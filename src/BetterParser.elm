@@ -3,7 +3,7 @@ module BetterParser exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import List exposing (member, foldr, reverse, head)
-import String exposing (cons, words, endsWith, startsWith)
+import String exposing (cons, words, endsWith, startsWith, dropLeft, dropRight)
 import Dict exposing (fromList, get)
 
 type alias Res b a = Result String (b,a)
@@ -101,9 +101,48 @@ attrnames =
            ,("id",Id)
            ,("href",Href)
            ]
+
+
+renderer : Result String HTML -> Html msg
+renderer res = 
+  let renderer' t = 
+    case t of 
+      Empty -> text ""
+      Node  tag xs -> 
+        toTag (.tagname tag)
+              (List.map toAttr (.attr tag))
+              (List.map renderer' xs)
+  in 
+  case res of 
+    Err s -> div [] [text "Oh no!", br [] [], text s]
+    Ok t  -> renderer' t 
+
+  
+
+
+
+toTag tn xs =
+  case tn of 
+    Div -> div xs
+    P   -> p  xs
+    Input -> input xs
+    Img   -> img xs
+    H1    -> h1 xs
+    H2    -> h2 xs
+    H3    -> h3 xs
+    Text s -> (\_ -> text s)
+
+
+toAttr a = 
+  case a of 
+    Class s -> class s
+    Id s    -> id s
+    Href s  -> href s
+    Style xs -> style xs
+
+
 -------------------------------------------------------------------------------
 -- Elm String to HTML
-
 
 consumerLS xs =
   case xs of
@@ -112,6 +151,9 @@ consumerLS xs =
 
 token : String -> Parser (List String) String
 token t = sat consumerLS (\s -> s == t)
+
+coma : Parser (List String) a -> Parser (List String) a 
+coma p = p +++ (token "," >>* p)
 
 parseTagName : Parser (List String) TagName
 parseTagName = 
@@ -141,15 +183,17 @@ parseStringLiteral =
       oneWord = sat consumerLS 
                      (\t -> startsWith "\"" t
                             && endsWith "\"" t)
-                >>= return
+                >>= (\res -> return (trimQuot res))
 
       multiWords = 
         parseStart
         >>= (\st -> many parseMid  "" f
         >>= (\mid -> parseEnd  
-        >>= (\end -> return (st ++ " " ++ mid ++ end))))
+        >>= (\end -> return (trimQuot (st ++ " " ++ mid ++ end)))))
 
   in (oneWord +++ multiWords)
+
+trimQuot s = (dropRight 1 (dropLeft 1 s))
 
 parseText : Parser (List String) HTML
 parseText = 
@@ -157,10 +201,26 @@ parseText =
   >>* parseStringLiteral
   >>= (\s -> return (Node (Tag (Text s) []) []))
 
+parseStyle : Parser (List String) Attr
+parseStyle = 
+  let parseTuple = 
+        token "("
+        >>* parseStringLiteral
+        >>= (\v1 -> token ","
+        >>* parseStringLiteral
+        >>= (\v2 -> token ")"
+        >>* return (v1,v2)))
+
+  in token "style"
+     >>* token "["
+     >>* (many (coma parseTuple) [] (::))
+     >>= (\res -> token "]"
+     >>* return (Style res))
+
 parseAttr : Parser (List String) Attr
-parseAttr = (parseAttrName +++ (token "," >>* parseAttrName))
+parseAttr = (coma parseAttrName
             >>= (\an -> parseStringLiteral
-            >>= (\s  -> return (an s)))
+            >>= (\s  -> return (an s)))) +++ (coma parseStyle)
 
 parseAttrList : Parser (List String) (List Attr)
 parseAttrList = token "["
@@ -175,6 +235,7 @@ parseTag =
   
   (
   (parseTagName +++ (token "," >>* parseTagName))
+  --coma (parseTagName +++ parseText)
   >>= (\tn -> parseAttrList
   >>= (\al -> parseTagList
   >>= (\ts  -> return (Node (Tag tn al) ts))))
@@ -187,13 +248,14 @@ parseTagList = token "["
 
 res = parse parseTag (words testinput)
 res2 = parse parseAttrList (words testinput3)
+res3 = parse  parseStyle (words testinput4)
 
 testinput = 
   """ div [ class "mainDiv" ]
-          [ p [ ] [ text "this is a test" 
+          [ p [ style [ ( "color" , "red" ) ] ] [ text "this is a test" 
                   , p [ ] [ ]
                   ]
-          , p [ ] [ h2 [ id "very important" ] [ ] ]
+          , p [ ] [ h2 [ id "very important" , style [ ( "color" , "blue" ) ] ] [ text "big title" ] ]
           ]
 
   """
@@ -205,4 +267,8 @@ testinput2 =
 
 testinput3 = 
    """ [ class "mainDiv" , id "toto" ]
+   """
+
+testinput4 = 
+  """ style [ ( "color" , "red" ) ] 
    """

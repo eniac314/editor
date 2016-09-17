@@ -1,0 +1,133 @@
+var _user$project$Editor$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
+var _user$project$Editor$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'Store':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{rawString: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'Parse':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							parsedData: function () {
+								var _p1 = A2(
+									_user$project$BetterParser$parse,
+									_user$project$BetterParser$parseTag,
+									_elm_lang$core$String$words(
+										function (_) {
+											return _.rawString;
+										}(model)));
+								if (_p1.ctor === 'Err') {
+									return _elm_lang$core$Result$Err(_p1._0);
+								} else {
+									return _elm_lang$core$Result$Ok(_p1._0._0);
+								}
+							}()
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							toRender: _user$project$BetterParser$renderer(
+								function (_) {
+									return _.parsedData;
+								}(model))
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
+var _user$project$Editor$Model = F3(
+	function (a, b, c) {
+		return {rawString: a, parsedData: b, toRender: c};
+	});
+var _user$project$Editor$Render = {ctor: 'Render'};
+var _user$project$Editor$Parse = {ctor: 'Parse'};
+var _user$project$Editor$Store = function (a) {
+	return {ctor: 'Store', _0: a};
+};
+var _user$project$Editor$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$textarea,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onInput(_user$project$Editor$Store),
+						_elm_lang$html$Html_Attributes$rows(15),
+						_elm_lang$html$Html_Attributes$cols(45)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				A2(
+				_elm_lang$html$Html$br,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$Editor$Parse)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Parse')
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$Editor$Render)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Render')
+					])),
+				A2(
+				_elm_lang$html$Html$br,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				function (_) {
+				return _.toRender;
+			}(model)
+			]));
+};
+var _user$project$Editor$main = {
+	main: _elm_lang$html$Html_App$program(
+		{
+			init: {
+				ctor: '_Tuple2',
+				_0: A3(
+					_user$project$Editor$Model,
+					'',
+					_elm_lang$core$Result$Err('nothing yet'),
+					_elm_lang$html$Html$text('')),
+				_1: _elm_lang$core$Platform_Cmd$none
+			},
+			update: _user$project$Editor$update,
+			view: _user$project$Editor$view,
+			subscriptions: _user$project$Editor$subscriptions
+		})
+};
