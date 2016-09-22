@@ -25,7 +25,7 @@ var _user$project$Editor$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parsedData: _user$project$BetterParser$interpret(
+							parsedData: _user$project$ElmParser$interpret(
 								function (_) {
 									return _.rawString;
 								}(model))
@@ -38,7 +38,7 @@ var _user$project$Editor$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							toRender: _user$project$BetterParser$renderer(
+							toRender: _user$project$ElmParser$renderer(
 								function (_) {
 									return _.parsedData;
 								}(model))

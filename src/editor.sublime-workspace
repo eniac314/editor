@@ -4,6 +4,58 @@
 		"selected_items":
 		[
 			[
+				"te",
+				"testinput4"
+			],
+			[
+				"tok",
+				"tokenizer"
+			],
+			[
+				"get",
+				"getTokens'"
+			],
+			[
+				"fr",
+				"fromList"
+			],
+			[
+				"ge",
+				"getTokens'"
+			],
+			[
+				"cha",
+				"CharMeta"
+			],
+			[
+				"token",
+				"tokenString"
+			],
+			[
+				"Toe",
+				"Token"
+			],
+			[
+				"In",
+				"Invalid"
+			],
+			[
+				"to",
+				"tokenizer'"
+			],
+			[
+				"Char",
+				"CharMeta"
+			],
+			[
+				"re",
+				"removeIndexes"
+			],
+			[
+				"e",
+				"exposing"
+			],
+			[
 				"P",
 				"Parse"
 			],
@@ -52,10 +104,6 @@
 				"endsWith"
 			],
 			[
-				"to",
-				"tokenizerLS"
-			],
-			[
 				"H",
 				"H1"
 			],
@@ -80,10 +128,6 @@
 				"TagName"
 			],
 			[
-				"re",
-				"return"
-			],
-			[
 				"pA",
 				"Parser"
 			],
@@ -98,10 +142,6 @@
 			[
 				"p",
 				"plist"
-			],
-			[
-				"e",
-				"echoServer"
 			],
 			[
 				"gif",
@@ -150,10 +190,6 @@
 			[
 				"phoo",
 				"photothèque"
-			],
-			[
-				"ge",
-				"getPicsName"
 			],
 			[
 				"is",
@@ -226,10 +262,6 @@
 			[
 				"pu",
 				"hPutStrLn"
-			],
-			[
-				"get",
-				"getCurrentDirectory"
 			],
 			[
 				"pr",
@@ -308,10 +340,6 @@
 				"Nothing"
 			],
 			[
-				"cha",
-				"chambresHotes"
-			],
-			[
 				"des",
 				"descr"
 			],
@@ -366,10 +394,6 @@
 			[
 				"de",
 				"descr"
-			],
-			[
-				"te",
-				"text-align"
 			],
 			[
 				"mini",
@@ -490,30 +514,6 @@
 			[
 				"load",
 				"loading"
-			],
-			[
-				"Fes",
-				"festivalArt"
-			],
-			[
-				"ta",
-				"takeAndRotate"
-			],
-			[
-				"D",
-				"Debug"
-			],
-			[
-				"au",
-				"automneFx"
-			],
-			[
-				"hiver",
-				"hiverFx"
-			],
-			[
-				"G",
-				"GalleryAction"
 			]
 		]
 	},
@@ -528,10 +528,10 @@
 			}
 		},
 		{
-			"file": "/home/eniac314/prog/Haskell/compiler.hs",
+			"file": "Tokenizer.elm",
 			"settings":
 			{
-				"buffer_size": 15517,
+				"buffer_size": 6637,
 				"line_ending": "Unix"
 			}
 		},
@@ -539,16 +539,9 @@
 			"file": "BetterParser.elm",
 			"settings":
 			{
-				"buffer_size": 10055,
+				"buffer_size": 7316,
 				"line_ending": "Unix",
 				"name": "module BetterParser exposing (..)"
-			}
-		},
-		{
-			"settings":
-			{
-				"buffer_size": 0,
-				"line_ending": "Unix"
 			}
 		}
 	],
@@ -933,7 +926,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -963,37 +956,36 @@
 						"translation.y": 508.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "/home/eniac314/prog/Haskell/compiler.hs",
+					"file": "Tokenizer.elm",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15517,
+						"buffer_size": 6637,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								4610,
+								4610
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Haskell/Haskell.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Elm Language Support/Syntaxes/Elm.tmLanguage",
+							"tab_size": 2
 						},
 						"translation.x": 0.0,
-						"translation.y": 1482.0,
+						"translation.y": 3016.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -1002,15 +994,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10055,
+						"buffer_size": 7316,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								6670,
+								6670
 							]
 						],
 						"settings":
@@ -1021,37 +1013,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3480.0,
+						"translation.y": 1140.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 0,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]

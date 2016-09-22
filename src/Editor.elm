@@ -8,11 +8,10 @@ import String exposing (words)
 import Http
 import Json.Decode as Json
 import Task
-import BetterParser exposing (HTML
-                             , Parser
-                             , interpret
-                             , renderer
-                             )
+import ElmParser exposing ( interpret
+                          , renderer
+                          , HTML
+                          )
 
 main =
     App.program { init   = (Model "" (Err "nothing yet") (text ""), Cmd.none) 
