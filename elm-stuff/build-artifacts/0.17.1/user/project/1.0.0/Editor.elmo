@@ -1,6 +1,12 @@
 var _user$project$Editor$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
+var _user$project$Editor$inputStyle = _elm_lang$html$Html_Attributes$style(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			{ctor: '_Tuple2', _0: 'font-family', _1: 'monospace'},
+			{ctor: '_Tuple2', _0: '', _1: ''}
+		]));
 var _user$project$Editor$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
@@ -19,20 +25,10 @@ var _user$project$Editor$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							parsedData: function () {
-								var _p1 = A2(
-									_user$project$BetterParser$parse,
-									_user$project$BetterParser$parseTag,
-									_elm_lang$core$String$words(
-										function (_) {
-											return _.rawString;
-										}(model)));
-								if (_p1.ctor === 'Err') {
-									return _elm_lang$core$Result$Err(_p1._0);
-								} else {
-									return _elm_lang$core$Result$Ok(_p1._0._0);
-								}
-							}()
+							parsedData: _user$project$BetterParser$interpret(
+								function (_) {
+									return _.rawString;
+								}(model))
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
@@ -73,7 +69,8 @@ var _user$project$Editor$view = function (model) {
 					[
 						_elm_lang$html$Html_Events$onInput(_user$project$Editor$Store),
 						_elm_lang$html$Html_Attributes$rows(15),
-						_elm_lang$html$Html_Attributes$cols(45)
+						_elm_lang$html$Html_Attributes$cols(45),
+						_user$project$Editor$inputStyle
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[])),

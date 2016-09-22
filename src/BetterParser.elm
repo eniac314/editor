@@ -3,7 +3,7 @@ module BetterParser exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import List exposing (member, foldr, reverse, head)
-import String exposing (cons, words, endsWith, startsWith, dropLeft, dropRight)
+import String exposing (cons, words, endsWith, startsWith, dropLeft, dropRight, uncons, isEmpty, fromChar)
 import Dict exposing (fromList, get)
 
 type alias Res b a = Result String (b,a)
@@ -144,6 +144,14 @@ toAttr a =
 -------------------------------------------------------------------------------
 -- Elm String to HTML
 
+interpret : String -> Result String HTML
+interpret input = 
+  case tokenizer input of 
+    Err s -> Err ("Tokenizer error: " ++ s)
+    Ok ts -> case parse parseTag ts of 
+               Err s  -> Err ("Parser error: " ++ s) 
+               Ok (res,_) -> Ok res
+
 consumerLS xs =
   case xs of
     [] -> Err "no more tokens"
@@ -246,7 +254,7 @@ parseTagList = token "["
                 >>* many parseTag [] (::)
                 >>= (\res -> token "]" >>* return res)
 
-res = parse parseTag (words testinput)
+res = (tokenizer testinput4)
 res2 = parse parseAttrList (words testinput3)
 res3 = parse  parseStyle (words testinput4)
 
@@ -270,5 +278,123 @@ testinput3 =
    """
 
 testinput4 = 
-  """ style [ ( "color" , "red" ) ] 
-   """
+  """ div []
+      [ h2 [] [text "first title"]
+      ] 
+  
+  """
+
+--------------------------------------------------------------------------------
+--TOKENIZER
+
+type alias Token = 
+  { val  : String
+  , ln   : (Int, String)
+  }
+
+tokError : Token -> String
+tokError t = "{ val: " ++ (.val t) 
+             ++ ", line " ++ (toString (fst (.ln t)))
+             ++ ", " ++ (toString (snd (.ln t))) ++ " }"
+
+tokenizer : String -> Result String (List String)
+tokenizer s = (words s) |> splitter 
+
+isTokenChar : Char-> Bool
+isTokenChar c = 
+  c == '(' ||
+  c == ')' ||
+  c == '{' ||
+  c == '}' ||
+  c == '+' ||
+  c == '-' ||
+  c == '/' ||
+  c == '*' ||
+  c == ';' ||
+  c == ',' ||
+  c == '.' ||
+  c == '[' ||
+  c == ']' ||
+  c == '&' ||
+  c == '|' ||
+  c == '>' ||
+  c == '<' ||
+  c == '=' ||
+  c == '~'  
+
+
+splitter : List String -> Result String (List String)
+splitter xs = 
+  case xs of 
+    []      -> Ok []
+    (y::ys) ->
+      if startsWith "\"" y
+      then case getStringLiteral xs of 
+            Err s       -> Err s
+            Ok (sl,out) -> 
+              let rest = splitter out
+              in  case rest of 
+                Err s   -> Err s
+                Ok  r   -> Ok (sl::r)
+      else case getTokens y of 
+            Err s       -> Err s
+            Ok ts       -> 
+              let rest = splitter ys
+              in  case rest of 
+                Err s   -> Err s
+                Ok  r   -> Ok (ts ++ r)
+
+getStringLiteral : List String -> Result String (String, List String) 
+getStringLiteral xs = 
+  case xs of 
+    
+    [] -> Err "Invalid string literal"
+
+    (s :: []) -> 
+      case (splitOn (\c -> c == '\"') s) of 
+        (a::b::xs) -> Ok (a ++ b, xs)
+        --(a::xs) -> Ok (a, xs)
+        _ -> Err "Invalid string literal" 
+    
+    (s::ss) -> 
+      case (splitOn (\c -> c == '\"') s) of 
+        (a::b::xs) -> Ok (a ++ b, xs ++ ss)
+        _ -> case getStringLiteral ss of
+               Err s -> Err s
+               Ok (end,rest) -> Ok (s ++ " " ++ end, rest)
+      --if endsWith "\"" s
+      --then Ok (s,[])
+      --else Err "Invalid string literal"
+    
+    --(s::ss) -> 
+    --  if endsWith "\"" s
+    --  then Ok (s,ss)
+    --  else case getStringLiteral ss of
+    --         Err s -> Err s
+    --         Ok (end,rest) -> Ok (s ++ " " ++ end, rest)
+
+getTokens : String -> Result String (List String)
+getTokens xs =
+  Ok (splitOn isTokenChar xs)
+
+splitOn :  (Char -> Bool) -> String -> List String
+splitOn p s = 
+  let 
+  helper (inp,out,buff) = 
+      case uncons inp of
+        Nothing -> (inp, addBuffer buff out, buff)
+        Just (c,ss) ->
+          if p c 
+          then helper (ss, (fromChar c) :: (addBuffer buff out), "")
+          else helper (ss,out,cons c buff)
+  
+  addBuffer buff out = 
+    if isEmpty buff 
+    then out
+    else (String.reverse buff) :: out 
+
+  (_,res,_) = helper (s,[],"")
+
+  in List.reverse res 
+
+  

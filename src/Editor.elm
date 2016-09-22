@@ -9,9 +9,8 @@ import Http
 import Json.Decode as Json
 import Task
 import BetterParser exposing (HTML
-                             , parse
                              , Parser
-                             , parseTag
+                             , interpret
                              , renderer
                              )
 
@@ -40,11 +39,7 @@ update msg model =
     Store s -> ({ model | rawString = s}, Cmd.none)
     Parse   -> 
        ({ model |
-          parsedData = 
-            case (parse parseTag 
-                   (words (.rawString model))) of 
-                Err s -> Err s
-                Ok (res,_) -> Ok res
+          parsedData = interpret (.rawString model)
         }, Cmd.none)
     Render  -> ({ model | 
                   toRender = (renderer (.parsedData model))
@@ -59,6 +54,7 @@ view model =
                      onInput Store
                    , rows 15
                    , cols 45
+                   , inputStyle
                    ]
                    []
         , br [] []
@@ -66,6 +62,11 @@ view model =
         , button [onClick Render] [ text "Render"]
         , br [] []
         , (.toRender model )
+        ]
+
+inputStyle = 
+  style [("font-family","monospace")
+        ,("","")
         ]
 
 -- SUBSCRIPTIONS
