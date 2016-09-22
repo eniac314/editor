@@ -1,0 +1,583 @@
+var _user$project$Tokenizer$break = F2(
+	function (p, xs) {
+		var helper = F2(
+			function (ys, left) {
+				helper:
+				while (true) {
+					var _p0 = ys;
+					if (_p0.ctor === '[]') {
+						return {
+							ctor: '_Tuple2',
+							_0: left,
+							_1: _elm_lang$core$Native_List.fromArray(
+								[])
+						};
+					} else {
+						var _p2 = _p0._1;
+						var _p1 = _p0._0;
+						if (p(_p1)) {
+							return {
+								ctor: '_Tuple2',
+								_0: _elm_lang$core$List$reverse(
+									A2(_elm_lang$core$List_ops['::'], _p1, left)),
+								_1: _p2
+							};
+						} else {
+							var _v1 = _p2,
+								_v2 = A2(_elm_lang$core$List_ops['::'], _p1, left);
+							ys = _v1;
+							left = _v2;
+							continue helper;
+						}
+					}
+				}
+			});
+		return A2(
+			helper,
+			xs,
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	});
+var _user$project$Tokenizer$removeIndexes = function (xs) {
+	return A2(_elm_lang$core$List$map, _elm_lang$core$Basics$snd, xs);
+};
+var _user$project$Tokenizer$addIndexes = function (xs) {
+	var helper = F2(
+		function (n, xs) {
+			var _p3 = xs;
+			if (_p3.ctor === '[]') {
+				return _elm_lang$core$Native_List.fromArray(
+					[]);
+			} else {
+				return A2(
+					_elm_lang$core$List_ops['::'],
+					{ctor: '_Tuple2', _0: n, _1: _p3._0},
+					A2(helper, n + 1, _p3._1));
+			}
+		});
+	return A2(helper, 0, xs);
+};
+var _user$project$Tokenizer$getStringLit = function (xs) {
+	var _p4 = xs;
+	if (_p4.ctor === '[]') {
+		return _elm_lang$core$Result$Err('getStringLit: Invalid String literal');
+	} else {
+		var _p7 = _p4._1;
+		var _p6 = _p4._0;
+		if (_elm_lang$core$Native_Utils.eq(
+			function (_) {
+				return _.ch;
+			}(_p6),
+			_elm_lang$core$Native_Utils.chr('\"'))) {
+			return _elm_lang$core$Result$Ok(
+				{
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_List.fromArray(
+						[]),
+					_1: _p7
+				});
+		} else {
+			var _p5 = _user$project$Tokenizer$getStringLit(_p7);
+			if (_p5.ctor === 'Err') {
+				return _elm_lang$core$Result$Err(_p5._0);
+			} else {
+				return _elm_lang$core$Result$Ok(
+					{
+						ctor: '_Tuple2',
+						_0: A2(_elm_lang$core$List_ops['::'], _p6, _p5._0._0),
+						_1: _p5._0._1
+					});
+			}
+		}
+	}
+};
+var _user$project$Tokenizer$splitOn = F2(
+	function (p, s) {
+		var addBuffer = F2(
+			function (buff, out) {
+				return _elm_lang$core$String$isEmpty(buff) ? out : A2(
+					_elm_lang$core$List_ops['::'],
+					_elm_lang$core$String$reverse(buff),
+					out);
+			});
+		var helper = function (_p8) {
+			helper:
+			while (true) {
+				var _p9 = _p8;
+				var _p15 = _p9._1;
+				var _p14 = _p9._0;
+				var _p13 = _p9._2;
+				var _p10 = _elm_lang$core$String$uncons(_p14);
+				if (_p10.ctor === 'Nothing') {
+					return {
+						ctor: '_Tuple3',
+						_0: _p14,
+						_1: A2(addBuffer, _p13, _p15),
+						_2: _p13
+					};
+				} else {
+					var _p12 = _p10._0._1;
+					var _p11 = _p10._0._0;
+					if (p(_p11)) {
+						var _v8 = {
+							ctor: '_Tuple3',
+							_0: _p12,
+							_1: A2(
+								_elm_lang$core$List_ops['::'],
+								_elm_lang$core$String$fromChar(_p11),
+								A2(addBuffer, _p13, _p15)),
+							_2: ''
+						};
+						_p8 = _v8;
+						continue helper;
+					} else {
+						var _v9 = {
+							ctor: '_Tuple3',
+							_0: _p12,
+							_1: _p15,
+							_2: A2(_elm_lang$core$String$cons, _p11, _p13)
+						};
+						_p8 = _v9;
+						continue helper;
+					}
+				}
+			}
+		};
+		var _p16 = helper(
+			{
+				ctor: '_Tuple3',
+				_0: s,
+				_1: _elm_lang$core$Native_List.fromArray(
+					[]),
+				_2: ''
+			});
+		var res = _p16._1;
+		return _elm_lang$core$List$reverse(res);
+	});
+var _user$project$Tokenizer$getStringLiteral = function (xs) {
+	var _p17 = xs;
+	if (_p17.ctor === '[]') {
+		return _elm_lang$core$Result$Err('Invalid string literal');
+	} else {
+		if (_p17._1.ctor === '[]') {
+			var _p18 = A2(
+				_user$project$Tokenizer$splitOn,
+				function (c) {
+					return _elm_lang$core$Native_Utils.eq(
+						c,
+						_elm_lang$core$Native_Utils.chr('\"'));
+				},
+				_p17._0);
+			if ((_p18.ctor === '::') && (_p18._1.ctor === '::')) {
+				return _elm_lang$core$Result$Ok(
+					{
+						ctor: '_Tuple2',
+						_0: A2(_elm_lang$core$Basics_ops['++'], _p18._0, _p18._1._0),
+						_1: _p18._1._1
+					});
+			} else {
+				return _elm_lang$core$Result$Err('Invalid string literal');
+			}
+		} else {
+			var _p22 = _p17._1;
+			var _p21 = _p17._0;
+			var _p19 = A2(
+				_user$project$Tokenizer$splitOn,
+				function (c) {
+					return _elm_lang$core$Native_Utils.eq(
+						c,
+						_elm_lang$core$Native_Utils.chr('\"'));
+				},
+				_p21);
+			if ((_p19.ctor === '::') && (_p19._1.ctor === '::')) {
+				return _elm_lang$core$Result$Ok(
+					{
+						ctor: '_Tuple2',
+						_0: A2(_elm_lang$core$Basics_ops['++'], _p19._0, _p19._1._0),
+						_1: A2(_elm_lang$core$Basics_ops['++'], _p19._1._1, _p22)
+					});
+			} else {
+				var _p20 = _user$project$Tokenizer$getStringLiteral(_p22);
+				if (_p20.ctor === 'Err') {
+					return _elm_lang$core$Result$Err(_p20._0);
+				} else {
+					return _elm_lang$core$Result$Ok(
+						{
+							ctor: '_Tuple2',
+							_0: A2(
+								_elm_lang$core$Basics_ops['++'],
+								_p21,
+								A2(_elm_lang$core$Basics_ops['++'], ' ', _p20._0._0)),
+							_1: _p20._0._1
+						});
+				}
+			}
+		}
+	}
+};
+var _user$project$Tokenizer$isTokenChar = function (c) {
+	return _elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('(')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr(')')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('{')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('}')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('+')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('-')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('/')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('*')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr(';')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr(',')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('.')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('[')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr(']')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('&')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('|')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('>')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('<')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('=')) || _elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('~')))))))))))))))))));
+};
+var _user$project$Tokenizer$getTokens = function (xs) {
+	return _elm_lang$core$Result$Ok(
+		A2(_user$project$Tokenizer$splitOn, _user$project$Tokenizer$isTokenChar, xs));
+};
+var _user$project$Tokenizer$splitter = function (xs) {
+	var _p23 = xs;
+	if (_p23.ctor === '[]') {
+		return _elm_lang$core$Result$Ok(
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	} else {
+		var _p28 = _p23._0;
+		if (A2(_elm_lang$core$String$startsWith, '\"', _p28)) {
+			var _p24 = _user$project$Tokenizer$getStringLiteral(xs);
+			if (_p24.ctor === 'Err') {
+				return _elm_lang$core$Result$Err(_p24._0);
+			} else {
+				var rest = _user$project$Tokenizer$splitter(_p24._0._1);
+				var _p25 = rest;
+				if (_p25.ctor === 'Err') {
+					return _elm_lang$core$Result$Err(_p25._0);
+				} else {
+					return _elm_lang$core$Result$Ok(
+						A2(_elm_lang$core$List_ops['::'], _p24._0._0, _p25._0));
+				}
+			}
+		} else {
+			var _p26 = _user$project$Tokenizer$getTokens(_p28);
+			if (_p26.ctor === 'Err') {
+				return _elm_lang$core$Result$Err(_p26._0);
+			} else {
+				var rest = _user$project$Tokenizer$splitter(_p23._1);
+				var _p27 = rest;
+				if (_p27.ctor === 'Err') {
+					return _elm_lang$core$Result$Err(_p27._0);
+				} else {
+					return _elm_lang$core$Result$Ok(
+						A2(_elm_lang$core$Basics_ops['++'], _p26._0, _p27._0));
+				}
+			}
+		}
+	}
+};
+var _user$project$Tokenizer$isSpace = function (c) {
+	return _elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('\r')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr(' ')) || (_elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('\t')) || _elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('\n'))));
+};
+var _user$project$Tokenizer$tokenizer = function (s) {
+	return _user$project$Tokenizer$splitter(
+		_elm_lang$core$String$words(s));
+};
+var _user$project$Tokenizer$tokError = function (t) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'{ val: ',
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			function (_) {
+				return _.val;
+			}(t),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				', char ',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(
+						function (_) {
+							return _.ch;
+						}(t)),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						', line ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(
+								function (_) {
+									return _.ln;
+								}(t)),
+							' }'))))));
+};
+var _user$project$Tokenizer$Token = F3(
+	function (a, b, c) {
+		return {val: a, ch: b, ln: c};
+	});
+var _user$project$Tokenizer$tokenString = function (xs) {
+	var _p29 = xs;
+	if (_p29.ctor === 'Err') {
+		return _elm_lang$core$Result$Err(_p29._0);
+	} else {
+		if (_p29._0._0.ctor === '[]') {
+			return _elm_lang$core$Result$Err('tokenString: Invalid String literal');
+		} else {
+			var _p30 = _p29._0._0._0;
+			var val = A3(
+				_elm_lang$core$List$foldr,
+				F2(
+					function (c, s) {
+						return A2(
+							_elm_lang$core$String$cons,
+							function (_) {
+								return _.ch;
+							}(c),
+							s);
+					}),
+				'',
+				A2(_elm_lang$core$List_ops['::'], _p30, _p29._0._0._1));
+			var ln = function (_) {
+				return _.lnp;
+			}(_p30);
+			var ch = function (_) {
+				return _.chp;
+			}(_p30);
+			return _elm_lang$core$Result$Ok(
+				{
+					ctor: '_Tuple2',
+					_0: A3(
+						_user$project$Tokenizer$Token,
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'\"',
+							A2(_elm_lang$core$Basics_ops['++'], val, '\"')),
+						ch,
+						ln),
+					_1: _p29._0._1
+				});
+		}
+	}
+};
+var _user$project$Tokenizer$getTokens$ = function (xs) {
+	var tString = function (xs) {
+		return _elm_lang$core$String$fromList(
+			A2(
+				_elm_lang$core$List$map,
+				function (_) {
+					return _.ch;
+				},
+				xs));
+	};
+	var tokenize = function (buff) {
+		var ys = _elm_lang$core$List$reverse(buff);
+		var _p31 = ys;
+		if (_p31.ctor === '[]') {
+			return _elm_lang$core$Native_List.fromArray(
+				[]);
+		} else {
+			var _p32 = _p31._0;
+			return _elm_lang$core$Native_List.fromArray(
+				[
+					A3(
+					_user$project$Tokenizer$Token,
+					tString(
+						A2(_elm_lang$core$List_ops['::'], _p32, _p31._1)),
+					function (_) {
+						return _.chp;
+					}(_p32),
+					function (_) {
+						return _.lnp;
+					}(_p32))
+				]);
+		}
+	};
+	var helper = F2(
+		function (xs, acc) {
+			helper:
+			while (true) {
+				var _p33 = xs;
+				if (_p33.ctor === '[]') {
+					return {
+						ctor: '_Tuple2',
+						_0: tokenize(acc),
+						_1: _elm_lang$core$Native_List.fromArray(
+							[])
+					};
+				} else {
+					var _p35 = _p33._1;
+					var _p34 = _p33._0;
+					if (_user$project$Tokenizer$isTokenChar(
+						function (_) {
+							return _.ch;
+						}(_p34))) {
+						return {
+							ctor: '_Tuple2',
+							_0: A2(
+								_elm_lang$core$Basics_ops['++'],
+								tokenize(acc),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										A3(
+										_user$project$Tokenizer$Token,
+										_elm_lang$core$String$fromChar(
+											function (_) {
+												return _.ch;
+											}(_p34)),
+										function (_) {
+											return _.chp;
+										}(_p34),
+										function (_) {
+											return _.lnp;
+										}(_p34))
+									])),
+							_1: _p35
+						};
+					} else {
+						if (_user$project$Tokenizer$isSpace(
+							function (_) {
+								return _.ch;
+							}(_p34))) {
+							return {
+								ctor: '_Tuple2',
+								_0: tokenize(acc),
+								_1: _p35
+							};
+						} else {
+							if (_elm_lang$core$Native_Utils.eq(
+								function (_) {
+									return _.ch;
+								}(_p34),
+								_elm_lang$core$Native_Utils.chr('\"'))) {
+								return {
+									ctor: '_Tuple2',
+									_0: tokenize(acc),
+									_1: A2(_elm_lang$core$List_ops['::'], _p34, _p35)
+								};
+							} else {
+								var _v22 = _p35,
+									_v23 = A2(_elm_lang$core$List_ops['::'], _p34, acc);
+								xs = _v22;
+								acc = _v23;
+								continue helper;
+							}
+						}
+					}
+				}
+			}
+		});
+	return A2(
+		helper,
+		xs,
+		_elm_lang$core$Native_List.fromArray(
+			[]));
+};
+var _user$project$Tokenizer$tokenizer$ = function (cs) {
+	tokenizer$:
+	while (true) {
+		var _p36 = cs;
+		if (_p36.ctor === '[]') {
+			return _elm_lang$core$Result$Ok(
+				_elm_lang$core$Native_List.fromArray(
+					[]));
+		} else {
+			var _p42 = _p36._1;
+			var _p41 = _p36._0;
+			if (_elm_lang$core$Native_Utils.eq(
+				function (_) {
+					return _.ch;
+				}(_p41),
+				_elm_lang$core$Native_Utils.chr('\"'))) {
+				var _p37 = _user$project$Tokenizer$tokenString(
+					_user$project$Tokenizer$getStringLit(_p42));
+				if (_p37.ctor === 'Err') {
+					return _elm_lang$core$Result$Err(_p37._0);
+				} else {
+					var _p38 = _user$project$Tokenizer$tokenizer$(_p37._0._1);
+					if (_p38.ctor === 'Err') {
+						return _elm_lang$core$Result$Err(_p38._0);
+					} else {
+						return _elm_lang$core$Result$Ok(
+							A2(_elm_lang$core$List_ops['::'], _p37._0._0, _p38._0));
+					}
+				}
+			} else {
+				if (_user$project$Tokenizer$isSpace(
+					function (_) {
+						return _.ch;
+					}(_p41))) {
+					var _v27 = _p42;
+					cs = _v27;
+					continue tokenizer$;
+				} else {
+					var _p39 = _user$project$Tokenizer$getTokens$(
+						A2(_elm_lang$core$List_ops['::'], _p41, _p42));
+					var ts = _p39._0;
+					var rest = _p39._1;
+					var _p40 = _user$project$Tokenizer$tokenizer$(rest);
+					if (_p40.ctor === 'Err') {
+						return _elm_lang$core$Result$Err(_p40._0);
+					} else {
+						return _elm_lang$core$Result$Ok(
+							A2(_elm_lang$core$Basics_ops['++'], ts, _p40._0));
+					}
+				}
+			}
+		}
+	}
+};
+var _user$project$Tokenizer$CharPos = F3(
+	function (a, b, c) {
+		return {ch: a, lnp: b, chp: c};
+	});
+var _user$project$Tokenizer$tagPos = function (s) {
+	var ls = _user$project$Tokenizer$addIndexes(
+		_elm_lang$core$String$lines(s));
+	var cs = A2(
+		_elm_lang$core$List$map,
+		function (_p43) {
+			var _p44 = _p43;
+			return A2(
+				_elm_lang$core$List$map,
+				function (_p45) {
+					var _p46 = _p45;
+					return A3(_user$project$Tokenizer$CharPos, _p46._1, _p44._0, _p46._0);
+				},
+				_user$project$Tokenizer$addIndexes(
+					_elm_lang$core$String$toList(_p44._1)));
+		},
+		ls);
+	return _elm_lang$core$List$concat(cs);
+};

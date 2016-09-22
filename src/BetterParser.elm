@@ -5,6 +5,7 @@ import Html.Attributes exposing (..)
 import List exposing (member, foldr, reverse, head)
 import String exposing (cons, words, endsWith, startsWith, dropLeft, dropRight, uncons, isEmpty, fromChar)
 import Dict exposing (fromList, get)
+import Tokenizer exposing (..)
 
 type alias Res b a = Result String (b,a)
 type Parser a b = Parser (a -> Res b a)
@@ -254,9 +255,10 @@ parseTagList = token "["
                 >>* many parseTag [] (::)
                 >>= (\res -> token "]" >>* return res)
 
-res = (tokenizer testinput4)
-res2 = parse parseAttrList (words testinput3)
-res3 = parse  parseStyle (words testinput4)
+res = (tokenizer' ( tagPos testinput))
+res2 = tokenizer testinput4
+res3 = parse parseAttrList (words testinput3)
+res4 = parse  parseStyle (words testinput4)
 
 testinput = 
   """ div [ class "mainDiv" ]
@@ -284,117 +286,3 @@ testinput4 =
   
   """
 
---------------------------------------------------------------------------------
---TOKENIZER
-
-type alias Token = 
-  { val  : String
-  , ln   : (Int, String)
-  }
-
-tokError : Token -> String
-tokError t = "{ val: " ++ (.val t) 
-             ++ ", line " ++ (toString (fst (.ln t)))
-             ++ ", " ++ (toString (snd (.ln t))) ++ " }"
-
-tokenizer : String -> Result String (List String)
-tokenizer s = (words s) |> splitter 
-
-isTokenChar : Char-> Bool
-isTokenChar c = 
-  c == '(' ||
-  c == ')' ||
-  c == '{' ||
-  c == '}' ||
-  c == '+' ||
-  c == '-' ||
-  c == '/' ||
-  c == '*' ||
-  c == ';' ||
-  c == ',' ||
-  c == '.' ||
-  c == '[' ||
-  c == ']' ||
-  c == '&' ||
-  c == '|' ||
-  c == '>' ||
-  c == '<' ||
-  c == '=' ||
-  c == '~'  
-
-
-splitter : List String -> Result String (List String)
-splitter xs = 
-  case xs of 
-    []      -> Ok []
-    (y::ys) ->
-      if startsWith "\"" y
-      then case getStringLiteral xs of 
-            Err s       -> Err s
-            Ok (sl,out) -> 
-              let rest = splitter out
-              in  case rest of 
-                Err s   -> Err s
-                Ok  r   -> Ok (sl::r)
-      else case getTokens y of 
-            Err s       -> Err s
-            Ok ts       -> 
-              let rest = splitter ys
-              in  case rest of 
-                Err s   -> Err s
-                Ok  r   -> Ok (ts ++ r)
-
-getStringLiteral : List String -> Result String (String, List String) 
-getStringLiteral xs = 
-  case xs of 
-    
-    [] -> Err "Invalid string literal"
-
-    (s :: []) -> 
-      case (splitOn (\c -> c == '\"') s) of 
-        (a::b::xs) -> Ok (a ++ b, xs)
-        --(a::xs) -> Ok (a, xs)
-        _ -> Err "Invalid string literal" 
-    
-    (s::ss) -> 
-      case (splitOn (\c -> c == '\"') s) of 
-        (a::b::xs) -> Ok (a ++ b, xs ++ ss)
-        _ -> case getStringLiteral ss of
-               Err s -> Err s
-               Ok (end,rest) -> Ok (s ++ " " ++ end, rest)
-      --if endsWith "\"" s
-      --then Ok (s,[])
-      --else Err "Invalid string literal"
-    
-    --(s::ss) -> 
-    --  if endsWith "\"" s
-    --  then Ok (s,ss)
-    --  else case getStringLiteral ss of
-    --         Err s -> Err s
-    --         Ok (end,rest) -> Ok (s ++ " " ++ end, rest)
-
-getTokens : String -> Result String (List String)
-getTokens xs =
-  Ok (splitOn isTokenChar xs)
-
-splitOn :  (Char -> Bool) -> String -> List String
-splitOn p s = 
-  let 
-  helper (inp,out,buff) = 
-      case uncons inp of
-        Nothing -> (inp, addBuffer buff out, buff)
-        Just (c,ss) ->
-          if p c 
-          then helper (ss, (fromChar c) :: (addBuffer buff out), "")
-          else helper (ss,out,cons c buff)
-  
-  addBuffer buff out = 
-    if isEmpty buff 
-    then out
-    else (String.reverse buff) :: out 
-
-  (_,res,_) = helper (s,[],"")
-
-  in List.reverse res 
-
-  
