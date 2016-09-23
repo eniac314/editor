@@ -1,0 +1,98 @@
+var _user$project$TagAttr$toAttr = function (a) {
+	var _p0 = a;
+	switch (_p0.ctor) {
+		case 'Class':
+			return _elm_lang$html$Html_Attributes$class(_p0._0);
+		case 'Id':
+			return _elm_lang$html$Html_Attributes$id(_p0._0);
+		case 'Href':
+			return _elm_lang$html$Html_Attributes$href(_p0._0);
+		default:
+			return _elm_lang$html$Html_Attributes$style(_p0._0);
+	}
+};
+var _user$project$TagAttr$toTag = F2(
+	function (tn, xs) {
+		var _p1 = tn;
+		switch (_p1.ctor) {
+			case 'Div':
+				return _elm_lang$html$Html$div(xs);
+			case 'P':
+				return _elm_lang$html$Html$p(xs);
+			case 'Input':
+				return _elm_lang$html$Html$input(xs);
+			case 'Img':
+				return _elm_lang$html$Html$img(xs);
+			case 'H1':
+				return _elm_lang$html$Html$h1(xs);
+			case 'H2':
+				return _elm_lang$html$Html$h2(xs);
+			case 'H3':
+				return _elm_lang$html$Html$h3(xs);
+			case 'H4':
+				return _elm_lang$html$Html$h4(xs);
+			case 'H5':
+				return _elm_lang$html$Html$h5(xs);
+			case 'H6':
+				return _elm_lang$html$Html$h6(xs);
+			case 'A':
+				return _elm_lang$html$Html$a(xs);
+			case 'Text':
+				return function (_p2) {
+					return _elm_lang$html$Html$text(_p1._0);
+				};
+			default:
+				return _elm_lang$html$Html$span(
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+		}
+	});
+var _user$project$TagAttr$TextNode = {ctor: 'TextNode'};
+var _user$project$TagAttr$A = {ctor: 'A'};
+var _user$project$TagAttr$Div = {ctor: 'Div'};
+var _user$project$TagAttr$Text = function (a) {
+	return {ctor: 'Text', _0: a};
+};
+var _user$project$TagAttr$H6 = {ctor: 'H6'};
+var _user$project$TagAttr$H5 = {ctor: 'H5'};
+var _user$project$TagAttr$H4 = {ctor: 'H4'};
+var _user$project$TagAttr$H3 = {ctor: 'H3'};
+var _user$project$TagAttr$H2 = {ctor: 'H2'};
+var _user$project$TagAttr$H1 = {ctor: 'H1'};
+var _user$project$TagAttr$Img = {ctor: 'Img'};
+var _user$project$TagAttr$Input = {ctor: 'Input'};
+var _user$project$TagAttr$P = {ctor: 'P'};
+var _user$project$TagAttr$tagnames = _elm_lang$core$Dict$fromList(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			{ctor: '_Tuple2', _0: 'p', _1: _user$project$TagAttr$P},
+			{ctor: '_Tuple2', _0: 'input', _1: _user$project$TagAttr$Input},
+			{ctor: '_Tuple2', _0: 'img', _1: _user$project$TagAttr$Img},
+			{ctor: '_Tuple2', _0: 'h1', _1: _user$project$TagAttr$H1},
+			{ctor: '_Tuple2', _0: 'h2', _1: _user$project$TagAttr$H2},
+			{ctor: '_Tuple2', _0: 'h3', _1: _user$project$TagAttr$H3},
+			{ctor: '_Tuple2', _0: 'h4', _1: _user$project$TagAttr$H4},
+			{ctor: '_Tuple2', _0: 'h5', _1: _user$project$TagAttr$H5},
+			{ctor: '_Tuple2', _0: 'h6', _1: _user$project$TagAttr$H6},
+			{ctor: '_Tuple2', _0: 'div', _1: _user$project$TagAttr$Div},
+			{ctor: '_Tuple2', _0: 'a', _1: _user$project$TagAttr$A}
+		]));
+var _user$project$TagAttr$Href = function (a) {
+	return {ctor: 'Href', _0: a};
+};
+var _user$project$TagAttr$Style = function (a) {
+	return {ctor: 'Style', _0: a};
+};
+var _user$project$TagAttr$Id = function (a) {
+	return {ctor: 'Id', _0: a};
+};
+var _user$project$TagAttr$Class = function (a) {
+	return {ctor: 'Class', _0: a};
+};
+var _user$project$TagAttr$attrnames = _elm_lang$core$Dict$fromList(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			{ctor: '_Tuple2', _0: 'class', _1: _user$project$TagAttr$Class},
+			{ctor: '_Tuple2', _0: 'id', _1: _user$project$TagAttr$Id},
+			{ctor: '_Tuple2', _0: 'href', _1: _user$project$TagAttr$Href}
+		]));

@@ -34,6 +34,46 @@ var _user$project$ElmParser$coma = function (p) {
 			_user$project$ElmParser$token(','),
 			p));
 };
+var _user$project$ElmParser$parseTagName = A2(
+	_user$project$BetterParser_ops['>>='],
+	_user$project$BetterParser$item(_user$project$ElmParser$consumerLS),
+	function (v) {
+		var _p1 = A2(
+			_elm_lang$core$Dict$get,
+			function (_) {
+				return _.val;
+			}(v),
+			_user$project$TagAttr$tagnames);
+		if (_p1.ctor === 'Nothing') {
+			return _user$project$BetterParser$failure(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'invalid tag name: ',
+					_user$project$Tokenizer$tokError(v)));
+		} else {
+			return _user$project$BetterParser$return(_p1._0);
+		}
+	});
+var _user$project$ElmParser$parseAttrName = A2(
+	_user$project$BetterParser_ops['>>='],
+	_user$project$BetterParser$item(_user$project$ElmParser$consumerLS),
+	function (v) {
+		var _p2 = A2(
+			_elm_lang$core$Dict$get,
+			function (_) {
+				return _.val;
+			}(v),
+			_user$project$TagAttr$attrnames);
+		if (_p2.ctor === 'Nothing') {
+			return _user$project$BetterParser$failure(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'invalid attribute name: ',
+					_user$project$Tokenizer$tokError(v)));
+		} else {
+			return _user$project$BetterParser$return(_p2._0);
+		}
+	});
 var _user$project$ElmParser$parseStringLiteral = A2(
 	_user$project$BetterParser_ops['>>='],
 	A2(
@@ -59,207 +99,6 @@ var _user$project$ElmParser$parseStringLiteral = A2(
 					return _.val;
 				}(res)));
 	});
-var _user$project$ElmParser$toAttr = function (a) {
-	var _p1 = a;
-	switch (_p1.ctor) {
-		case 'Class':
-			return _elm_lang$html$Html_Attributes$class(_p1._0);
-		case 'Id':
-			return _elm_lang$html$Html_Attributes$id(_p1._0);
-		case 'Href':
-			return _elm_lang$html$Html_Attributes$href(_p1._0);
-		default:
-			return _elm_lang$html$Html_Attributes$style(_p1._0);
-	}
-};
-var _user$project$ElmParser$toTag = F2(
-	function (tn, xs) {
-		var _p2 = tn;
-		switch (_p2.ctor) {
-			case 'Div':
-				return _elm_lang$html$Html$div(xs);
-			case 'P':
-				return _elm_lang$html$Html$p(xs);
-			case 'Input':
-				return _elm_lang$html$Html$input(xs);
-			case 'Img':
-				return _elm_lang$html$Html$img(xs);
-			case 'H1':
-				return _elm_lang$html$Html$h1(xs);
-			case 'H2':
-				return _elm_lang$html$Html$h2(xs);
-			case 'H3':
-				return _elm_lang$html$Html$h3(xs);
-			case 'H4':
-				return _elm_lang$html$Html$h4(xs);
-			case 'H5':
-				return _elm_lang$html$Html$h5(xs);
-			case 'H6':
-				return _elm_lang$html$Html$h6(xs);
-			case 'A':
-				return _elm_lang$html$Html$a(xs);
-			default:
-				return function (_p3) {
-					return _elm_lang$html$Html$text(_p2._0);
-				};
-		}
-	});
-var _user$project$ElmParser$renderer = function (res) {
-	var renderer$ = function (t) {
-		var _p4 = t;
-		if (_p4.ctor === 'Empty') {
-			return _elm_lang$html$Html$text('');
-		} else {
-			var _p5 = _p4._0;
-			return A3(
-				_user$project$ElmParser$toTag,
-				function (_) {
-					return _.tagname;
-				}(_p5),
-				A2(
-					_elm_lang$core$List$map,
-					_user$project$ElmParser$toAttr,
-					function (_) {
-						return _.attr;
-					}(_p5)),
-				A2(_elm_lang$core$List$map, renderer$, _p4._1));
-		}
-	};
-	var _p6 = res;
-	if (_p6.ctor === 'Err') {
-		return A2(
-			_elm_lang$html$Html$div,
-			_elm_lang$core$Native_List.fromArray(
-				[]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html$text('Oh no!'),
-					A2(
-					_elm_lang$html$Html$br,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					_elm_lang$core$Native_List.fromArray(
-						[])),
-					_elm_lang$html$Html$text(_p6._0)
-				]));
-	} else {
-		return renderer$(_p6._0);
-	}
-};
-var _user$project$ElmParser$Tag = F2(
-	function (a, b) {
-		return {tagname: a, attr: b};
-	});
-var _user$project$ElmParser$Empty = {ctor: 'Empty'};
-var _user$project$ElmParser$Node = F2(
-	function (a, b) {
-		return {ctor: 'Node', _0: a, _1: b};
-	});
-var _user$project$ElmParser$add = F2(
-	function (v, t) {
-		var _p7 = t;
-		if (_p7.ctor === 'Empty') {
-			return A2(
-				_user$project$ElmParser$Node,
-				v,
-				_elm_lang$core$Native_List.fromArray(
-					[]));
-		} else {
-			return A2(
-				_user$project$ElmParser$Node,
-				_p7._0,
-				A2(
-					_elm_lang$core$List_ops['::'],
-					A2(
-						_user$project$ElmParser$Node,
-						v,
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-					_p7._1));
-		}
-	});
-var _user$project$ElmParser$A = {ctor: 'A'};
-var _user$project$ElmParser$Div = {ctor: 'Div'};
-var _user$project$ElmParser$Text = function (a) {
-	return {ctor: 'Text', _0: a};
-};
-var _user$project$ElmParser$parseText = A2(
-	_user$project$BetterParser_ops['>>='],
-	A2(
-		_user$project$BetterParser_ops['>>*'],
-		A2(
-			_user$project$BetterParser$sat,
-			_user$project$ElmParser$consumerLS,
-			function (t) {
-				return _elm_lang$core$Native_Utils.eq(
-					function (_) {
-						return _.val;
-					}(t),
-					'text');
-			}),
-		_user$project$ElmParser$parseStringLiteral),
-	function (s) {
-		return _user$project$BetterParser$return(
-			A2(
-				_user$project$ElmParser$Node,
-				A2(
-					_user$project$ElmParser$Tag,
-					_user$project$ElmParser$Text(s),
-					_elm_lang$core$Native_List.fromArray(
-						[])),
-				_elm_lang$core$Native_List.fromArray(
-					[])));
-	});
-var _user$project$ElmParser$H6 = {ctor: 'H6'};
-var _user$project$ElmParser$H5 = {ctor: 'H5'};
-var _user$project$ElmParser$H4 = {ctor: 'H4'};
-var _user$project$ElmParser$H3 = {ctor: 'H3'};
-var _user$project$ElmParser$H2 = {ctor: 'H2'};
-var _user$project$ElmParser$H1 = {ctor: 'H1'};
-var _user$project$ElmParser$Img = {ctor: 'Img'};
-var _user$project$ElmParser$Input = {ctor: 'Input'};
-var _user$project$ElmParser$P = {ctor: 'P'};
-var _user$project$ElmParser$tagnames = _elm_lang$core$Dict$fromList(
-	_elm_lang$core$Native_List.fromArray(
-		[
-			{ctor: '_Tuple2', _0: 'p', _1: _user$project$ElmParser$P},
-			{ctor: '_Tuple2', _0: 'input', _1: _user$project$ElmParser$Input},
-			{ctor: '_Tuple2', _0: 'img', _1: _user$project$ElmParser$Img},
-			{ctor: '_Tuple2', _0: 'h1', _1: _user$project$ElmParser$H1},
-			{ctor: '_Tuple2', _0: 'h2', _1: _user$project$ElmParser$H2},
-			{ctor: '_Tuple2', _0: 'h3', _1: _user$project$ElmParser$H3},
-			{ctor: '_Tuple2', _0: 'h4', _1: _user$project$ElmParser$H4},
-			{ctor: '_Tuple2', _0: 'h5', _1: _user$project$ElmParser$H5},
-			{ctor: '_Tuple2', _0: 'h6', _1: _user$project$ElmParser$H6},
-			{ctor: '_Tuple2', _0: 'div', _1: _user$project$ElmParser$Div},
-			{ctor: '_Tuple2', _0: 'a', _1: _user$project$ElmParser$A}
-		]));
-var _user$project$ElmParser$parseTagName = A2(
-	_user$project$BetterParser_ops['>>='],
-	_user$project$BetterParser$item(_user$project$ElmParser$consumerLS),
-	function (v) {
-		var _p8 = A2(
-			_elm_lang$core$Dict$get,
-			function (_) {
-				return _.val;
-			}(v),
-			_user$project$ElmParser$tagnames);
-		if (_p8.ctor === 'Nothing') {
-			return _user$project$BetterParser$failure(
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					'invalid tag name: ',
-					_user$project$Tokenizer$tokError(v)));
-		} else {
-			return _user$project$BetterParser$return(_p8._0);
-		}
-	});
-var _user$project$ElmParser$Href = function (a) {
-	return {ctor: 'Href', _0: a};
-};
-var _user$project$ElmParser$Style = function (a) {
-	return {ctor: 'Style', _0: a};
-};
 var _user$project$ElmParser$parseStyle = function () {
 	var parseTuple = A2(
 		_user$project$BetterParser_ops['>>='],
@@ -304,42 +143,9 @@ var _user$project$ElmParser$parseStyle = function () {
 				_user$project$BetterParser_ops['>>*'],
 				_user$project$ElmParser$token(']'),
 				_user$project$BetterParser$return(
-					_user$project$ElmParser$Style(res)));
+					_user$project$TagAttr$Style(res)));
 		});
 }();
-var _user$project$ElmParser$Id = function (a) {
-	return {ctor: 'Id', _0: a};
-};
-var _user$project$ElmParser$Class = function (a) {
-	return {ctor: 'Class', _0: a};
-};
-var _user$project$ElmParser$attrnames = _elm_lang$core$Dict$fromList(
-	_elm_lang$core$Native_List.fromArray(
-		[
-			{ctor: '_Tuple2', _0: 'class', _1: _user$project$ElmParser$Class},
-			{ctor: '_Tuple2', _0: 'id', _1: _user$project$ElmParser$Id},
-			{ctor: '_Tuple2', _0: 'href', _1: _user$project$ElmParser$Href}
-		]));
-var _user$project$ElmParser$parseAttrName = A2(
-	_user$project$BetterParser_ops['>>='],
-	_user$project$BetterParser$item(_user$project$ElmParser$consumerLS),
-	function (v) {
-		var _p9 = A2(
-			_elm_lang$core$Dict$get,
-			function (_) {
-				return _.val;
-			}(v),
-			_user$project$ElmParser$attrnames);
-		if (_p9.ctor === 'Nothing') {
-			return _user$project$BetterParser$failure(
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					'invalid attribute name: ',
-					_user$project$Tokenizer$tokError(v)));
-		} else {
-			return _user$project$BetterParser$return(_p9._0);
-		}
-	});
 var _user$project$ElmParser$parseAttr = A2(
 	_user$project$BetterParser_ops['+++'],
 	A2(
@@ -375,61 +181,143 @@ var _user$project$ElmParser$parseAttrList = A2(
 			_user$project$ElmParser$token(']'),
 			_user$project$BetterParser$return(res));
 	});
-var _user$project$ElmParser$parseTag = A2(
-	_user$project$BetterParser_ops['+++'],
-	_user$project$ElmParser$coma(_user$project$ElmParser$parseText),
-	A2(
+var _user$project$ElmParser$parseText = function (path) {
+	return A2(
 		_user$project$BetterParser_ops['>>='],
-		_user$project$ElmParser$coma(_user$project$ElmParser$parseTagName),
-		function (tn) {
+		A2(
+			_user$project$BetterParser_ops['>>*'],
+			A2(
+				_user$project$BetterParser$sat,
+				_user$project$ElmParser$consumerLS,
+				function (t) {
+					return _elm_lang$core$Native_Utils.eq(
+						function (_) {
+							return _.val;
+						}(t),
+						'text');
+				}),
+			_user$project$ElmParser$parseStringLiteral),
+		function (s) {
+			return _user$project$BetterParser$return(
+				A2(
+					_user$project$HtmlZipper$Node,
+					A3(
+						_user$project$HtmlZipper$Tag,
+						_user$project$TagAttr$Text(s),
+						A2(_elm_lang$core$List_ops['::'], _user$project$TagAttr$TextNode, path),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+					_elm_lang$core$Native_List.fromArray(
+						[])));
+		});
+};
+var _user$project$ElmParser$parseTag = function (path) {
+	return A2(
+		_user$project$BetterParser_ops['+++'],
+		_user$project$ElmParser$coma(
+			_user$project$ElmParser$parseText(path)),
+		A2(
+			_user$project$BetterParser_ops['>>='],
+			_user$project$ElmParser$coma(_user$project$ElmParser$parseTagName),
+			function (tn) {
+				return A2(
+					_user$project$BetterParser_ops['>>='],
+					_user$project$ElmParser$parseAttrList,
+					function (al) {
+						return A2(
+							_user$project$BetterParser_ops['>>='],
+							_user$project$ElmParser$parseTagList(path),
+							function (ts) {
+								return _user$project$BetterParser$return(
+									A2(
+										_user$project$HtmlZipper$Node,
+										A3(
+											_user$project$HtmlZipper$Tag,
+											tn,
+											A2(_elm_lang$core$List_ops['::'], tn, path),
+											al),
+										ts));
+							});
+					});
+			}));
+};
+var _user$project$ElmParser$parseTagList = function (path) {
+	return A2(
+		_user$project$BetterParser_ops['>>='],
+		A2(
+			_user$project$BetterParser_ops['>>*'],
+			_user$project$ElmParser$token('['),
+			A3(
+				_user$project$BetterParser$many,
+				_user$project$ElmParser$parseTag(path),
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				F2(
+					function (x, y) {
+						return A2(_elm_lang$core$List_ops['::'], x, y);
+					}))),
+		function (res) {
 			return A2(
-				_user$project$BetterParser_ops['>>='],
-				_user$project$ElmParser$parseAttrList,
-				function (al) {
-					return A2(
-						_user$project$BetterParser_ops['>>='],
-						_user$project$ElmParser$parseTagList,
-						function (ts) {
-							return _user$project$BetterParser$return(
-								A2(
-									_user$project$ElmParser$Node,
-									A2(_user$project$ElmParser$Tag, tn, al),
-									ts));
-						});
-				});
-		}));
-var _user$project$ElmParser$parseTagList = A2(
-	_user$project$BetterParser_ops['>>='],
-	A2(
-		_user$project$BetterParser_ops['>>*'],
-		_user$project$ElmParser$token('['),
-		A3(
-			_user$project$BetterParser$many,
-			_user$project$ElmParser$parseTag,
+				_user$project$BetterParser_ops['>>*'],
+				_user$project$ElmParser$token(']'),
+				_user$project$BetterParser$return(res));
+		});
+};
+var _user$project$ElmParser$interpret = function (input) {
+	var _p3 = _user$project$Tokenizer$tokenizer(input);
+	if (_p3.ctor === 'Err') {
+		return _elm_lang$core$Result$Err(
+			A2(_elm_lang$core$Basics_ops['++'], 'Tokenizer error: ', _p3._0));
+	} else {
+		var _p4 = A2(
+			_user$project$BetterParser$parse,
+			_user$project$ElmParser$parseTag(
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+			_p3._0);
+		if (_p4.ctor === 'Err') {
+			return _elm_lang$core$Result$Err(
+				A2(_elm_lang$core$Basics_ops['++'], 'Parser error: ', _p4._0));
+		} else {
+			return _elm_lang$core$Result$Ok(_p4._0._0);
+		}
+	}
+};
+var _user$project$ElmParser$renderer = function (res) {
+	var renderer$ = function (_p5) {
+		var _p6 = _p5;
+		var _p7 = _p6._0;
+		return A3(
+			_user$project$TagAttr$toTag,
+			function (_) {
+				return _.tagname;
+			}(_p7),
+			A2(
+				_elm_lang$core$List$map,
+				_user$project$TagAttr$toAttr,
+				function (_) {
+					return _.attr;
+				}(_p7)),
+			A2(_elm_lang$core$List$map, renderer$, _p6._1));
+	};
+	var _p8 = res;
+	if (_p8.ctor === 'Err') {
+		return A2(
+			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
 				[]),
-			F2(
-				function (x, y) {
-					return A2(_elm_lang$core$List_ops['::'], x, y);
-				}))),
-	function (res) {
-		return A2(
-			_user$project$BetterParser_ops['>>*'],
-			_user$project$ElmParser$token(']'),
-			_user$project$BetterParser$return(res));
-	});
-var _user$project$ElmParser$interpret = function (input) {
-	var _p10 = _user$project$Tokenizer$tokenizer(input);
-	if (_p10.ctor === 'Err') {
-		return _elm_lang$core$Result$Err(
-			A2(_elm_lang$core$Basics_ops['++'], 'Tokenizer error: ', _p10._0));
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text('Oh no!'),
+					A2(
+					_elm_lang$html$Html$br,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[])),
+					_elm_lang$html$Html$text(_p8._0)
+				]));
 	} else {
-		var _p11 = A2(_user$project$BetterParser$parse, _user$project$ElmParser$parseTag, _p10._0);
-		if (_p11.ctor === 'Err') {
-			return _elm_lang$core$Result$Err(
-				A2(_elm_lang$core$Basics_ops['++'], 'Parser error: ', _p11._0));
-		} else {
-			return _elm_lang$core$Result$Ok(_p11._0._0);
-		}
+		return renderer$(_p8._0);
 	}
 };

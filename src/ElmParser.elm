@@ -4,93 +4,19 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import List exposing (member, foldr, reverse)
 import String exposing (cons, words, endsWith, startsWith, dropLeft, dropRight, uncons, isEmpty, fromChar)
-import Dict exposing (fromList, get)
 import BetterParser exposing (..)
 import Tokenizer exposing (tokenizer, Token, tokError)
-
----------------------------------------------------------------------------
-
-type Tree a = Node a (List (Tree a)) | Empty
-
-add : a -> Tree a -> Tree a
-add v t = 
-  case t of 
-    Empty -> Node v []
-    Node k xs -> Node k ((Node v [])::xs)
-
--------------------------------------------------------------------------------
-
-type alias HTML = Tree Tag
-type alias Tag = 
-  { tagname : TagName
-  , attr : List Attr
-  }
-
--------------------------------------------------------------------------------
-type TagName = 
-  P | Input | Img | H1 | H2 | H3 | H4 | H5 | H6 |
-  Text String  | Div | A 
-
-tagnames = 
-  fromList [ ("p",P)
-           , ("input",Input)
-           , ("img",Img)
-           , ("h1",H1)
-           , ("h2",H2)
-           , ("h3",H3)
-           , ("h4",H4)
-           , ("h5",H5)
-           , ("h6",H6)
-           , ("div",Div)
-           , ("a",A)
-           ]
-
-toTag tn xs =
-  case tn of 
-    Div -> div xs
-    P   -> p  xs
-    Input -> input xs
-    Img   -> img xs
-    H1    -> h1 xs
-    H2    -> h2 xs
-    H3    -> h3 xs
-    H4    -> h4 xs
-    H5    -> h5 xs
-    H6    -> h6 xs
-    A     -> a  xs
-    Text s -> (\_ -> text s)
-
--------------------------------------------------------------------------------
-
-type Attr = 
-   Class String
- | Id String
- | Style (List (String, String))
- | Href String
-
-attrnames =
-  fromList [("class",Class)
-           ,("id",Id)
-           ,("href",Href)
-           ]
-
-toAttr a = 
-  case a of 
-    Class s -> class s
-    Id s    -> id s
-    Href s  -> href s
-    Style xs -> style xs
+import TagAttr exposing (TagName (..),Attr (..), attrnames, tagnames, toAttr, toTag)
+import HtmlZipper exposing (HTML, Tag, Tree (..))
+import Dict exposing (get)
 
 
--------------------------------------------------------------------------------
+
 -- Elm String to HTML
 
 renderer : Result String HTML -> Html msg
 renderer res = 
-  let renderer' t = 
-    case t of 
-      Empty -> text ""
-      Node  tag xs -> 
+  let renderer' (Node  tag xs) = 
         toTag (.tagname tag)
               (List.map toAttr (.attr tag))
               (List.map renderer' xs)
@@ -105,7 +31,7 @@ interpret : String -> Result String HTML
 interpret input = 
   case tokenizer input of 
     Err s -> Err ("Tokenizer error: " ++ s)
-    Ok ts -> case parse parseTag ts of 
+    Ok ts -> case parse (parseTag []) ts of 
                Err s  -> Err ("Parser error: " ++ s) 
                Ok (res,_) -> Ok res
 
@@ -148,11 +74,11 @@ parseStringLiteral =
 
 trimQuot s = (dropRight 1 (dropLeft 1 s))
 
-parseText : Parser (List Token) HTML
-parseText = 
+parseText : List TagName -> Parser (List Token) HTML
+parseText path = 
   sat consumerLS (\t -> (.val t) == "text")
   >>* parseStringLiteral
-  >>= (\s -> return (Node (Tag (Text s) []) []))
+  >>= (\s -> return (Node (Tag (Text s) (TextNode :: path) []) []))
 
 parseStyle : Parser (List Token) Attr
 parseStyle = 
@@ -180,20 +106,21 @@ parseAttrList = token "["
                 >>* many parseAttr [] (::)
                 >>= (\res -> token "]" >>* return res)
 
-parseTag : Parser (List Token) HTML
-parseTag = 
-  (coma parseText)
+parseTag : List TagName -> Parser (List Token) HTML
+parseTag path = 
+  (coma (parseText path))
 
   +++
   
   (
   (coma parseTagName)
   >>= (\tn -> parseAttrList
-  >>= (\al -> parseTagList
-  >>= (\ts  -> return (Node (Tag tn al) ts))))
+  >>= (\al -> (parseTagList path)
+  >>= (\ts  -> return (Node (Tag tn (tn :: path) al) ts))))
   )
 
-parseTagList : Parser (List Token) (List HTML)
-parseTagList = token "["
-                >>* many parseTag [] (::)
-                >>= (\res -> token "]" >>* return res)
+parseTagList : List TagName -> Parser (List Token) (List HTML)
+parseTagList path = 
+  token "["
+  >>* many (parseTag path) [] (::)
+  >>= (\res -> token "]" >>* return res)

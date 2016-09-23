@@ -8,9 +8,9 @@ import String exposing (words)
 import Http
 import Json.Decode as Json
 import Task
+import HtmlZipper exposing (HTML)
 import ElmParser exposing ( interpret
                           , renderer
-                          , HTML
                           )
 
 main =
