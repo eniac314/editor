@@ -1,7 +1,8 @@
 module HtmlZipper exposing (..)
 
-import TagAttr exposing (TagName,Attr, tagnames', attrnames', splitAttr)
+import TagAttr exposing (TagName,Attr, splitAttr)
 import Dict exposing (get)
+import String exposing (toLower, dropRight, dropLeft)
 
 ---------------------------------------------------------------------------
 
@@ -88,29 +89,41 @@ htmlToString html =
     else " " ++ (spacer (indent - 1))
 
   getT tagname = 
-    case get (toString tagname) tagnames' of 
-      Nothing -> "htmlToString: wrong HTML tag: " ++ (toString tagname)
-      Just s  -> s
+    toLower (toString tagname)
 
   getA attrname = 
-    case get attrname attrnames' of 
-      Nothing -> "htmlToString: wrong HTML attribute: " ++ attrname 
-      Just s  -> s
+      toLower (toString attrname)
   
   attrListToString ats =  
     List.map (\a -> let (an,payload) = splitAttr a
-                    in (getA an) ++ payload ) ats
+                    in (trimQuot (getA an)) ++ " "++ payload ) ats
 
 
   helper indent (Node {tagname, path, attr} childs) =
-    spacer indent ++ 
-    (getT tagname) ++ " " ++
-    (toString (attrListToString attr)) ++
-    "\n" ++ (toString (List.map (helper (indent + 2)) childs)) 
-  
+    let tn = getT tagname
+        buff = spacer (indent + off)
+        off  =  (String.length tn)
+        atList = attrListToString attr
+        tglist = (List.map (helper (indent + off +  3)) childs)
+    
+    in if String.startsWith "text" tn
+       then tn
+       else let 
+                atln = if atList == []
+                       then " []"
+                       else " [ " ++ (String.join ("\n" ++ buff ++ " , ") atList) ++ ("\n" ++ buff ++ " ]")
+                tgln = if tglist == []
+                       then " []"
+                       else " [ " ++ (String.join ("\n" ++ buff ++ " , ") tglist) ++ ("\n" ++ buff ++ " ]")
+            in
+            tn ++ atln ++ "\n" ++
+            buff ++ tgln 
+
   in helper 0 html
 
 -------------------------------------------------------------------------------
+
+trimQuot s = (dropRight 1 (dropLeft 1 s))
 
 break : (a -> Bool) -> List a -> (List a, List a)
 break p xs = 

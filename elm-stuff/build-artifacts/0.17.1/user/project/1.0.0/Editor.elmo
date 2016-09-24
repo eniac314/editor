@@ -8,7 +8,7 @@ var _user$project$Editor$subscriptions = function (model) {
 var _user$project$Editor$inputStyle = _elm_lang$html$Html_Attributes$style(
 	_elm_lang$core$Native_List.fromArray(
 		[
-			{ctor: '_Tuple2', _0: 'font-family', _1: 'monospace'},
+			{ctor: '_Tuple2', _0: 'font-family', _1: 'Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace'},
 			{ctor: '_Tuple2', _0: 'width', _1: '40%'}
 		]));
 var _user$project$Editor$update = F2(
@@ -123,17 +123,27 @@ var _user$project$Editor$view = function (model) {
 					[]),
 				_elm_lang$core$Native_List.fromArray(
 					[])),
-				_elm_lang$html$Html$text(
-				function () {
-					var _p1 = function (_) {
-						return _.parsedData;
-					}(model);
-					if (_p1.ctor === 'Err') {
-						return _p1._0;
-					} else {
-						return _user$project$HtmlZipper$htmlToString(_p1._0);
-					}
-				}()),
+				A2(
+				_elm_lang$html$Html$textarea,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Editor$inputStyle,
+						_elm_lang$html$Html_Attributes$rows(15)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(
+						function () {
+							var _p1 = function (_) {
+								return _.parsedData;
+							}(model);
+							if (_p1.ctor === 'Err') {
+								return _p1._0;
+							} else {
+								return _user$project$HtmlZipper$htmlToString(_p1._0);
+							}
+						}())
+					])),
 				A2(
 				_elm_lang$html$Html$br,
 				_elm_lang$core$Native_List.fromArray(

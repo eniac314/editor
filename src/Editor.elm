@@ -62,17 +62,20 @@ view model =
         , br [] []
         , text (toString (.parsedData model))
         , br [] []
-        , text (case (.parsedData model) of 
+        , textarea [ 
+                    inputStyle
+                   , rows 15 
+                   ]
+                   [text (case (.parsedData model) of 
                         Err s -> s
-                        Ok r  -> htmlToString r) 
-            
-              
+                        Ok r  -> htmlToString r)
+                   ]  
         , br [] []
         , (.toRender model )
         ]
 
 inputStyle = 
-  style [("font-family","monospace")
+  style [("font-family","Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace")
         ,("width","40%")
         ]
 

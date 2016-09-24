@@ -5,6 +5,7 @@ import Html.Attributes exposing (..)
 import Dict exposing (fromList, toList ,get)
 import List exposing (map)
 import String exposing (fromList, toList )
+import Char exposing (toUpper)
 
 
 -------------------------------------------------------------------------------
@@ -26,10 +27,6 @@ tagnames =
            , ("div",Div)
            , ("a",A)
            ]
-
-tagnames' = 
-    Dict.fromList 
-      (List.map (\(a,b) -> (toString b,a)) (Dict.toList tagnames))
 
 toTag tn xs =
   case tn of 
@@ -62,9 +59,10 @@ attrnames =
            ,("href",Href)
            ]
 
-attrnames' = 
-    Dict.fromList 
-      (List.map (\(a,b) -> (toString b,a)) (Dict.toList attrnames))
+capitalize s = 
+  case String.uncons s of 
+    Nothing -> ""
+    Just (c,cs) -> String.cons (Char.toUpper c) cs
 
 toAttr a = 
   case a of 
