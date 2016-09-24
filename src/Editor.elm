@@ -7,14 +7,14 @@ import Html.Events exposing (..)
 import String exposing (words)
 import Http
 import Json.Decode as Json
-import Task
+import Task exposing (succeed, perform)
 import HtmlZipper exposing (HTML, htmlToString)
 import ElmParser exposing ( interpret
                           , renderer
                           )
 
 main =
-    App.program { init   = (Model "" (Err "nothing yet") (text ""), Cmd.none) 
+    App.program { init   = (Model testinput Nothing (Err "nothing yet") (text ""), Cmd.none) 
                 , update = update
                 , view   = view
                 , subscriptions = subscriptions
@@ -22,6 +22,7 @@ main =
 
 type alias Model = 
   { rawString : String
+  , procString : Maybe String 
   , parsedData : Result String HTML
   , toRender : Html Msg
   }
@@ -37,39 +38,44 @@ update msg model =
   case msg of 
     Store s -> ({ model | rawString = s}, Cmd.none)
     Parse   -> 
-       ({ model |
-          parsedData = interpret (.rawString model)
-        }, Cmd.none)
+        let pdata = interpret (.rawString model)
+            prString = case pdata of 
+                         Err s -> Nothing
+                         Ok r  -> Just (htmlToString r)
+        in
+        ({ model |
+           parsedData = pdata 
+         , procString = prString
+         }, Cmd.none)
     Render  -> ({ model | 
                   toRender = (renderer (.parsedData model))
                 }, Cmd.none)
 
+
+--reset = Task.perform (\_ -> Reset) (\_ -> Reset) (succeed Reset)
 -- VIEW
 
 view : Model -> Html Msg
 view model = 
     div []
-        [ textarea [ 
-                     onInput Store
-                   , rows 15
-                   , cols 45
-                   , inputStyle
-                   ]
-                   [text testinput]
-        , br [] []
-        , button [onClick Parse] [ text "Parse"]
+         [ Html.form []
+            [ textarea [ onInput Store
+                       , rows 15
+                       , cols 45
+                       , inputStyle
+                       ]
+                       [ case (.procString model) of 
+                           Nothing -> text (.rawString model)
+                           Just s  -> text s
+                       ]
+            , br [] []
+            , button [onClick Parse, type' "reset"] [ text "Parse"]
+         ]
         , button [onClick Render] [ text "Render"]
+        
         , br [] []
         , text (toString (.parsedData model))
-        , br [] []
-        , textarea [ 
-                    inputStyle
-                   , rows 15 
-                   ]
-                   [text (case (.parsedData model) of 
-                        Err s -> s
-                        Ok r  -> htmlToString r)
-                   ]  
+        
         , br [] []
         , (.toRender model )
         ]

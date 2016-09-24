@@ -24,16 +24,24 @@ var _user$project$Editor$update = F2(
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'Parse':
+				var pdata = _user$project$ElmParser$interpret(
+					function (_) {
+						return _.rawString;
+					}(model));
+				var prString = function () {
+					var _p1 = pdata;
+					if (_p1.ctor === 'Err') {
+						return _elm_lang$core$Maybe$Nothing;
+					} else {
+						return _elm_lang$core$Maybe$Just(
+							_user$project$HtmlZipper$htmlToString(_p1._0));
+					}
+				}();
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{
-							parsedData: _user$project$ElmParser$interpret(
-								function (_) {
-									return _.rawString;
-								}(model))
-						}),
+						{parsedData: pdata, procString: prString}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			default:
@@ -51,9 +59,9 @@ var _user$project$Editor$update = F2(
 				};
 		}
 	});
-var _user$project$Editor$Model = F3(
-	function (a, b, c) {
-		return {rawString: a, parsedData: b, toRender: c};
+var _user$project$Editor$Model = F4(
+	function (a, b, c, d) {
+		return {rawString: a, procString: b, parsedData: c, toRender: d};
 	});
 var _user$project$Editor$Render = {ctor: 'Render'};
 var _user$project$Editor$Parse = {ctor: 'Parse'};
@@ -68,33 +76,53 @@ var _user$project$Editor$view = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(
-				_elm_lang$html$Html$textarea,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Events$onInput(_user$project$Editor$Store),
-						_elm_lang$html$Html_Attributes$rows(15),
-						_elm_lang$html$Html_Attributes$cols(45),
-						_user$project$Editor$inputStyle
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text(_user$project$Editor$testinput)
-					])),
-				A2(
-				_elm_lang$html$Html$br,
+				_elm_lang$html$Html$form,
 				_elm_lang$core$Native_List.fromArray(
 					[]),
 				_elm_lang$core$Native_List.fromArray(
-					[])),
-				A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Events$onClick(_user$project$Editor$Parse)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Parse')
+						A2(
+						_elm_lang$html$Html$textarea,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Events$onInput(_user$project$Editor$Store),
+								_elm_lang$html$Html_Attributes$rows(15),
+								_elm_lang$html$Html_Attributes$cols(45),
+								_user$project$Editor$inputStyle
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								function () {
+								var _p2 = function (_) {
+									return _.procString;
+								}(model);
+								if (_p2.ctor === 'Nothing') {
+									return _elm_lang$html$Html$text(
+										function (_) {
+											return _.rawString;
+										}(model));
+								} else {
+									return _elm_lang$html$Html$text(_p2._0);
+								}
+							}()
+							])),
+						A2(
+						_elm_lang$html$Html$br,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A2(
+						_elm_lang$html$Html$button,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Events$onClick(_user$project$Editor$Parse),
+								_elm_lang$html$Html_Attributes$type$('reset')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Parse')
+							]))
 					])),
 				A2(
 				_elm_lang$html$Html$button,
@@ -123,33 +151,6 @@ var _user$project$Editor$view = function (model) {
 					[]),
 				_elm_lang$core$Native_List.fromArray(
 					[])),
-				A2(
-				_elm_lang$html$Html$textarea,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_user$project$Editor$inputStyle,
-						_elm_lang$html$Html_Attributes$rows(15)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text(
-						function () {
-							var _p1 = function (_) {
-								return _.parsedData;
-							}(model);
-							if (_p1.ctor === 'Err') {
-								return _p1._0;
-							} else {
-								return _user$project$HtmlZipper$htmlToString(_p1._0);
-							}
-						}())
-					])),
-				A2(
-				_elm_lang$html$Html$br,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
-					[])),
 				function (_) {
 				return _.toRender;
 			}(model)
@@ -160,9 +161,10 @@ var _user$project$Editor$main = {
 		{
 			init: {
 				ctor: '_Tuple2',
-				_0: A3(
+				_0: A4(
 					_user$project$Editor$Model,
-					'',
+					_user$project$Editor$testinput,
+					_elm_lang$core$Maybe$Nothing,
 					_elm_lang$core$Result$Err('nothing yet'),
 					_elm_lang$html$Html$text('')),
 				_1: _elm_lang$core$Platform_Cmd$none
