@@ -1,6 +1,7 @@
 module HtmlZipper exposing (..)
 
-import TagAttr exposing (TagName,Attr)
+import TagAttr exposing (TagName,Attr, tagnames', attrnames', splitAttr)
+import Dict exposing (get)
 
 ---------------------------------------------------------------------------
 
@@ -76,6 +77,38 @@ type alias Tag =
   , attr : List Attr
   }
 
+
+
+htmlToString : HTML -> String
+htmlToString html =
+  let
+  spacer indent = 
+    if indent == 0
+    then ""
+    else " " ++ (spacer (indent - 1))
+
+  getT tagname = 
+    case get (toString tagname) tagnames' of 
+      Nothing -> "htmlToString: wrong HTML tag: " ++ (toString tagname)
+      Just s  -> s
+
+  getA attrname = 
+    case get attrname attrnames' of 
+      Nothing -> "htmlToString: wrong HTML attribute: " ++ attrname 
+      Just s  -> s
+  
+  attrListToString ats =  
+    List.map (\a -> let (an,payload) = splitAttr a
+                    in (getA an) ++ payload ) ats
+
+
+  helper indent (Node {tagname, path, attr} childs) =
+    spacer indent ++ 
+    (getT tagname) ++ " " ++
+    (toString (attrListToString attr)) ++
+    "\n" ++ (toString (List.map (helper (indent + 2)) childs)) 
+  
+  in helper 0 html
 
 -------------------------------------------------------------------------------
 

@@ -2,7 +2,9 @@ module TagAttr exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Dict exposing (fromList, get)
+import Dict exposing (fromList, toList ,get)
+import List exposing (map)
+import String exposing (fromList, toList )
 
 
 -------------------------------------------------------------------------------
@@ -11,7 +13,8 @@ type TagName =
   Text String  | Div | A | TextNode
 
 tagnames = 
-  fromList [ ("p",P)
+  Dict.fromList
+           [ ("p",P)
            , ("input",Input)
            , ("img",Img)
            , ("h1",H1)
@@ -23,6 +26,10 @@ tagnames =
            , ("div",Div)
            , ("a",A)
            ]
+
+tagnames' = 
+    Dict.fromList 
+      (List.map (\(a,b) -> (toString b,a)) (Dict.toList tagnames))
 
 toTag tn xs =
   case tn of 
@@ -49,10 +56,15 @@ type Attr =
  | Href String
 
 attrnames =
-  fromList [("class",Class)
+  Dict.fromList 
+           [("class",Class)
            ,("id",Id)
            ,("href",Href)
            ]
+
+attrnames' = 
+    Dict.fromList 
+      (List.map (\(a,b) -> (toString b,a)) (Dict.toList attrnames))
 
 toAttr a = 
   case a of 
@@ -62,4 +74,18 @@ toAttr a =
     Style xs -> style xs
 
 
--------------------------------------------------------------------------------
+-------------------------------------------------------------------------------- 
+
+splitAttr : Attr -> (String, String)
+splitAttr attr = 
+  let 
+  s = String.toList (toString attr)
+
+  f buff xs = 
+    case xs of 
+      [] -> (String.fromList (List.reverse buff),"")
+      (x::xs) ->
+        if (x == ' ')
+        then (String.fromList (List.reverse buff), String.fromList xs)
+        else f (x :: buff) xs
+  in f [] s 

@@ -37,6 +37,76 @@ var _user$project$HtmlZipper$break = F2(
 			_elm_lang$core$Native_List.fromArray(
 				[]));
 	});
+var _user$project$HtmlZipper$htmlToString = function (html) {
+	var getA = function (attrname) {
+		var _p3 = A2(_elm_lang$core$Dict$get, attrname, _user$project$TagAttr$attrnames$);
+		if (_p3.ctor === 'Nothing') {
+			return A2(_elm_lang$core$Basics_ops['++'], 'htmlToString: wrong HTML attribute: ', attrname);
+		} else {
+			return _p3._0;
+		}
+	};
+	var attrListToString = function (ats) {
+		return A2(
+			_elm_lang$core$List$map,
+			function (a) {
+				var _p4 = _user$project$TagAttr$splitAttr(a);
+				var an = _p4._0;
+				var payload = _p4._1;
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					getA(an),
+					payload);
+			},
+			ats);
+	};
+	var getT = function (tagname) {
+		var _p5 = A2(
+			_elm_lang$core$Dict$get,
+			_elm_lang$core$Basics$toString(tagname),
+			_user$project$TagAttr$tagnames$);
+		if (_p5.ctor === 'Nothing') {
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				'htmlToString: wrong HTML tag: ',
+				_elm_lang$core$Basics$toString(tagname));
+		} else {
+			return _p5._0;
+		}
+	};
+	var spacer = function (indent) {
+		return _elm_lang$core$Native_Utils.eq(indent, 0) ? '' : A2(
+			_elm_lang$core$Basics_ops['++'],
+			' ',
+			spacer(indent - 1));
+	};
+	var helper = F2(
+		function (indent, _p6) {
+			var _p7 = _p6;
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				spacer(indent),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					getT(_p7._0.tagname),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						' ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(
+								attrListToString(_p7._0.attr)),
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'\n',
+								_elm_lang$core$Basics$toString(
+									A2(
+										_elm_lang$core$List$map,
+										helper(indent + 2),
+										_p7._1)))))));
+		});
+	return A2(helper, 0, html);
+};
 var _user$project$HtmlZipper$Tag = F3(
 	function (a, b, c) {
 		return {tagname: a, path: b, attr: c};
@@ -52,10 +122,10 @@ var _user$project$HtmlZipper$Context = F3(
 var _user$project$HtmlZipper$ZipTree = function (a) {
 	return {ctor: 'ZipTree', _0: a};
 };
-var _user$project$HtmlZipper$zipUp = function (_p3) {
-	var _p4 = _p3;
-	var _p5 = _p4._0._1;
-	if (_p5.ctor === '[]') {
+var _user$project$HtmlZipper$zipUp = function (_p8) {
+	var _p9 = _p8;
+	var _p10 = _p9._0._1;
+	if (_p10.ctor === '[]') {
 		return _elm_lang$core$Maybe$Nothing;
 	} else {
 		return _elm_lang$core$Maybe$Just(
@@ -64,42 +134,42 @@ var _user$project$HtmlZipper$zipUp = function (_p3) {
 					ctor: '_Tuple2',
 					_0: A2(
 						_user$project$HtmlZipper$Node,
-						_p5._0._0,
+						_p10._0._0,
 						A2(
 							_elm_lang$core$Basics_ops['++'],
-							_p5._0._1,
+							_p10._0._1,
 							A2(
 								_elm_lang$core$Basics_ops['++'],
 								_elm_lang$core$Native_List.fromArray(
-									[_p4._0._0]),
-								_p5._0._2))),
-					_1: _p5._1
+									[_p9._0._0]),
+								_p10._0._2))),
+					_1: _p10._1
 				}));
 	}
 };
 var _user$project$HtmlZipper$zipDown = F2(
-	function (p, _p6) {
-		var _p7 = _p6;
-		var _p8 = _p7._0._0._1;
-		if (_p8.ctor === '[]') {
+	function (p, _p11) {
+		var _p12 = _p11;
+		var _p13 = _p12._0._0._1;
+		if (_p13.ctor === '[]') {
 			return _elm_lang$core$Maybe$Nothing;
 		} else {
-			var _p9 = A2(_user$project$HtmlZipper$break, p, _p8);
-			var l = _p9._0;
-			var r = _p9._1;
-			var _p10 = r;
-			if (_p10.ctor === '[]') {
+			var _p14 = A2(_user$project$HtmlZipper$break, p, _p13);
+			var l = _p14._0;
+			var r = _p14._1;
+			var _p15 = r;
+			if (_p15.ctor === '[]') {
 				return _elm_lang$core$Maybe$Nothing;
 			} else {
 				return _elm_lang$core$Maybe$Just(
 					_user$project$HtmlZipper$ZipTree(
 						{
 							ctor: '_Tuple2',
-							_0: _p10._0,
+							_0: _p15._0,
 							_1: A2(
 								_elm_lang$core$List_ops['::'],
-								A3(_user$project$HtmlZipper$Context, _p7._0._0._0, l, _p10._1),
-								_p7._0._1)
+								A3(_user$project$HtmlZipper$Context, _p12._0._0._0, l, _p15._1),
+								_p12._0._1)
 						}));
 			}
 		}
@@ -108,81 +178,49 @@ var _user$project$HtmlZipper$cd = F3(
 	function (path, f, zt) {
 		cd:
 		while (true) {
-			var _p11 = path;
-			if (_p11.ctor === '[]') {
+			var _p16 = path;
+			if (_p16.ctor === '[]') {
 				return _elm_lang$core$Maybe$Nothing;
 			} else {
-				if (_p11._1.ctor === '[]') {
-					var g = function (_p12) {
-						var _p13 = _p12;
+				if (_p16._1.ctor === '[]') {
+					var g = function (_p17) {
+						var _p18 = _p17;
 						return _elm_lang$core$Native_Utils.eq(
-							f(_p13._0),
-							_p11._0);
+							f(_p18._0),
+							_p16._0);
 					};
 					return A2(_user$project$HtmlZipper$zipDown, g, zt);
 				} else {
-					var g = function (_p14) {
-						var _p15 = _p14;
+					var g = function (_p19) {
+						var _p20 = _p19;
 						return _elm_lang$core$Native_Utils.eq(
-							f(_p15._0),
-							_p11._0);
+							f(_p20._0),
+							_p16._0);
 					};
-					var _p16 = A2(_user$project$HtmlZipper$zipDown, g, zt);
-					if (_p16.ctor === 'Nothing') {
+					var _p21 = A2(_user$project$HtmlZipper$zipDown, g, zt);
+					if (_p21.ctor === 'Nothing') {
 						return _elm_lang$core$Maybe$Nothing;
 					} else {
-						var _v12 = _p11._1,
-							_v13 = f,
-							_v14 = _p16._0;
-						path = _v12;
-						f = _v13;
-						zt = _v14;
+						var _v15 = _p16._1,
+							_v16 = f,
+							_v17 = _p21._0;
+						path = _v15;
+						f = _v16;
+						zt = _v17;
 						continue cd;
 					}
 				}
 			}
 		}
 	});
-var _user$project$HtmlZipper$zipRight = function (_p17) {
-	var _p18 = _p17;
-	var _p21 = _p18._0._1;
-	var _p19 = _p21;
-	if (_p19.ctor === '[]') {
-		return _elm_lang$core$Maybe$Nothing;
-	} else {
-		var _p20 = _p19._0._2;
-		if (_p20.ctor === '[]') {
-			return _elm_lang$core$Maybe$Nothing;
-		} else {
-			return _elm_lang$core$Maybe$Just(
-				_user$project$HtmlZipper$ZipTree(
-					{
-						ctor: '_Tuple2',
-						_0: _p20._0,
-						_1: A2(
-							_elm_lang$core$List_ops['::'],
-							A3(
-								_user$project$HtmlZipper$Context,
-								_p19._0._0,
-								A2(
-									_elm_lang$core$Basics_ops['++'],
-									_p19._0._1,
-									_elm_lang$core$Native_List.fromArray(
-										[_p18._0._0])),
-								_p20._1),
-							_p21)
-					}));
-		}
-	}
-};
-var _user$project$HtmlZipper$zipLeft = function (_p22) {
+var _user$project$HtmlZipper$zipRight = function (_p22) {
 	var _p23 = _p22;
 	var _p26 = _p23._0._1;
 	var _p24 = _p26;
 	if (_p24.ctor === '[]') {
 		return _elm_lang$core$Maybe$Nothing;
 	} else {
-		var _p25 = _elm_lang$core$List$reverse(_p24._0._1);
+		var _p25 = _p24._0._2;
 		if (_p25.ctor === '[]') {
 			return _elm_lang$core$Maybe$Nothing;
 		} else {
@@ -196,9 +234,41 @@ var _user$project$HtmlZipper$zipLeft = function (_p22) {
 							A3(
 								_user$project$HtmlZipper$Context,
 								_p24._0._0,
-								_elm_lang$core$List$reverse(_p25._1),
-								A2(_elm_lang$core$List_ops['::'], _p23._0._0, _p24._0._2)),
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									_p24._0._1,
+									_elm_lang$core$Native_List.fromArray(
+										[_p23._0._0])),
+								_p25._1),
 							_p26)
+					}));
+		}
+	}
+};
+var _user$project$HtmlZipper$zipLeft = function (_p27) {
+	var _p28 = _p27;
+	var _p31 = _p28._0._1;
+	var _p29 = _p31;
+	if (_p29.ctor === '[]') {
+		return _elm_lang$core$Maybe$Nothing;
+	} else {
+		var _p30 = _elm_lang$core$List$reverse(_p29._0._1);
+		if (_p30.ctor === '[]') {
+			return _elm_lang$core$Maybe$Nothing;
+		} else {
+			return _elm_lang$core$Maybe$Just(
+				_user$project$HtmlZipper$ZipTree(
+					{
+						ctor: '_Tuple2',
+						_0: _p30._0,
+						_1: A2(
+							_elm_lang$core$List_ops['::'],
+							A3(
+								_user$project$HtmlZipper$Context,
+								_p29._0._0,
+								_elm_lang$core$List$reverse(_p30._1),
+								A2(_elm_lang$core$List_ops['::'], _p28._0._0, _p29._0._2)),
+							_p31)
 					}));
 		}
 	}

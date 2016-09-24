@@ -1,3 +1,7 @@
+var _user$project$Editor$testinput4 = ' div []\n      [ h2 [] [text \"first title\"]\n      ] \n  \n  ';
+var _user$project$Editor$testinput3 = ' [ class \"mainDiv\" , id \"toto\" ]\n   ';
+var _user$project$Editor$testinput2 = ' div [ class \"mainDiv\" , id \"toto\" ]\n           [ text \"hello!\" ]\n\n  ';
+var _user$project$Editor$testinput = ' div [ class \"mainDiv\" ]\n          [ p [ style [ ( \"color\" , \"red\" ) ] ] [ text \"this is a test\" \n                  , p [ ] [ ]\n                  ]\n          , p [ ] [ h2 [ id \"very important\" , style [ ( \"color\" , \"blue\" ) ] ] [ text \"big title\" ] ]\n          ]\n\n  ';
 var _user$project$Editor$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
@@ -5,7 +9,7 @@ var _user$project$Editor$inputStyle = _elm_lang$html$Html_Attributes$style(
 	_elm_lang$core$Native_List.fromArray(
 		[
 			{ctor: '_Tuple2', _0: 'font-family', _1: 'monospace'},
-			{ctor: '_Tuple2', _0: '', _1: ''}
+			{ctor: '_Tuple2', _0: 'width', _1: '40%'}
 		]));
 var _user$project$Editor$update = F2(
 	function (msg, model) {
@@ -73,7 +77,9 @@ var _user$project$Editor$view = function (model) {
 						_user$project$Editor$inputStyle
 					]),
 				_elm_lang$core$Native_List.fromArray(
-					[])),
+					[
+						_elm_lang$html$Html$text(_user$project$Editor$testinput)
+					])),
 				A2(
 				_elm_lang$html$Html$br,
 				_elm_lang$core$Native_List.fromArray(
@@ -100,6 +106,34 @@ var _user$project$Editor$view = function (model) {
 					[
 						_elm_lang$html$Html$text('Render')
 					])),
+				A2(
+				_elm_lang$html$Html$br,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				_elm_lang$html$Html$text(
+				_elm_lang$core$Basics$toString(
+					function (_) {
+						return _.parsedData;
+					}(model))),
+				A2(
+				_elm_lang$html$Html$br,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				_elm_lang$html$Html$text(
+				function () {
+					var _p1 = function (_) {
+						return _.parsedData;
+					}(model);
+					if (_p1.ctor === 'Err') {
+						return _p1._0;
+					} else {
+						return _user$project$HtmlZipper$htmlToString(_p1._0);
+					}
+				}()),
 				A2(
 				_elm_lang$html$Html$br,
 				_elm_lang$core$Native_List.fromArray(

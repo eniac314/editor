@@ -8,7 +8,7 @@ import String exposing (words)
 import Http
 import Json.Decode as Json
 import Task
-import HtmlZipper exposing (HTML)
+import HtmlZipper exposing (HTML, htmlToString)
 import ElmParser exposing ( interpret
                           , renderer
                           )
@@ -55,17 +55,25 @@ view model =
                    , cols 45
                    , inputStyle
                    ]
-                   []
+                   [text testinput]
         , br [] []
         , button [onClick Parse] [ text "Parse"]
         , button [onClick Render] [ text "Render"]
+        , br [] []
+        , text (toString (.parsedData model))
+        , br [] []
+        , text (case (.parsedData model) of 
+                        Err s -> s
+                        Ok r  -> htmlToString r) 
+            
+              
         , br [] []
         , (.toRender model )
         ]
 
 inputStyle = 
   style [("font-family","monospace")
-        ,("","")
+        ,("width","40%")
         ]
 
 -- SUBSCRIPTIONS
@@ -74,3 +82,30 @@ subscriptions : Model -> Sub Msg
 subscriptions model = Sub.none
 
 
+-- Test
+
+testinput = 
+  """ div [ class "mainDiv" ]
+          [ p [ style [ ( "color" , "red" ) ] ] [ text "this is a test" 
+                  , p [ ] [ ]
+                  ]
+          , p [ ] [ h2 [ id "very important" , style [ ( "color" , "blue" ) ] ] [ text "big title" ] ]
+          ]
+
+  """
+testinput2 = 
+   """ div [ class "mainDiv" , id "toto" ]
+           [ text "hello!" ]
+
+  """
+
+testinput3 = 
+   """ [ class "mainDiv" , id "toto" ]
+   """
+
+testinput4 = 
+  """ div []
+      [ h2 [] [text "first title"]
+      ] 
+  
+  """
