@@ -91,6 +91,18 @@ getStringLit : CharMeta -> Result String (CharMeta,CharMeta)
 getStringLit xs = 
   case xs of 
     [] -> Err "getStringLit: Invalid String literal"
+    --(c::c'::xs) -> 
+    --  if (.ch c == '\\') && (.ch c' == '\"')
+    --  then 
+    --    case getStringLit xs of 
+    --        Err s -> Err s
+    --        Ok (l,r) -> Ok (c'::l, r)
+    --    else if (.ch c' == '\"')
+    --         then  Ok ([],xs)
+    --         else 
+    --          case getStringLit (c'::xs) of 
+    --            Err s -> Err s
+    --            Ok (l,r) -> Ok (c::l, r)
     (x::xs) -> 
       if (.ch x == '\"')
       then Ok ([],xs)

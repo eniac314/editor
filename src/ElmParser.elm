@@ -115,7 +115,7 @@ parseTag path =
   (
   (coma parseTagName)
   >>= (\tn -> parseAttrList
-  >>= (\al -> (parseTagList path)
+  >>= (\al -> (parseTagList (tn :: path))
   >>= (\ts  -> return (Node (Tag tn (tn :: path) al) ts))))
   )
 

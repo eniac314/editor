@@ -226,7 +226,8 @@ var _user$project$ElmParser$parseTag = function (path) {
 					function (al) {
 						return A2(
 							_user$project$BetterParser_ops['>>='],
-							_user$project$ElmParser$parseTagList(path),
+							_user$project$ElmParser$parseTagList(
+								A2(_elm_lang$core$List_ops['::'], tn, path)),
 							function (ts) {
 								return _user$project$BetterParser$return(
 									A2(
