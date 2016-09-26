@@ -106,6 +106,8 @@ parseAttrList = token "["
                 >>* many parseAttr [] (::)
                 >>= (\res -> token "]" >>* return res)
 
+--f p = (\path n -> p path (n + 1))
+
 parseTag : List TagName -> Parser (List Token) HTML
 parseTag path = 
   (coma (parseText path))
@@ -124,3 +126,4 @@ parseTagList path =
   token "["
   >>* many (parseTag path) [] (::)
   >>= (\res -> token "]" >>* return res)
+                                                                              

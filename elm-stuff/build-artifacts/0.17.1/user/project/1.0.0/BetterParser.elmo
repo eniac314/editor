@@ -123,3 +123,31 @@ var _user$project$BetterParser$many1 = F3(
 					});
 			});
 	});
+var _user$project$BetterParser$manyState = F5(
+	function (s, g, p, acc, f) {
+		return A2(
+			_user$project$BetterParser_ops['+++'],
+			A5(_user$project$BetterParser$many1state, s, g, p, acc, f),
+			_user$project$BetterParser$return(acc));
+	});
+var _user$project$BetterParser$many1state = F5(
+	function (s, g, p, acc, f) {
+		return A2(
+			_user$project$BetterParser_ops['>>='],
+			p(s),
+			function (v) {
+				return A2(
+					_user$project$BetterParser_ops['>>='],
+					A5(
+						_user$project$BetterParser$manyState,
+						g(s),
+						g,
+						p,
+						acc,
+						f),
+					function (vs) {
+						return _user$project$BetterParser$return(
+							A2(f, v, vs));
+					});
+			});
+	});
