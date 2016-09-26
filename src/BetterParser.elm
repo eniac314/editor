@@ -53,13 +53,12 @@ many1 :  Parser a b -> c -> (b -> c -> c) -> Parser a c
 many1 p acc f = 
   p >>= (\v -> many p acc f >>= (\vs -> return (f v vs)))
 
-manyState : state -> (state -> state) -> (state -> Parser a b) -> c -> (b -> c -> c) -> Parser a c
-manyState s g p acc f = (many1state s g p acc f) +++ return acc
+many' : (( a, b ) -> Parser c ( a, b )) -> ( a, b ) -> (( a, b ) -> ( d, b ) -> ( d, b )) -> d -> Parser c ( d, b )
+many' p acc f ie = (many1' p acc f ie) +++ return (ie,snd acc)
 
-many1state : state -> (state -> state) -> (state -> Parser a b) -> c -> (b -> c -> c) -> Parser a c
-many1state s g p acc f =
-  (p s) >>= (\v -> manyState (g s) g p acc f >>= (\vs -> return (f v vs)))
-
+many1' : (( a, b ) -> Parser c ( a, b )) -> ( a, b ) -> (( a, b ) -> ( d, b ) -> ( d, b )) -> d -> Parser c ( d, b )
+many1' p acc f ie = 
+  p acc >>= (\v -> many' p v f ie >>= (\vs -> return (f v vs)))
 
 plist : List (Parser a b)-> (b -> c -> c) -> c -> Parser a c
 plist ps f acc = 

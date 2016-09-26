@@ -8,6 +8,7 @@ import String exposing (words)
 import Http
 import Json.Decode as Json
 import Task exposing (succeed, perform)
+import Data.Integer exposing (fromInt, add, Integer)
 import HtmlZipper exposing ( HTML
                            , HtmlZipper
                            , Path
@@ -37,22 +38,27 @@ main =
 type alias Model = 
   { rawString : String
   , procString : Maybe String
-  , parsedData : Result String HTML
+  , parsedData : Result String (HTML,Integer)
   , currPath : Path 
   , page : Maybe HtmlZipper
   , toRender : Html Msg
+  , nextId : Integer
   }
 
 init initInput = 
-  let pdata = interpret initInput
+  let pdata = interpret initInput (fromInt 0)
       initPage = 
         case pdata of 
           Err s -> Nothing
-          Ok  t -> Just (initZip t)
+          Ok  (t,n) -> Just (initZip t)
       initPath = 
         case initPage of 
           Nothing -> []
           Just ip -> extractPath ip
+      nextId = 
+        case pdata of 
+          Err s -> fromInt 0
+          Ok (r,n) -> (add n (fromInt 1)) 
   in
   Model initInput
         Nothing
@@ -60,6 +66,8 @@ init initInput =
         initPath
         initPage        
         (renderer pdata)
+        nextId
+        
 
 -- UPDATE
 
@@ -87,20 +95,26 @@ update msg model =
 
 
 parse model = 
-  let pdata = interpret (.rawString model)
+  let pdata = interpret (.rawString model) (.nextId model)
       prString = case pdata of 
                    Err s -> Nothing
-                   Ok r  -> Just (htmlToString r)
+                   Ok (r,n)  -> Just (htmlToString r)
       newPage = 
         case pdata of 
           Err s -> (.page model)
-          Ok  r -> 
+          Ok  (r,_) -> 
             case (.page model) of 
               Nothing -> Just (initZip r)
               Just p  -> Just (updateFocus r p)
+      nextId =
+       case pdata of 
+         Err s -> .nextId model
+         Ok (_,n) -> add n (fromInt 1)
+
   in { model | procString = prString
              , parsedData = pdata
              , page = newPage
+             , nextId = nextId
      } 
 
 move : (HtmlZipper -> Maybe HtmlZipper) -> Model -> Model
@@ -123,7 +137,7 @@ move f model =
       newParsedData = 
         case newPage of 
          Nothing -> Err "wrong Html tree"
-         Just np -> Ok (extractTree np)
+         Just np -> Ok ((extractTree np),.nextId model)
 
       newPath    = 
         case newPage of 
@@ -140,7 +154,8 @@ move f model =
            newParsedData
            newPath
            newPage        
-           newRender 
+           newRender
+           (.nextId model) 
 
 --reset = Task.perform (\_ -> Reset) (\_ -> Reset) (succeed Reset)
 -- VIEW

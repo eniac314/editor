@@ -7,14 +7,14 @@ import String exposing (cons, words, endsWith, startsWith, dropLeft, dropRight, 
 import BetterParser exposing (..)
 import Tokenizer exposing (tokenizer, Token, tokError)
 import TagAttr exposing (TagName (..),Attr (..), attrnames, tagnames, toAttr, toTag)
-import HtmlZipper exposing (HTML, Tag, Tree (..))
+import HtmlZipper exposing (HTML, Tag, Tree (..), Path)
 import Dict exposing (get)
-
+import Data.Integer exposing (add, fromInt, Integer)
 
 
 -- Elm String to HTML
 
-renderer : Result String HTML -> Html msg
+renderer : Result String (HTML,Integer) -> Html msg
 renderer res = 
   let renderer' (Node  tag xs) = 
         toTag (.tagname tag)
@@ -23,17 +23,31 @@ renderer res =
   in 
   case res of 
     Err s -> div [] [text "Oh no!", br [] [], text s]
-    Ok t  -> renderer' t 
+    Ok (t,n)  -> renderer' t 
 
 
 
-interpret : String -> Result String HTML
-interpret input = 
+interpret : String -> Integer -> Result String (HTML,Integer)
+interpret input n = 
   case tokenizer input of 
     Err s -> Err ("Tokenizer error: " ++ s)
-    Ok ts -> case parse (parseTag []) ts of 
+    Ok ts -> case parse (parseTag [] n) ts of 
                Err s  -> Err ("Parser error: " ++ s) 
                Ok (res,_) -> Ok res
+
+test = interpret testinput (fromInt 0)
+
+zero =  fromInt 0
+
+testinput = 
+ """ div [ class "mainDiv" ]
+          [ p [ style [ ( "color" , "red" ) ] ] [ text "this is a test" 
+                  , p [ ] [ ]
+                  ]
+          , p [ ] [ h2 [ id "very important" , style [ ( "color" , "blue" ) ] ] [ text "big title" ] ]
+          ]
+
+  """
 
 consumerLS xs =
   case xs of
@@ -74,11 +88,11 @@ parseStringLiteral =
 
 trimQuot s = (dropRight 1 (dropLeft 1 s))
 
-parseText : List TagName -> Parser (List Token) HTML
-parseText path = 
+parseText : Path -> Integer -> Parser (List Token) (HTML, Integer)
+parseText path n = 
   sat consumerLS (\t -> (.val t) == "text")
   >>* parseStringLiteral
-  >>= (\s -> return (Node (Tag (Text s) (TextNode :: path) []) []))
+  >>= (\s -> return ((Node (Tag (Text s) ((TextNode,n) :: path) []) []),n))
 
 parseStyle : Parser (List Token) Attr
 parseStyle = 
@@ -108,22 +122,26 @@ parseAttrList = token "["
 
 --f p = (\path n -> p path (n + 1))
 
-parseTag : List TagName -> Parser (List Token) HTML
-parseTag path = 
-  (coma (parseText path))
+parseTag : Path -> Integer -> Parser (List Token) (HTML,Integer)
+parseTag path n = 
+  (coma (parseText path n))
 
   +++
   
   (
   (coma parseTagName)
   >>= (\tn -> parseAttrList
-  >>= (\al -> (parseTagList (tn :: path))
-  >>= (\ts  -> return (Node (Tag tn (tn :: path) al) ts))))
+  >>= (\al -> (parseTagList ((tn,n) :: path) (n))
+  >>= (\(ts,n')  -> return ((Node (Tag tn ((tn,n) :: path) al) ts),n'))))
   )
 
-parseTagList : List TagName -> Parser (List Token) (List HTML)
-parseTagList path = 
+parseTagList : Path -> Integer -> Parser (List Token) (List HTML,Integer)
+parseTagList path n = 
   token "["
-  >>* many (parseTag path) [] (::)
+  >>* many' (\(_,n) -> parseTag path (add n (fromInt 1)) 
+              >>= \(res, n') -> return ([res], n')) 
+            ([],n)
+            (\(t,n) (ts,n') -> (t ++ ts, n'))
+            []
   >>= (\res -> token "]" >>* return res)
                                                                               

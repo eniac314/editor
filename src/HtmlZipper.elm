@@ -3,6 +3,7 @@ module HtmlZipper exposing (..)
 import TagAttr exposing (TagName,Attr, splitAttr)
 import Dict exposing (get)
 import String exposing (toLower, dropRight, dropLeft)
+import Data.Integer exposing (add, fromInt, Integer)
 
 ---------------------------------------------------------------------------
 
@@ -95,11 +96,11 @@ cd path f zt =
 type alias HTML = Tree Tag
 type alias Tag = 
   { tagname : TagName
-  , path : List TagName
+  , path : List (TagName,Integer)
   , attr : List Attr
   }
 
-type alias Path = List TagName
+type alias Path = List (TagName,Integer)
 
 
 htmlToString : HTML -> String

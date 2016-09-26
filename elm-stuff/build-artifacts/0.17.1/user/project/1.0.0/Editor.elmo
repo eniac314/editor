@@ -12,9 +12,13 @@ var _user$project$Editor$inputStyle = _elm_lang$html$Html_Attributes$style(
 			{ctor: '_Tuple2', _0: 'width', _1: '40%'}
 		]));
 var _user$project$Editor$parse = function (model) {
-	var pdata = _user$project$ElmParser$interpret(
+	var pdata = A2(
+		_user$project$ElmParser$interpret,
 		function (_) {
 			return _.rawString;
+		}(model),
+		function (_) {
+			return _.nextId;
 		}(model));
 	var prString = function () {
 		var _p0 = pdata;
@@ -22,7 +26,7 @@ var _user$project$Editor$parse = function (model) {
 			return _elm_lang$core$Maybe$Nothing;
 		} else {
 			return _elm_lang$core$Maybe$Just(
-				_user$project$HtmlZipper$htmlToString(_p0._0));
+				_user$project$HtmlZipper$htmlToString(_p0._0._0));
 		}
 	}();
 	var newPage = function () {
@@ -32,7 +36,7 @@ var _user$project$Editor$parse = function (model) {
 				return _.page;
 			}(model);
 		} else {
-			var _p3 = _p1._0;
+			var _p3 = _p1._0._0;
 			var _p2 = function (_) {
 				return _.page;
 			}(model);
@@ -45,105 +49,149 @@ var _user$project$Editor$parse = function (model) {
 			}
 		}
 	}();
-	return _elm_lang$core$Native_Utils.update(
-		model,
-		{procString: prString, parsedData: pdata, page: newPage});
-};
-var _user$project$Editor$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {rawString: a, procString: b, parsedData: c, currPath: d, page: e, toRender: f};
-	});
-var _user$project$Editor$init = function (initInput) {
-	var pdata = _user$project$ElmParser$interpret(initInput);
-	var initPage = function () {
+	var nextId = function () {
 		var _p4 = pdata;
 		if (_p4.ctor === 'Err') {
+			return function (_) {
+				return _.nextId;
+			}(model);
+		} else {
+			return A2(
+				_javcasas$elm_integer$Data_Integer$add,
+				_p4._0._1,
+				_javcasas$elm_integer$Data_Integer$fromInt(1));
+		}
+	}();
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{procString: prString, parsedData: pdata, page: newPage, nextId: nextId});
+};
+var _user$project$Editor$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {rawString: a, procString: b, parsedData: c, currPath: d, page: e, toRender: f, nextId: g};
+	});
+var _user$project$Editor$init = function (initInput) {
+	var pdata = A2(
+		_user$project$ElmParser$interpret,
+		initInput,
+		_javcasas$elm_integer$Data_Integer$fromInt(0));
+	var initPage = function () {
+		var _p5 = pdata;
+		if (_p5.ctor === 'Err') {
 			return _elm_lang$core$Maybe$Nothing;
 		} else {
 			return _elm_lang$core$Maybe$Just(
-				_user$project$HtmlZipper$initZip(_p4._0));
+				_user$project$HtmlZipper$initZip(_p5._0._0));
 		}
 	}();
 	var initPath = function () {
-		var _p5 = initPage;
-		if (_p5.ctor === 'Nothing') {
+		var _p6 = initPage;
+		if (_p6.ctor === 'Nothing') {
 			return _elm_lang$core$Native_List.fromArray(
 				[]);
 		} else {
-			return _user$project$HtmlZipper$extractPath(_p5._0);
+			return _user$project$HtmlZipper$extractPath(_p6._0);
 		}
 	}();
-	return A6(
+	var nextId = function () {
+		var _p7 = pdata;
+		if (_p7.ctor === 'Err') {
+			return _javcasas$elm_integer$Data_Integer$fromInt(0);
+		} else {
+			return A2(
+				_javcasas$elm_integer$Data_Integer$add,
+				_p7._0._1,
+				_javcasas$elm_integer$Data_Integer$fromInt(1));
+		}
+	}();
+	return A7(
 		_user$project$Editor$Model,
 		initInput,
 		_elm_lang$core$Maybe$Nothing,
 		pdata,
 		initPath,
 		initPage,
-		_user$project$ElmParser$renderer(pdata));
+		_user$project$ElmParser$renderer(pdata),
+		nextId);
 };
 var _user$project$Editor$move = F2(
 	function (f, model) {
 		var newPage = function () {
-			var _p6 = function (_) {
+			var _p8 = function (_) {
 				return _.page;
 			}(model);
-			if (_p6.ctor === 'Nothing') {
+			if (_p8.ctor === 'Nothing') {
 				return _elm_lang$core$Maybe$Nothing;
 			} else {
-				var _p8 = _p6._0;
-				var _p7 = f(_p8);
-				if (_p7.ctor === 'Nothing') {
-					return _elm_lang$core$Maybe$Just(_p8);
+				var _p10 = _p8._0;
+				var _p9 = f(_p10);
+				if (_p9.ctor === 'Nothing') {
+					return _elm_lang$core$Maybe$Just(_p10);
 				} else {
-					return _elm_lang$core$Maybe$Just(_p7._0);
+					return _elm_lang$core$Maybe$Just(_p9._0);
 				}
 			}
 		}();
 		var newRstring = function () {
-			var _p9 = newPage;
-			if (_p9.ctor === 'Nothing') {
+			var _p11 = newPage;
+			if (_p11.ctor === 'Nothing') {
 				return function (_) {
 					return _.rawString;
 				}(model);
 			} else {
 				return _user$project$HtmlZipper$htmlToString(
-					_user$project$HtmlZipper$extractTree(_p9._0));
+					_user$project$HtmlZipper$extractTree(_p11._0));
 			}
 		}();
 		var newProcString = _elm_lang$core$Maybe$Just(newRstring);
 		var newParsedData = function () {
-			var _p10 = newPage;
-			if (_p10.ctor === 'Nothing') {
+			var _p12 = newPage;
+			if (_p12.ctor === 'Nothing') {
 				return _elm_lang$core$Result$Err('wrong Html tree');
 			} else {
 				return _elm_lang$core$Result$Ok(
-					_user$project$HtmlZipper$extractTree(_p10._0));
+					{
+						ctor: '_Tuple2',
+						_0: _user$project$HtmlZipper$extractTree(_p12._0),
+						_1: function (_) {
+							return _.nextId;
+						}(model)
+					});
 			}
 		}();
 		var newRender = _user$project$ElmParser$renderer(newParsedData);
 		var newPath = function () {
-			var _p11 = newPage;
-			if (_p11.ctor === 'Nothing') {
+			var _p13 = newPage;
+			if (_p13.ctor === 'Nothing') {
 				return function (_) {
 					return _.currPath;
 				}(model);
 			} else {
-				return _user$project$HtmlZipper$extractPath(_p11._0);
+				return _user$project$HtmlZipper$extractPath(_p13._0);
 			}
 		}();
-		return A6(_user$project$Editor$Model, newRstring, newProcString, newParsedData, newPath, newPage, newRender);
+		return A7(
+			_user$project$Editor$Model,
+			newRstring,
+			newProcString,
+			newParsedData,
+			newPath,
+			newPage,
+			newRender,
+			function (_) {
+				return _.nextId;
+			}(model));
 	});
 var _user$project$Editor$update = F2(
 	function (msg, model) {
-		var _p12 = msg;
-		switch (_p12.ctor) {
+		var _p14 = msg;
+		switch (_p14.ctor) {
 			case 'Store':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{rawString: _p12._0}),
+						{rawString: _p14._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			case 'Parse':
@@ -236,16 +284,16 @@ var _user$project$Editor$view = function (model) {
 						_elm_lang$core$Native_List.fromArray(
 							[
 								function () {
-								var _p13 = function (_) {
+								var _p15 = function (_) {
 									return _.procString;
 								}(model);
-								if (_p13.ctor === 'Nothing') {
+								if (_p15.ctor === 'Nothing') {
 									return _elm_lang$html$Html$text(
 										function (_) {
 											return _.rawString;
 										}(model));
 								} else {
-									return _elm_lang$html$Html$text(_p13._0);
+									return _elm_lang$html$Html$text(_p15._0);
 								}
 							}()
 							])),

@@ -1,0 +1,876 @@
+var _javcasas$elm_integer$Data_Integer$sign = function (_p0) {
+	var _p1 = _p0;
+	return _p1._0._0;
+};
+var _javcasas$elm_integer$Data_Integer$range = F2(
+	function (a, b) {
+		return _elm_lang$core$Native_Utils.eq(a, b) ? _elm_lang$core$Native_List.fromArray(
+			[a]) : A2(
+			_elm_lang$core$List_ops['::'],
+			a,
+			A2(_javcasas$elm_integer$Data_Integer$range, a + 1, b));
+	});
+var _javcasas$elm_integer$Data_Integer$zeroes = function (n) {
+	return A2(_elm_lang$core$String$repeat, n, '0');
+};
+var _javcasas$elm_integer$Data_Integer$fillZeroes = function (d) {
+	var d_s = _elm_lang$core$Basics$toString(d);
+	var len = _elm_lang$core$String$length(d_s);
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		_javcasas$elm_integer$Data_Integer$zeroes(6 - len),
+		d_s);
+};
+var _javcasas$elm_integer$Data_Integer$revmagnitudeToString = function (m) {
+	var _p2 = m;
+	if (_p2.ctor === '[]') {
+		return '0';
+	} else {
+		if (_p2._1.ctor === '[]') {
+			return _elm_lang$core$Basics$toString(_p2._0);
+		} else {
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(_p2._0),
+				_elm_lang$core$String$concat(
+					A2(_elm_lang$core$List$map, _javcasas$elm_integer$Data_Integer$fillZeroes, _p2._1)));
+		}
+	}
+};
+var _javcasas$elm_integer$Data_Integer$dropWhile = F2(
+	function (f, x) {
+		dropWhile:
+		while (true) {
+			var _p3 = x;
+			if (_p3.ctor === '[]') {
+				return _elm_lang$core$Native_List.fromArray(
+					[]);
+			} else {
+				var _p5 = _p3._1;
+				var _p4 = _p3._0;
+				if (f(_p4)) {
+					var _v3 = f,
+						_v4 = _p5;
+					f = _v3;
+					x = _v4;
+					continue dropWhile;
+				} else {
+					return A2(_elm_lang$core$List_ops['::'], _p4, _p5);
+				}
+			}
+		}
+	});
+var _javcasas$elm_integer$Data_Integer$dropZeroes = function (x) {
+	var rev_list = _elm_lang$core$List$reverse(x);
+	var no_zeros = A2(
+		_javcasas$elm_integer$Data_Integer$dropWhile,
+		function (x) {
+			return _elm_lang$core$Native_Utils.eq(x, 0);
+		},
+		rev_list);
+	return _elm_lang$core$List$reverse(no_zeros);
+};
+var _javcasas$elm_integer$Data_Integer$groups = F2(
+	function (n, x) {
+		var tail = A2(_elm_lang$core$List$drop, n, x);
+		var head = A2(_elm_lang$core$List$take, n, x);
+		return _elm_lang$core$Native_Utils.eq(
+			tail,
+			_elm_lang$core$Native_List.fromArray(
+				[])) ? _elm_lang$core$Native_List.fromArray(
+			[head]) : A2(
+			_elm_lang$core$List_ops['::'],
+			head,
+			A2(_javcasas$elm_integer$Data_Integer$groups, n, tail));
+	});
+var _javcasas$elm_integer$Data_Integer$max_digit_value = 1000000;
+var _javcasas$elm_integer$Data_Integer$normaliseDigit = function (d) {
+	if (_elm_lang$core$Native_Utils.cmp(d, 0) < 0) {
+		var _p6 = _javcasas$elm_integer$Data_Integer$normaliseDigit(d + _javcasas$elm_integer$Data_Integer$max_digit_value);
+		var carry = _p6._0;
+		var d$ = _p6._1;
+		return {ctor: '_Tuple2', _0: carry - 1, _1: d$};
+	} else {
+		return {
+			ctor: '_Tuple2',
+			_0: (d / _javcasas$elm_integer$Data_Integer$max_digit_value) | 0,
+			_1: A2(_elm_lang$core$Basics$rem, d, _javcasas$elm_integer$Data_Integer$max_digit_value)
+		};
+	}
+};
+var _javcasas$elm_integer$Data_Integer$normaliseDigitList = function (x) {
+	var _p7 = x;
+	if (_p7.ctor === '[]') {
+		return _elm_lang$core$Native_List.fromArray(
+			[]);
+	} else {
+		if (_p7._1.ctor === '[]') {
+			var _p8 = _javcasas$elm_integer$Data_Integer$normaliseDigit(_p7._0);
+			var c = _p8._0;
+			var d$ = _p8._1;
+			return (!_elm_lang$core$Native_Utils.eq(c, 0)) ? _elm_lang$core$Native_List.fromArray(
+				[d$, c]) : _elm_lang$core$Native_List.fromArray(
+				[d$]);
+		} else {
+			var _p9 = _javcasas$elm_integer$Data_Integer$normaliseDigit(_p7._0);
+			var c = _p9._0;
+			var d$ = _p9._1;
+			return A2(
+				_elm_lang$core$List_ops['::'],
+				d$,
+				_javcasas$elm_integer$Data_Integer$normaliseDigitList(
+					A2(_elm_lang$core$List_ops['::'], _p7._1._0 + c, _p7._1._1)));
+		}
+	}
+};
+var _javcasas$elm_integer$Data_Integer$Negative = {ctor: 'Negative'};
+var _javcasas$elm_integer$Data_Integer$Positive = {ctor: 'Positive'};
+var _javcasas$elm_integer$Data_Integer$toString = function (_p10) {
+	var _p11 = _p10;
+	var sign = _elm_lang$core$Native_Utils.eq(_p11._0._0, _javcasas$elm_integer$Data_Integer$Positive) ? '' : '-';
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		sign,
+		_javcasas$elm_integer$Data_Integer$revmagnitudeToString(
+			_elm_lang$core$List$reverse(_p11._0._1._0)));
+};
+var _javcasas$elm_integer$Data_Integer$Magnitude = function (a) {
+	return {ctor: 'Magnitude', _0: a};
+};
+var _javcasas$elm_integer$Data_Integer$fromString$ = function (x) {
+	if (_elm_lang$core$Basics$not(
+		A2(_elm_lang$core$List$all, _elm_lang$core$Char$isDigit, x))) {
+		return _elm_lang$core$Maybe$Nothing;
+	} else {
+		var rev_digits = _elm_lang$core$List$reverse(x);
+		var rev_group_digits = A2(_javcasas$elm_integer$Data_Integer$groups, 6, rev_digits);
+		var group_digits = A2(_elm_lang$core$List$map, _elm_lang$core$List$reverse, rev_group_digits);
+		var group_strings = A2(_elm_lang$core$List$map, _elm_lang$core$String$fromList, group_digits);
+		var group_result_ints = A2(_elm_lang$core$List$map, _elm_lang$core$String$toInt, group_strings);
+		var result_to_maybe = function (x) {
+			var _p12 = x;
+			if (_p12.ctor === 'Ok') {
+				return _elm_lang$core$Maybe$Just(_p12._0);
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		};
+		var group_maybe_ints = A2(_elm_lang$core$List$map, result_to_maybe, group_result_ints);
+		var gen_res = function (x) {
+			var _p13 = x;
+			if (_p13.ctor === '[]') {
+				return _elm_lang$core$Maybe$Just(
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+			} else {
+				if (_p13._0.ctor === 'Nothing') {
+					return _elm_lang$core$Maybe$Nothing;
+				} else {
+					var _p14 = gen_res(_p13._1);
+					if (_p14.ctor === 'Nothing') {
+						return _elm_lang$core$Maybe$Nothing;
+					} else {
+						return _elm_lang$core$Maybe$Just(
+							A2(_elm_lang$core$List_ops['::'], _p13._0._0, _p14._0));
+					}
+				}
+			}
+		};
+		var _p15 = gen_res(group_maybe_ints);
+		if (_p15.ctor === 'Just') {
+			return _elm_lang$core$Maybe$Just(
+				_javcasas$elm_integer$Data_Integer$Magnitude(_p15._0));
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	}
+};
+var _javcasas$elm_integer$Data_Integer$normaliseMagnitude = function (_p16) {
+	var _p17 = _p16;
+	return _javcasas$elm_integer$Data_Integer$Magnitude(
+		_javcasas$elm_integer$Data_Integer$dropZeroes(
+			_javcasas$elm_integer$Data_Integer$normaliseDigitList(_p17._0)));
+};
+var _javcasas$elm_integer$Data_Integer$MagnitudeNotNormalised = function (a) {
+	return {ctor: 'MagnitudeNotNormalised', _0: a};
+};
+var _javcasas$elm_integer$Data_Integer$mul_single_digit = F2(
+	function (_p18, d) {
+		var _p19 = _p18;
+		return _javcasas$elm_integer$Data_Integer$normaliseMagnitude(
+			_javcasas$elm_integer$Data_Integer$MagnitudeNotNormalised(
+				A2(
+					_elm_lang$core$List$map,
+					function (x) {
+						return d * x;
+					},
+					_p19._0)));
+	});
+var _javcasas$elm_integer$Data_Integer$Integer = function (a) {
+	return {ctor: 'Integer', _0: a};
+};
+var _javcasas$elm_integer$Data_Integer$abs = function (_p20) {
+	var _p21 = _p20;
+	return _javcasas$elm_integer$Data_Integer$Integer(
+		{ctor: '_Tuple2', _0: _javcasas$elm_integer$Data_Integer$Positive, _1: _p21._0._1});
+};
+var _javcasas$elm_integer$Data_Integer$IntegerNotNormalised = function (a) {
+	return {ctor: 'IntegerNotNormalised', _0: a};
+};
+var _javcasas$elm_integer$Data_Integer$normalise = function (_p22) {
+	normalise:
+	while (true) {
+		var _p23 = _p22;
+		var _p30 = _p23._0._0;
+		var nmagnitude = _javcasas$elm_integer$Data_Integer$normaliseMagnitude(_p23._0._1);
+		var is_negative_magnitude = function (_p24) {
+			is_negative_magnitude:
+			while (true) {
+				var _p25 = _p24;
+				var _p26 = _p25._0;
+				if (_p26.ctor === '[]') {
+					return false;
+				} else {
+					if (_p26._1.ctor === '[]') {
+						return _elm_lang$core$Native_Utils.cmp(_p26._0, 0) < 0;
+					} else {
+						var _v17 = _javcasas$elm_integer$Data_Integer$Magnitude(_p26._1);
+						_p24 = _v17;
+						continue is_negative_magnitude;
+					}
+				}
+			}
+		};
+		var reverse_magnitude = function (_p27) {
+			var _p28 = _p27;
+			return _javcasas$elm_integer$Data_Integer$MagnitudeNotNormalised(
+				A2(
+					_elm_lang$core$List$map,
+					function (x) {
+						return 0 - x;
+					},
+					_p28._0));
+		};
+		var reverse_sign = function (s) {
+			var _p29 = s;
+			if (_p29.ctor === 'Positive') {
+				return _javcasas$elm_integer$Data_Integer$Negative;
+			} else {
+				return _javcasas$elm_integer$Data_Integer$Positive;
+			}
+		};
+		if (is_negative_magnitude(nmagnitude)) {
+			var _v20 = _javcasas$elm_integer$Data_Integer$IntegerNotNormalised(
+				{
+					ctor: '_Tuple2',
+					_0: reverse_sign(_p30),
+					_1: reverse_magnitude(nmagnitude)
+				});
+			_p22 = _v20;
+			continue normalise;
+		} else {
+			return _javcasas$elm_integer$Data_Integer$Integer(
+				{ctor: '_Tuple2', _0: _p30, _1: nmagnitude});
+		}
+	}
+};
+var _javcasas$elm_integer$Data_Integer$fromInt = function (x) {
+	var sign = (_elm_lang$core$Native_Utils.cmp(x, 0) < 0) ? _javcasas$elm_integer$Data_Integer$Negative : _javcasas$elm_integer$Data_Integer$Positive;
+	return _javcasas$elm_integer$Data_Integer$normalise(
+		_javcasas$elm_integer$Data_Integer$IntegerNotNormalised(
+			{
+				ctor: '_Tuple2',
+				_0: sign,
+				_1: _javcasas$elm_integer$Data_Integer$MagnitudeNotNormalised(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$core$Basics$abs(x)
+						]))
+			}));
+};
+var _javcasas$elm_integer$Data_Integer$fromString = function (x) {
+	var _p31 = _elm_lang$core$String$toList(x);
+	if (_p31.ctor === '[]') {
+		return _elm_lang$core$Maybe$Just(
+			_javcasas$elm_integer$Data_Integer$fromInt(0));
+	} else {
+		switch (_p31._0.valueOf()) {
+			case '-':
+				var _p32 = _javcasas$elm_integer$Data_Integer$fromString$(_p31._1);
+				if (_p32.ctor === 'Nothing') {
+					return _elm_lang$core$Maybe$Nothing;
+				} else {
+					return _elm_lang$core$Maybe$Just(
+						_javcasas$elm_integer$Data_Integer$Integer(
+							{ctor: '_Tuple2', _0: _javcasas$elm_integer$Data_Integer$Negative, _1: _p32._0}));
+				}
+			case '+':
+				var _p33 = _javcasas$elm_integer$Data_Integer$fromString$(_p31._1);
+				if (_p33.ctor === 'Nothing') {
+					return _elm_lang$core$Maybe$Nothing;
+				} else {
+					return _elm_lang$core$Maybe$Just(
+						_javcasas$elm_integer$Data_Integer$Integer(
+							{ctor: '_Tuple2', _0: _javcasas$elm_integer$Data_Integer$Positive, _1: _p33._0}));
+				}
+			default:
+				var _p34 = _javcasas$elm_integer$Data_Integer$fromString$(_p31);
+				if (_p34.ctor === 'Nothing') {
+					return _elm_lang$core$Maybe$Nothing;
+				} else {
+					return _elm_lang$core$Maybe$Just(
+						_javcasas$elm_integer$Data_Integer$Integer(
+							{ctor: '_Tuple2', _0: _javcasas$elm_integer$Data_Integer$Positive, _1: _p34._0}));
+				}
+		}
+	}
+};
+var _javcasas$elm_integer$Data_Integer$dividers = function () {
+	var log = A2(
+		_elm_lang$core$Basics$logBase,
+		2,
+		_elm_lang$core$Basics$toFloat(_javcasas$elm_integer$Data_Integer$max_digit_value));
+	var log_i = _elm_lang$core$Basics$truncate(log) + 1;
+	var exp_values = _elm_lang$core$List$reverse(
+		A2(_javcasas$elm_integer$Data_Integer$range, 0, log_i));
+	var int_values = A2(
+		_elm_lang$core$List$map,
+		function (x) {
+			return Math.pow(2, x);
+		},
+		exp_values);
+	return A2(_elm_lang$core$List$map, _javcasas$elm_integer$Data_Integer$fromInt, int_values);
+}();
+var _javcasas$elm_integer$Data_Integer$zero = _javcasas$elm_integer$Data_Integer$fromInt(0);
+var _javcasas$elm_integer$Data_Integer$one = _javcasas$elm_integer$Data_Integer$fromInt(1);
+var _javcasas$elm_integer$Data_Integer$minusOne = _javcasas$elm_integer$Data_Integer$fromInt(-1);
+var _javcasas$elm_integer$Data_Integer$toPositiveSign = function (_p35) {
+	var _p36 = _p35;
+	var _p41 = _p36._0._0;
+	var _p40 = _p36._0._1._0;
+	var reverse_magnitude = function (_p37) {
+		var _p38 = _p37;
+		return _javcasas$elm_integer$Data_Integer$MagnitudeNotNormalised(
+			A2(
+				_elm_lang$core$List$map,
+				function (x) {
+					return 0 - x;
+				},
+				_p38._0));
+	};
+	var _p39 = _p41;
+	if (_p39.ctor === 'Positive') {
+		return _javcasas$elm_integer$Data_Integer$IntegerNotNormalised(
+			{
+				ctor: '_Tuple2',
+				_0: _p41,
+				_1: _javcasas$elm_integer$Data_Integer$MagnitudeNotNormalised(_p40)
+			});
+	} else {
+		return _javcasas$elm_integer$Data_Integer$IntegerNotNormalised(
+			{
+				ctor: '_Tuple2',
+				_0: _javcasas$elm_integer$Data_Integer$Positive,
+				_1: reverse_magnitude(
+					_javcasas$elm_integer$Data_Integer$Magnitude(_p40))
+			});
+	}
+};
+var _javcasas$elm_integer$Data_Integer$negate = function (_p42) {
+	var _p43 = _p42;
+	var newsign = function () {
+		var _p44 = _p43._0._0;
+		if (_p44.ctor === 'Positive') {
+			return _javcasas$elm_integer$Data_Integer$Negative;
+		} else {
+			return _javcasas$elm_integer$Data_Integer$Positive;
+		}
+	}();
+	return _javcasas$elm_integer$Data_Integer$normalise(
+		_javcasas$elm_integer$Data_Integer$toPositiveSign(
+			_javcasas$elm_integer$Data_Integer$Integer(
+				{ctor: '_Tuple2', _0: newsign, _1: _p43._0._1})));
+};
+var _javcasas$elm_integer$Data_Integer$MagnitudePair = function (a) {
+	return {ctor: 'MagnitudePair', _0: a};
+};
+var _javcasas$elm_integer$Data_Integer$sameSize = F2(
+	function (_p46, _p45) {
+		var _p47 = _p46;
+		var _p48 = _p45;
+		var sameSize$ = F2(
+			function (a, b) {
+				var _p49 = {ctor: '_Tuple2', _0: a, _1: b};
+				if (_p49._0.ctor === '::') {
+					if (_p49._1.ctor === '::') {
+						return A2(
+							_elm_lang$core$List_ops['::'],
+							{ctor: '_Tuple2', _0: _p49._0._0, _1: _p49._1._0},
+							A2(sameSize$, _p49._0._1, _p49._1._1));
+					} else {
+						return A2(
+							_elm_lang$core$List_ops['::'],
+							{ctor: '_Tuple2', _0: _p49._0._0, _1: 0},
+							A2(
+								sameSize$,
+								_p49._0._1,
+								_elm_lang$core$Native_List.fromArray(
+									[])));
+					}
+				} else {
+					if (_p49._1.ctor === '[]') {
+						return _elm_lang$core$Native_List.fromArray(
+							[]);
+					} else {
+						return A2(
+							_elm_lang$core$List_ops['::'],
+							{ctor: '_Tuple2', _0: 0, _1: _p49._1._0},
+							A2(
+								sameSize$,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_p49._1._1));
+					}
+				}
+			});
+		return _javcasas$elm_integer$Data_Integer$MagnitudePair(
+			A2(sameSize$, _p47._0, _p48._0));
+	});
+var _javcasas$elm_integer$Data_Integer$sameSize$ = F2(
+	function (_p51, _p50) {
+		var _p52 = _p51;
+		var _p53 = _p50;
+		var sameSize$$ = F2(
+			function (a, b) {
+				var _p54 = {ctor: '_Tuple2', _0: a, _1: b};
+				if (_p54._0.ctor === '::') {
+					if (_p54._1.ctor === '::') {
+						return A2(
+							_elm_lang$core$List_ops['::'],
+							{ctor: '_Tuple2', _0: _p54._0._0, _1: _p54._1._0},
+							A2(sameSize$$, _p54._0._1, _p54._1._1));
+					} else {
+						return A2(
+							_elm_lang$core$List_ops['::'],
+							{ctor: '_Tuple2', _0: _p54._0._0, _1: 0},
+							A2(
+								sameSize$$,
+								_p54._0._1,
+								_elm_lang$core$Native_List.fromArray(
+									[])));
+					}
+				} else {
+					if (_p54._1.ctor === '[]') {
+						return _elm_lang$core$Native_List.fromArray(
+							[]);
+					} else {
+						return A2(
+							_elm_lang$core$List_ops['::'],
+							{ctor: '_Tuple2', _0: 0, _1: _p54._1._0},
+							A2(
+								sameSize$$,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_p54._1._1));
+					}
+				}
+			});
+		return _javcasas$elm_integer$Data_Integer$MagnitudePair(
+			A2(sameSize$$, _p52._0, _p53._0));
+	});
+var _javcasas$elm_integer$Data_Integer$add = F2(
+	function (a, b) {
+		var _p55 = _javcasas$elm_integer$Data_Integer$toPositiveSign(b);
+		var mb = _p55._0._1;
+		var _p56 = _javcasas$elm_integer$Data_Integer$toPositiveSign(a);
+		var ma = _p56._0._1;
+		var _p57 = A2(_javcasas$elm_integer$Data_Integer$sameSize$, ma, mb);
+		var p = _p57._0;
+		var added = A2(
+			_elm_lang$core$List$map,
+			function (_p58) {
+				var _p59 = _p58;
+				return _p59._0 + _p59._1;
+			},
+			p);
+		return _javcasas$elm_integer$Data_Integer$normalise(
+			_javcasas$elm_integer$Data_Integer$IntegerNotNormalised(
+				{
+					ctor: '_Tuple2',
+					_0: _javcasas$elm_integer$Data_Integer$Positive,
+					_1: _javcasas$elm_integer$Data_Integer$MagnitudeNotNormalised(added)
+				}));
+	});
+var _javcasas$elm_integer$Data_Integer$sub = F2(
+	function (a, b) {
+		return A2(
+			_javcasas$elm_integer$Data_Integer$add,
+			a,
+			_javcasas$elm_integer$Data_Integer$negate(b));
+	});
+var _javcasas$elm_integer$Data_Integer$mul_magnitudes = F2(
+	function (_p61, _p60) {
+		var _p62 = _p61;
+		var _p63 = _p60;
+		var _p67 = _p63._0;
+		var _p64 = _p62._0;
+		if (_p64.ctor === '[]') {
+			return _javcasas$elm_integer$Data_Integer$Magnitude(
+				_elm_lang$core$Native_List.fromArray(
+					[]));
+		} else {
+			if (_p64._1.ctor === '[]') {
+				return A2(
+					_javcasas$elm_integer$Data_Integer$mul_single_digit,
+					_javcasas$elm_integer$Data_Integer$Magnitude(_p67),
+					_p64._0);
+			} else {
+				var _p65 = A2(
+					_javcasas$elm_integer$Data_Integer$mul_magnitudes,
+					_javcasas$elm_integer$Data_Integer$Magnitude(_p64._1),
+					_javcasas$elm_integer$Data_Integer$Magnitude(_p67));
+				var rest = _p65._0;
+				var i2 = _javcasas$elm_integer$Data_Integer$Integer(
+					{
+						ctor: '_Tuple2',
+						_0: _javcasas$elm_integer$Data_Integer$Positive,
+						_1: _javcasas$elm_integer$Data_Integer$Magnitude(
+							A2(_elm_lang$core$List_ops['::'], 0, rest))
+					});
+				var accum = A2(
+					_javcasas$elm_integer$Data_Integer$mul_single_digit,
+					_javcasas$elm_integer$Data_Integer$Magnitude(_p67),
+					_p64._0);
+				var i1 = _javcasas$elm_integer$Data_Integer$Integer(
+					{ctor: '_Tuple2', _0: _javcasas$elm_integer$Data_Integer$Positive, _1: accum});
+				var _p66 = A2(_javcasas$elm_integer$Data_Integer$add, i1, i2);
+				var result = _p66._0._1;
+				return result;
+			}
+		}
+	});
+var _javcasas$elm_integer$Data_Integer$mul = F2(
+	function (_p69, _p68) {
+		var _p70 = _p69;
+		var _p71 = _p68;
+		var sign = function () {
+			var _p72 = {ctor: '_Tuple2', _0: _p70._0._0, _1: _p71._0._0};
+			_v42_2:
+			do {
+				if (_p72.ctor === '_Tuple2') {
+					if (_p72._0.ctor === 'Positive') {
+						if (_p72._1.ctor === 'Positive') {
+							return _javcasas$elm_integer$Data_Integer$Positive;
+						} else {
+							break _v42_2;
+						}
+					} else {
+						if (_p72._1.ctor === 'Negative') {
+							return _javcasas$elm_integer$Data_Integer$Positive;
+						} else {
+							break _v42_2;
+						}
+					}
+				} else {
+					break _v42_2;
+				}
+			} while(false);
+			return _javcasas$elm_integer$Data_Integer$Negative;
+		}();
+		return _javcasas$elm_integer$Data_Integer$Integer(
+			{
+				ctor: '_Tuple2',
+				_0: sign,
+				_1: A2(_javcasas$elm_integer$Data_Integer$mul_magnitudes, _p70._0._1, _p71._0._1)
+			});
+	});
+var _javcasas$elm_integer$Data_Integer$pad_digits = function (n) {
+	return _elm_lang$core$Native_Utils.eq(n, 0) ? _javcasas$elm_integer$Data_Integer$fromInt(1) : A2(
+		_javcasas$elm_integer$Data_Integer$mul,
+		_javcasas$elm_integer$Data_Integer$pad_digits(n - 1),
+		_javcasas$elm_integer$Data_Integer$fromInt(_javcasas$elm_integer$Data_Integer$max_digit_value));
+};
+var _javcasas$elm_integer$Data_Integer$MagnitudePairReverseOrder = function (a) {
+	return {ctor: 'MagnitudePairReverseOrder', _0: a};
+};
+var _javcasas$elm_integer$Data_Integer$reverseMagnitudePair = function (_p73) {
+	var _p74 = _p73;
+	return _javcasas$elm_integer$Data_Integer$MagnitudePairReverseOrder(
+		_elm_lang$core$List$reverse(_p74._0));
+};
+var _javcasas$elm_integer$Data_Integer$compareMagnitude = function (_p75) {
+	compareMagnitude:
+	while (true) {
+		var _p76 = _p75;
+		var _p77 = _p76._0;
+		if (_p77.ctor === '[]') {
+			return _elm_lang$core$Basics$EQ;
+		} else {
+			var _p79 = _p77._0._1;
+			var _p78 = _p77._0._0;
+			if (_elm_lang$core$Native_Utils.eq(_p78, _p79)) {
+				var _v46 = _javcasas$elm_integer$Data_Integer$MagnitudePairReverseOrder(_p77._1);
+				_p75 = _v46;
+				continue compareMagnitude;
+			} else {
+				return A2(_elm_lang$core$Basics$compare, _p78, _p79);
+			}
+		}
+	}
+};
+var _javcasas$elm_integer$Data_Integer$compare = F2(
+	function (_p81, _p80) {
+		var _p82 = _p81;
+		var _p86 = _p82._0._0;
+		var _p83 = _p80;
+		var invert_order = function (x) {
+			var _p84 = x;
+			switch (_p84.ctor) {
+				case 'LT':
+					return _elm_lang$core$Basics$GT;
+				case 'EQ':
+					return _elm_lang$core$Basics$EQ;
+				default:
+					return _elm_lang$core$Basics$LT;
+			}
+		};
+		var _p85 = {ctor: '_Tuple2', _0: _p86, _1: _p83._0._0};
+		_v50_2:
+		do {
+			if (_p85.ctor === '_Tuple2') {
+				if (_p85._0.ctor === 'Positive') {
+					if (_p85._1.ctor === 'Negative') {
+						return _elm_lang$core$Basics$GT;
+					} else {
+						break _v50_2;
+					}
+				} else {
+					if (_p85._1.ctor === 'Positive') {
+						return _elm_lang$core$Basics$LT;
+					} else {
+						break _v50_2;
+					}
+				}
+			} else {
+				break _v50_2;
+			}
+		} while(false);
+		var ss = A2(_javcasas$elm_integer$Data_Integer$sameSize, _p82._0._1, _p83._0._1);
+		var rss = _javcasas$elm_integer$Data_Integer$reverseMagnitudePair(ss);
+		var cr = _javcasas$elm_integer$Data_Integer$compareMagnitude(rss);
+		return _elm_lang$core$Native_Utils.eq(_p86, _javcasas$elm_integer$Data_Integer$Positive) ? cr : invert_order(cr);
+	});
+var _javcasas$elm_integer$Data_Integer$eq = F2(
+	function (a, b) {
+		var _p87 = A2(_javcasas$elm_integer$Data_Integer$compare, a, b);
+		if (_p87.ctor === 'EQ') {
+			return true;
+		} else {
+			return false;
+		}
+	});
+var _javcasas$elm_integer$Data_Integer$neq = F2(
+	function (a, b) {
+		return _elm_lang$core$Basics$not(
+			A2(_javcasas$elm_integer$Data_Integer$eq, a, b));
+	});
+var _javcasas$elm_integer$Data_Integer$lt = F2(
+	function (a, b) {
+		var _p88 = A2(_javcasas$elm_integer$Data_Integer$compare, a, b);
+		if (_p88.ctor === 'LT') {
+			return true;
+		} else {
+			return false;
+		}
+	});
+var _javcasas$elm_integer$Data_Integer$gt = F2(
+	function (a, b) {
+		var _p89 = A2(_javcasas$elm_integer$Data_Integer$compare, a, b);
+		if (_p89.ctor === 'GT') {
+			return true;
+		} else {
+			return false;
+		}
+	});
+var _javcasas$elm_integer$Data_Integer$gte = F2(
+	function (a, b) {
+		var _p90 = A2(_javcasas$elm_integer$Data_Integer$compare, a, b);
+		switch (_p90.ctor) {
+			case 'GT':
+				return true;
+			case 'EQ':
+				return true;
+			default:
+				return false;
+		}
+	});
+var _javcasas$elm_integer$Data_Integer$lte = F2(
+	function (a, b) {
+		var _p91 = A2(_javcasas$elm_integer$Data_Integer$compare, a, b);
+		switch (_p91.ctor) {
+			case 'LT':
+				return true;
+			case 'EQ':
+				return true;
+			default:
+				return false;
+		}
+	});
+var _javcasas$elm_integer$Data_Integer$divmod_digit = F4(
+	function (padding, to_test, a, b) {
+		var _p92 = to_test;
+		if (_p92.ctor === '[]') {
+			return {
+				ctor: '_Tuple2',
+				_0: _javcasas$elm_integer$Data_Integer$fromInt(0),
+				_1: a
+			};
+		} else {
+			var _p95 = _p92._0;
+			var candidate = A2(
+				_javcasas$elm_integer$Data_Integer$mul,
+				A2(_javcasas$elm_integer$Data_Integer$mul, _p95, b),
+				padding);
+			var _p93 = A2(_javcasas$elm_integer$Data_Integer$lte, candidate, a) ? {
+				ctor: '_Tuple2',
+				_0: A2(_javcasas$elm_integer$Data_Integer$mul, _p95, padding),
+				_1: A2(_javcasas$elm_integer$Data_Integer$sub, a, candidate)
+			} : {
+				ctor: '_Tuple2',
+				_0: _javcasas$elm_integer$Data_Integer$fromInt(0),
+				_1: a
+			};
+			var newdiv = _p93._0;
+			var newmod = _p93._1;
+			var _p94 = A4(_javcasas$elm_integer$Data_Integer$divmod_digit, padding, _p92._1, newmod, b);
+			var restdiv = _p94._0;
+			var restmod = _p94._1;
+			return {
+				ctor: '_Tuple2',
+				_0: A2(_javcasas$elm_integer$Data_Integer$add, newdiv, restdiv),
+				_1: restmod
+			};
+		}
+	});
+var _javcasas$elm_integer$Data_Integer$divmod$ = F3(
+	function (n, a, b) {
+		if (_elm_lang$core$Native_Utils.eq(n, 0)) {
+			return A4(
+				_javcasas$elm_integer$Data_Integer$divmod_digit,
+				_javcasas$elm_integer$Data_Integer$pad_digits(n),
+				_javcasas$elm_integer$Data_Integer$dividers,
+				a,
+				b);
+		} else {
+			var _p96 = A4(
+				_javcasas$elm_integer$Data_Integer$divmod_digit,
+				_javcasas$elm_integer$Data_Integer$pad_digits(n),
+				_javcasas$elm_integer$Data_Integer$dividers,
+				a,
+				b);
+			var cdiv = _p96._0;
+			var cmod = _p96._1;
+			var _p97 = A3(_javcasas$elm_integer$Data_Integer$divmod$, n - 1, cmod, b);
+			var rdiv = _p97._0;
+			var rmod = _p97._1;
+			return {
+				ctor: '_Tuple2',
+				_0: A2(_javcasas$elm_integer$Data_Integer$add, cdiv, rdiv),
+				_1: rmod
+			};
+		}
+	});
+var _javcasas$elm_integer$Data_Integer$divmod = F2(
+	function (a, b) {
+		if (A2(_javcasas$elm_integer$Data_Integer$eq, b, _javcasas$elm_integer$Data_Integer$zero)) {
+			return _elm_lang$core$Maybe$Nothing;
+		} else {
+			var _p98 = b;
+			var s2 = _p98._0._0;
+			var m2 = _p98._0._1._0;
+			var _p99 = a;
+			var s1 = _p99._0._0;
+			var m1 = _p99._0._1._0;
+			var cand_l = (_elm_lang$core$List$length(m1) - _elm_lang$core$List$length(m2)) + 1;
+			var l = (_elm_lang$core$Native_Utils.cmp(cand_l, 0) < 0) ? 0 : cand_l;
+			var _p100 = A3(
+				_javcasas$elm_integer$Data_Integer$divmod$,
+				l,
+				_javcasas$elm_integer$Data_Integer$abs(a),
+				_javcasas$elm_integer$Data_Integer$abs(b));
+			var d = _p100._0._0._1;
+			var m = _p100._1._0._1;
+			var sign = function () {
+				var _p101 = {ctor: '_Tuple2', _0: s1, _1: s2};
+				_v57_2:
+				do {
+					if (_p101.ctor === '_Tuple2') {
+						if (_p101._0.ctor === 'Positive') {
+							if (_p101._1.ctor === 'Positive') {
+								return _javcasas$elm_integer$Data_Integer$Positive;
+							} else {
+								break _v57_2;
+							}
+						} else {
+							if (_p101._1.ctor === 'Negative') {
+								return _javcasas$elm_integer$Data_Integer$Positive;
+							} else {
+								break _v57_2;
+							}
+						}
+					} else {
+						break _v57_2;
+					}
+				} while(false);
+				return _javcasas$elm_integer$Data_Integer$Negative;
+			}();
+			return _elm_lang$core$Maybe$Just(
+				{
+					ctor: '_Tuple2',
+					_0: _javcasas$elm_integer$Data_Integer$Integer(
+						{ctor: '_Tuple2', _0: sign, _1: d}),
+					_1: _javcasas$elm_integer$Data_Integer$Integer(
+						{ctor: '_Tuple2', _0: s1, _1: m})
+				});
+		}
+	});
+var _javcasas$elm_integer$Data_Integer$unsafeDivmod = F2(
+	function (a, b) {
+		var v = A2(_javcasas$elm_integer$Data_Integer$divmod, a, b);
+		var _p102 = v;
+		if (_p102.ctor === 'Just') {
+			return _p102._0;
+		} else {
+			return _elm_lang$core$Native_Utils.crashCase(
+				'Data.Integer',
+				{
+					start: {line: 552, column: 5},
+					end: {line: 554, column: 48}
+				},
+				_p102)('Divide by zero');
+		}
+	});
+var _javcasas$elm_integer$Data_Integer$max = F2(
+	function (a, b) {
+		var _p104 = A2(_javcasas$elm_integer$Data_Integer$compare, a, b);
+		switch (_p104.ctor) {
+			case 'GT':
+				return a;
+			case 'EQ':
+				return a;
+			default:
+				return b;
+		}
+	});
+var _javcasas$elm_integer$Data_Integer$min = F2(
+	function (a, b) {
+		var _p105 = A2(_javcasas$elm_integer$Data_Integer$compare, a, b);
+		switch (_p105.ctor) {
+			case 'LT':
+				return a;
+			case 'EQ':
+				return a;
+			default:
+				return b;
+		}
+	});

@@ -123,28 +123,27 @@ var _user$project$BetterParser$many1 = F3(
 					});
 			});
 	});
-var _user$project$BetterParser$manyState = F5(
-	function (s, g, p, acc, f) {
+var _user$project$BetterParser$many$ = F4(
+	function (p, acc, f, ie) {
 		return A2(
 			_user$project$BetterParser_ops['+++'],
-			A5(_user$project$BetterParser$many1state, s, g, p, acc, f),
-			_user$project$BetterParser$return(acc));
+			A4(_user$project$BetterParser$many1$, p, acc, f, ie),
+			_user$project$BetterParser$return(
+				{
+					ctor: '_Tuple2',
+					_0: ie,
+					_1: _elm_lang$core$Basics$snd(acc)
+				}));
 	});
-var _user$project$BetterParser$many1state = F5(
-	function (s, g, p, acc, f) {
+var _user$project$BetterParser$many1$ = F4(
+	function (p, acc, f, ie) {
 		return A2(
 			_user$project$BetterParser_ops['>>='],
-			p(s),
+			p(acc),
 			function (v) {
 				return A2(
 					_user$project$BetterParser_ops['>>='],
-					A5(
-						_user$project$BetterParser$manyState,
-						g(s),
-						g,
-						p,
-						acc,
-						f),
+					A4(_user$project$BetterParser$many$, p, v, f, ie),
 					function (vs) {
 						return _user$project$BetterParser$return(
 							A2(f, v, vs));

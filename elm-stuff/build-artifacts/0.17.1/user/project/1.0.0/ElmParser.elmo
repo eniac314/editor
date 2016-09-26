@@ -181,128 +181,193 @@ var _user$project$ElmParser$parseAttrList = A2(
 			_user$project$ElmParser$token(']'),
 			_user$project$BetterParser$return(res));
 	});
-var _user$project$ElmParser$parseText = function (path) {
-	return A2(
-		_user$project$BetterParser_ops['>>='],
-		A2(
-			_user$project$BetterParser_ops['>>*'],
-			A2(
-				_user$project$BetterParser$sat,
-				_user$project$ElmParser$consumerLS,
-				function (t) {
-					return _elm_lang$core$Native_Utils.eq(
-						function (_) {
-							return _.val;
-						}(t),
-						'text');
-				}),
-			_user$project$ElmParser$parseStringLiteral),
-		function (s) {
-			return _user$project$BetterParser$return(
-				A2(
-					_user$project$HtmlZipper$Node,
-					A3(
-						_user$project$HtmlZipper$Tag,
-						_user$project$TagAttr$Text(s),
-						A2(_elm_lang$core$List_ops['::'], _user$project$TagAttr$TextNode, path),
-						_elm_lang$core$Native_List.fromArray(
-							[])),
-					_elm_lang$core$Native_List.fromArray(
-						[])));
-		});
-};
-var _user$project$ElmParser$parseTag = function (path) {
-	return A2(
-		_user$project$BetterParser_ops['+++'],
-		_user$project$ElmParser$coma(
-			_user$project$ElmParser$parseText(path)),
-		A2(
+var _user$project$ElmParser$parseText = F2(
+	function (path, n) {
+		return A2(
 			_user$project$BetterParser_ops['>>='],
-			_user$project$ElmParser$coma(_user$project$ElmParser$parseTagName),
-			function (tn) {
-				return A2(
-					_user$project$BetterParser_ops['>>='],
-					_user$project$ElmParser$parseAttrList,
-					function (al) {
+			A2(
+				_user$project$BetterParser_ops['>>*'],
+				A2(
+					_user$project$BetterParser$sat,
+					_user$project$ElmParser$consumerLS,
+					function (t) {
+						return _elm_lang$core$Native_Utils.eq(
+							function (_) {
+								return _.val;
+							}(t),
+							'text');
+					}),
+				_user$project$ElmParser$parseStringLiteral),
+			function (s) {
+				return _user$project$BetterParser$return(
+					{
+						ctor: '_Tuple2',
+						_0: A2(
+							_user$project$HtmlZipper$Node,
+							A3(
+								_user$project$HtmlZipper$Tag,
+								_user$project$TagAttr$Text(s),
+								A2(
+									_elm_lang$core$List_ops['::'],
+									{ctor: '_Tuple2', _0: _user$project$TagAttr$TextNode, _1: n},
+									path),
+								_elm_lang$core$Native_List.fromArray(
+									[])),
+							_elm_lang$core$Native_List.fromArray(
+								[])),
+						_1: n
+					});
+			});
+	});
+var _user$project$ElmParser$parseTag = F2(
+	function (path, n) {
+		return A2(
+			_user$project$BetterParser_ops['+++'],
+			_user$project$ElmParser$coma(
+				A2(_user$project$ElmParser$parseText, path, n)),
+			A2(
+				_user$project$BetterParser_ops['>>='],
+				_user$project$ElmParser$coma(_user$project$ElmParser$parseTagName),
+				function (tn) {
+					return A2(
+						_user$project$BetterParser_ops['>>='],
+						_user$project$ElmParser$parseAttrList,
+						function (al) {
+							return A2(
+								_user$project$BetterParser_ops['>>='],
+								A2(
+									_user$project$ElmParser$parseTagList,
+									A2(
+										_elm_lang$core$List_ops['::'],
+										{ctor: '_Tuple2', _0: tn, _1: n},
+										path),
+									n),
+								function (_p3) {
+									var _p4 = _p3;
+									return _user$project$BetterParser$return(
+										{
+											ctor: '_Tuple2',
+											_0: A2(
+												_user$project$HtmlZipper$Node,
+												A3(
+													_user$project$HtmlZipper$Tag,
+													tn,
+													A2(
+														_elm_lang$core$List_ops['::'],
+														{ctor: '_Tuple2', _0: tn, _1: n},
+														path),
+													al),
+												_p4._0),
+											_1: _p4._1
+										});
+								});
+						});
+				}));
+	});
+var _user$project$ElmParser$parseTagList = F2(
+	function (path, n) {
+		return A2(
+			_user$project$BetterParser_ops['>>='],
+			A2(
+				_user$project$BetterParser_ops['>>*'],
+				_user$project$ElmParser$token('['),
+				A4(
+					_user$project$BetterParser$many$,
+					function (_p5) {
+						var _p6 = _p5;
 						return A2(
 							_user$project$BetterParser_ops['>>='],
-							_user$project$ElmParser$parseTagList(
-								A2(_elm_lang$core$List_ops['::'], tn, path)),
-							function (ts) {
+							A2(
+								_user$project$ElmParser$parseTag,
+								path,
+								A2(
+									_javcasas$elm_integer$Data_Integer$add,
+									_p6._1,
+									_javcasas$elm_integer$Data_Integer$fromInt(1))),
+							function (_p7) {
+								var _p8 = _p7;
 								return _user$project$BetterParser$return(
-									A2(
-										_user$project$HtmlZipper$Node,
-										A3(
-											_user$project$HtmlZipper$Tag,
-											tn,
-											A2(_elm_lang$core$List_ops['::'], tn, path),
-											al),
-										ts));
+									{
+										ctor: '_Tuple2',
+										_0: _elm_lang$core$Native_List.fromArray(
+											[_p8._0]),
+										_1: _p8._1
+									});
 							});
-					});
-			}));
-};
-var _user$project$ElmParser$parseTagList = function (path) {
-	return A2(
-		_user$project$BetterParser_ops['>>='],
-		A2(
-			_user$project$BetterParser_ops['>>*'],
-			_user$project$ElmParser$token('['),
-			A3(
-				_user$project$BetterParser$many,
-				_user$project$ElmParser$parseTag(path),
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				F2(
-					function (x, y) {
-						return A2(_elm_lang$core$List_ops['::'], x, y);
-					}))),
-		function (res) {
-			return A2(
-				_user$project$BetterParser_ops['>>*'],
-				_user$project$ElmParser$token(']'),
-				_user$project$BetterParser$return(res));
-		});
-};
-var _user$project$ElmParser$interpret = function (input) {
-	var _p3 = _user$project$Tokenizer$tokenizer(input);
-	if (_p3.ctor === 'Err') {
-		return _elm_lang$core$Result$Err(
-			A2(_elm_lang$core$Basics_ops['++'], 'Tokenizer error: ', _p3._0));
-	} else {
-		var _p4 = A2(
-			_user$project$BetterParser$parse,
-			_user$project$ElmParser$parseTag(
-				_elm_lang$core$Native_List.fromArray(
-					[])),
-			_p3._0);
-		if (_p4.ctor === 'Err') {
+					},
+					{
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_List.fromArray(
+							[]),
+						_1: n
+					},
+					F2(
+						function (_p10, _p9) {
+							var _p11 = _p10;
+							var _p12 = _p9;
+							return {
+								ctor: '_Tuple2',
+								_0: A2(_elm_lang$core$Basics_ops['++'], _p11._0, _p12._0),
+								_1: _p12._1
+							};
+						}),
+					_elm_lang$core$Native_List.fromArray(
+						[]))),
+			function (res) {
+				return A2(
+					_user$project$BetterParser_ops['>>*'],
+					_user$project$ElmParser$token(']'),
+					_user$project$BetterParser$return(res));
+			});
+	});
+var _user$project$ElmParser$testinput = ' div [ class \"mainDiv\" ]\n          [ p [ style [ ( \"color\" , \"red\" ) ] ] [ text \"this is a test\" \n                  , p [ ] [ ]\n                  ]\n          , p [ ] [ h2 [ id \"very important\" , style [ ( \"color\" , \"blue\" ) ] ] [ text \"big title\" ] ]\n          ]\n\n  ';
+var _user$project$ElmParser$zero = _javcasas$elm_integer$Data_Integer$fromInt(0);
+var _user$project$ElmParser$interpret = F2(
+	function (input, n) {
+		var _p13 = _user$project$Tokenizer$tokenizer(input);
+		if (_p13.ctor === 'Err') {
 			return _elm_lang$core$Result$Err(
-				A2(_elm_lang$core$Basics_ops['++'], 'Parser error: ', _p4._0));
+				A2(_elm_lang$core$Basics_ops['++'], 'Tokenizer error: ', _p13._0));
 		} else {
-			return _elm_lang$core$Result$Ok(_p4._0._0);
+			var _p14 = A2(
+				_user$project$BetterParser$parse,
+				A2(
+					_user$project$ElmParser$parseTag,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					n),
+				_p13._0);
+			if (_p14.ctor === 'Err') {
+				return _elm_lang$core$Result$Err(
+					A2(_elm_lang$core$Basics_ops['++'], 'Parser error: ', _p14._0));
+			} else {
+				return _elm_lang$core$Result$Ok(_p14._0._0);
+			}
 		}
-	}
-};
+	});
+var _user$project$ElmParser$test = A2(
+	_user$project$ElmParser$interpret,
+	_user$project$ElmParser$testinput,
+	_javcasas$elm_integer$Data_Integer$fromInt(0));
 var _user$project$ElmParser$renderer = function (res) {
-	var renderer$ = function (_p5) {
-		var _p6 = _p5;
-		var _p7 = _p6._0;
+	var renderer$ = function (_p15) {
+		var _p16 = _p15;
+		var _p17 = _p16._0;
 		return A3(
 			_user$project$TagAttr$toTag,
 			function (_) {
 				return _.tagname;
-			}(_p7),
+			}(_p17),
 			A2(
 				_elm_lang$core$List$map,
 				_user$project$TagAttr$toAttr,
 				function (_) {
 					return _.attr;
-				}(_p7)),
-			A2(_elm_lang$core$List$map, renderer$, _p6._1));
+				}(_p17)),
+			A2(_elm_lang$core$List$map, renderer$, _p16._1));
 	};
-	var _p8 = res;
-	if (_p8.ctor === 'Err') {
+	var _p18 = res;
+	if (_p18.ctor === 'Err') {
 		return A2(
 			_elm_lang$html$Html$div,
 			_elm_lang$core$Native_List.fromArray(
@@ -316,9 +381,9 @@ var _user$project$ElmParser$renderer = function (res) {
 						[]),
 					_elm_lang$core$Native_List.fromArray(
 						[])),
-					_elm_lang$html$Html$text(_p8._0)
+					_elm_lang$html$Html$text(_p18._0)
 				]));
 	} else {
-		return renderer$(_p8._0);
+		return renderer$(_p18._0._0);
 	}
 };
