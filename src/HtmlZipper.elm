@@ -25,8 +25,24 @@ extractTag (ZipTree (Node fVal ts, ctxs)) = fVal
 extractPath : ZipTree Tag -> Path
 extractPath z = .path (extractTag z)
 
+root : Path -> Maybe (TagName, Integer)
+root path = List.head path
+  
+updateTag : HTML -> HtmlZipper -> HtmlZipper
+updateTag (Node tag1 ts) 
+          (ZipTree ((Node tag2 _) ,ctx)) =
+            let 
+            path = 
+              case (.path tag2) of 
+                [] -> .path tag1
+                (x::xs) -> (.path tag1) ++ xs
+            
+            in ZipTree (Node (Tag (.tagname tag1) path (.attr tag1)) ts,ctx)
+
+
 updateFocus : Tree a -> ZipTree a -> ZipTree a
 updateFocus t (ZipTree (oldT,ctx)) = (ZipTree (t,ctx))
+
 
 zipUp : ZipTree a -> Maybe (ZipTree a)
 zipUp (ZipTree (fTree , ctxs)) =
@@ -76,21 +92,53 @@ zipLeft (ZipTree (fTree , ctxs)) =
               , (Context parent (List.reverse ts) (fTree :: rs)) :: bs)
             )
 
-cd : (List b) -> ( a -> b ) -> ZipTree a -> Maybe (ZipTree a)
+cd : (List b) -> ( a -> Maybe b ) -> ZipTree a -> Maybe (ZipTree a)
 cd path f zt = 
   case path of 
     [] -> Nothing
     
     (p :: []) ->
-      let g (Node val _) = (f val == p)
+      let g (Node val _) = (case (f val) of 
+                             Nothing -> False
+                             Just p' -> p' == p)
       in (zipDown g zt) 
 
     (p :: ps) ->
-      let g (Node val _) = (f val == p)
+      let g (Node val _) = (case (f val) of 
+                             Nothing -> False
+                             Just p' -> p' == p)
       in case (zipDown g zt) of 
           Nothing -> Nothing
-          Just zt'-> cd ps f zt'  
+          Just zt'-> cd ps f zt'
 
+cd' path zt = 
+  let current = List.reverse (extractPath zt)
+      dest    = List.reverse path
+      directions = trimPath current dest
+
+      trimPath cs ds = 
+        case (cs,ds) of
+          ([],[]) -> []
+          (c::cs,[]) -> []
+          ([],ds) -> ds
+          (c::cs',d::ds') -> 
+            if c == d then trimPath cs' ds' else []
+      
+      hasSameName d (Node tag ts) = 
+        let tn = .path tag
+        in case root tn of
+             Nothing -> False
+             Just r  -> r == d
+
+      helper dest zt = 
+        case dest of
+         [] -> Just zt
+         (d::ds) -> 
+          case (zipDown (hasSameName d) zt) of 
+            Nothing  -> Nothing
+            Just zt' -> helper ds zt'
+  in helper directions zt
+       
 -------------------------------------------------------------------------------
 
 type alias HTML = Tree Tag

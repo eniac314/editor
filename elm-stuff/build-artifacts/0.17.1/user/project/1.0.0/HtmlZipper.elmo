@@ -139,6 +139,9 @@ var _user$project$HtmlZipper$htmlToString = function (html) {
 		});
 	return A2(helper, 0, html);
 };
+var _user$project$HtmlZipper$root = function (path) {
+	return _elm_lang$core$List$head(path);
+};
 var _user$project$HtmlZipper$extractTag = function (_p6) {
 	var _p7 = _p6;
 	return _p7._0._0._0;
@@ -177,16 +180,56 @@ var _user$project$HtmlZipper$initZip = function (t) {
 				[])
 		});
 };
-var _user$project$HtmlZipper$updateFocus = F2(
-	function (t, _p10) {
-		var _p11 = _p10;
+var _user$project$HtmlZipper$updateTag = F2(
+	function (_p11, _p10) {
+		var _p12 = _p11;
+		var _p15 = _p12._0;
+		var _p13 = _p10;
+		var path = function () {
+			var _p14 = function (_) {
+				return _.path;
+			}(_p13._0._0._0);
+			if (_p14.ctor === '[]') {
+				return function (_) {
+					return _.path;
+				}(_p15);
+			} else {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					function (_) {
+						return _.path;
+					}(_p15),
+					_p14._1);
+			}
+		}();
 		return _user$project$HtmlZipper$ZipTree(
-			{ctor: '_Tuple2', _0: t, _1: _p11._0._1});
+			{
+				ctor: '_Tuple2',
+				_0: A2(
+					_user$project$HtmlZipper$Node,
+					A3(
+						_user$project$HtmlZipper$Tag,
+						function (_) {
+							return _.tagname;
+						}(_p15),
+						path,
+						function (_) {
+							return _.attr;
+						}(_p15)),
+					_p12._1),
+				_1: _p13._0._1
+			});
 	});
-var _user$project$HtmlZipper$zipUp = function (_p12) {
-	var _p13 = _p12;
-	var _p14 = _p13._0._1;
-	if (_p14.ctor === '[]') {
+var _user$project$HtmlZipper$updateFocus = F2(
+	function (t, _p16) {
+		var _p17 = _p16;
+		return _user$project$HtmlZipper$ZipTree(
+			{ctor: '_Tuple2', _0: t, _1: _p17._0._1});
+	});
+var _user$project$HtmlZipper$zipUp = function (_p18) {
+	var _p19 = _p18;
+	var _p20 = _p19._0._1;
+	if (_p20.ctor === '[]') {
 		return _elm_lang$core$Maybe$Nothing;
 	} else {
 		return _elm_lang$core$Maybe$Just(
@@ -195,42 +238,42 @@ var _user$project$HtmlZipper$zipUp = function (_p12) {
 					ctor: '_Tuple2',
 					_0: A2(
 						_user$project$HtmlZipper$Node,
-						_p14._0._0,
+						_p20._0._0,
 						A2(
 							_elm_lang$core$Basics_ops['++'],
-							_p14._0._1,
+							_p20._0._1,
 							A2(
 								_elm_lang$core$Basics_ops['++'],
 								_elm_lang$core$Native_List.fromArray(
-									[_p13._0._0]),
-								_p14._0._2))),
-					_1: _p14._1
+									[_p19._0._0]),
+								_p20._0._2))),
+					_1: _p20._1
 				}));
 	}
 };
 var _user$project$HtmlZipper$zipDown = F2(
-	function (p, _p15) {
-		var _p16 = _p15;
-		var _p17 = _p16._0._0._1;
-		if (_p17.ctor === '[]') {
+	function (p, _p21) {
+		var _p22 = _p21;
+		var _p23 = _p22._0._0._1;
+		if (_p23.ctor === '[]') {
 			return _elm_lang$core$Maybe$Nothing;
 		} else {
-			var _p18 = A2(_user$project$HtmlZipper$break, p, _p17);
-			var l = _p18._0;
-			var r = _p18._1;
-			var _p19 = r;
-			if (_p19.ctor === '[]') {
+			var _p24 = A2(_user$project$HtmlZipper$break, p, _p23);
+			var l = _p24._0;
+			var r = _p24._1;
+			var _p25 = r;
+			if (_p25.ctor === '[]') {
 				return _elm_lang$core$Maybe$Nothing;
 			} else {
 				return _elm_lang$core$Maybe$Just(
 					_user$project$HtmlZipper$ZipTree(
 						{
 							ctor: '_Tuple2',
-							_0: _p19._0,
+							_0: _p25._0,
 							_1: A2(
 								_elm_lang$core$List_ops['::'],
-								A3(_user$project$HtmlZipper$Context, _p16._0._0._0, l, _p19._1),
-								_p16._0._1)
+								A3(_user$project$HtmlZipper$Context, _p22._0._0._0, l, _p25._1),
+								_p22._0._1)
 						}));
 			}
 		}
@@ -239,118 +282,200 @@ var _user$project$HtmlZipper$cd = F3(
 	function (path, f, zt) {
 		cd:
 		while (true) {
-			var _p20 = path;
-			if (_p20.ctor === '[]') {
+			var _p26 = path;
+			if (_p26.ctor === '[]') {
 				return _elm_lang$core$Maybe$Nothing;
 			} else {
-				if (_p20._1.ctor === '[]') {
-					var g = function (_p21) {
-						var _p22 = _p21;
-						return _elm_lang$core$Native_Utils.eq(
-							f(_p22._0),
-							_p20._0);
+				if (_p26._1.ctor === '[]') {
+					var g = function (_p27) {
+						var _p28 = _p27;
+						var _p29 = f(_p28._0);
+						if (_p29.ctor === 'Nothing') {
+							return false;
+						} else {
+							return _elm_lang$core$Native_Utils.eq(_p29._0, _p26._0);
+						}
 					};
 					return A2(_user$project$HtmlZipper$zipDown, g, zt);
 				} else {
-					var g = function (_p23) {
-						var _p24 = _p23;
-						return _elm_lang$core$Native_Utils.eq(
-							f(_p24._0),
-							_p20._0);
+					var g = function (_p30) {
+						var _p31 = _p30;
+						var _p32 = f(_p31._0);
+						if (_p32.ctor === 'Nothing') {
+							return false;
+						} else {
+							return _elm_lang$core$Native_Utils.eq(_p32._0, _p26._0);
+						}
 					};
-					var _p25 = A2(_user$project$HtmlZipper$zipDown, g, zt);
-					if (_p25.ctor === 'Nothing') {
+					var _p33 = A2(_user$project$HtmlZipper$zipDown, g, zt);
+					if (_p33.ctor === 'Nothing') {
 						return _elm_lang$core$Maybe$Nothing;
 					} else {
-						var _v16 = _p20._1,
-							_v17 = f,
-							_v18 = _p25._0;
-						path = _v16;
-						f = _v17;
-						zt = _v18;
+						var _v21 = _p26._1,
+							_v22 = f,
+							_v23 = _p33._0;
+						path = _v21;
+						f = _v22;
+						zt = _v23;
 						continue cd;
 					}
 				}
 			}
 		}
 	});
-var _user$project$HtmlZipper$zipDownFirst = function (_p26) {
-	var _p27 = _p26;
-	var _p28 = _p27._0._0._1;
-	if (_p28.ctor === '[]') {
+var _user$project$HtmlZipper$cd$ = F2(
+	function (path, zt) {
+		var hasSameName = F2(
+			function (d, _p34) {
+				var _p35 = _p34;
+				var tn = function (_) {
+					return _.path;
+				}(_p35._0);
+				var _p36 = _user$project$HtmlZipper$root(tn);
+				if (_p36.ctor === 'Nothing') {
+					return false;
+				} else {
+					return _elm_lang$core$Native_Utils.eq(_p36._0, d);
+				}
+			});
+		var helper = F2(
+			function (dest, zt) {
+				helper:
+				while (true) {
+					var _p37 = dest;
+					if (_p37.ctor === '[]') {
+						return _elm_lang$core$Maybe$Just(zt);
+					} else {
+						var _p38 = A2(
+							_user$project$HtmlZipper$zipDown,
+							hasSameName(_p37._0),
+							zt);
+						if (_p38.ctor === 'Nothing') {
+							return _elm_lang$core$Maybe$Nothing;
+						} else {
+							var _v28 = _p37._1,
+								_v29 = _p38._0;
+							dest = _v28;
+							zt = _v29;
+							continue helper;
+						}
+					}
+				}
+			});
+		var trimPath = F2(
+			function (cs, ds) {
+				trimPath:
+				while (true) {
+					var _p39 = {ctor: '_Tuple2', _0: cs, _1: ds};
+					if (_p39._0.ctor === '[]') {
+						if (_p39._1.ctor === '[]') {
+							return _elm_lang$core$Native_List.fromArray(
+								[]);
+						} else {
+							return _p39._1;
+						}
+					} else {
+						if (_p39._1.ctor === '[]') {
+							return _elm_lang$core$Native_List.fromArray(
+								[]);
+						} else {
+							if (_elm_lang$core$Native_Utils.eq(_p39._0._0, _p39._1._0)) {
+								var _v31 = _p39._0._1,
+									_v32 = _p39._1._1;
+								cs = _v31;
+								ds = _v32;
+								continue trimPath;
+							} else {
+								return _elm_lang$core$Native_List.fromArray(
+									[]);
+							}
+						}
+					}
+				}
+			});
+		var dest = _elm_lang$core$List$reverse(path);
+		var current = _elm_lang$core$List$reverse(
+			_user$project$HtmlZipper$extractPath(zt));
+		var directions = A2(trimPath, current, dest);
+		return A2(helper, directions, zt);
+	});
+var _user$project$HtmlZipper$zipDownFirst = function (_p40) {
+	var _p41 = _p40;
+	var _p42 = _p41._0._0._1;
+	if (_p42.ctor === '[]') {
 		return _elm_lang$core$Maybe$Nothing;
 	} else {
 		return _elm_lang$core$Maybe$Just(
 			_user$project$HtmlZipper$ZipTree(
 				{
 					ctor: '_Tuple2',
-					_0: _p28._0,
+					_0: _p42._0,
 					_1: A2(
 						_elm_lang$core$List_ops['::'],
 						A3(
 							_user$project$HtmlZipper$Context,
-							_p27._0._0._0,
+							_p41._0._0._0,
 							_elm_lang$core$Native_List.fromArray(
 								[]),
-							_p28._1),
-						_p27._0._1)
+							_p42._1),
+						_p41._0._1)
 				}));
 	}
 };
-var _user$project$HtmlZipper$zipRight = function (_p29) {
-	var _p30 = _p29;
-	var _p31 = _p30._0._1;
-	if (_p31.ctor === '[]') {
+var _user$project$HtmlZipper$zipRight = function (_p43) {
+	var _p44 = _p43;
+	var _p45 = _p44._0._1;
+	if (_p45.ctor === '[]') {
 		return _elm_lang$core$Maybe$Nothing;
 	} else {
-		var _p32 = _p31._0._2;
-		if (_p32.ctor === '[]') {
+		var _p46 = _p45._0._2;
+		if (_p46.ctor === '[]') {
 			return _elm_lang$core$Maybe$Nothing;
 		} else {
 			return _elm_lang$core$Maybe$Just(
 				_user$project$HtmlZipper$ZipTree(
 					{
 						ctor: '_Tuple2',
-						_0: _p32._0,
+						_0: _p46._0,
 						_1: A2(
 							_elm_lang$core$List_ops['::'],
 							A3(
 								_user$project$HtmlZipper$Context,
-								_p31._0._0,
+								_p45._0._0,
 								A2(
 									_elm_lang$core$Basics_ops['++'],
-									_p31._0._1,
+									_p45._0._1,
 									_elm_lang$core$Native_List.fromArray(
-										[_p30._0._0])),
-								_p32._1),
-							_p31._1)
+										[_p44._0._0])),
+								_p46._1),
+							_p45._1)
 					}));
 		}
 	}
 };
-var _user$project$HtmlZipper$zipLeft = function (_p33) {
-	var _p34 = _p33;
-	var _p35 = _p34._0._1;
-	if (_p35.ctor === '[]') {
+var _user$project$HtmlZipper$zipLeft = function (_p47) {
+	var _p48 = _p47;
+	var _p49 = _p48._0._1;
+	if (_p49.ctor === '[]') {
 		return _elm_lang$core$Maybe$Nothing;
 	} else {
-		var _p36 = _elm_lang$core$List$reverse(_p35._0._1);
-		if (_p36.ctor === '[]') {
+		var _p50 = _elm_lang$core$List$reverse(_p49._0._1);
+		if (_p50.ctor === '[]') {
 			return _elm_lang$core$Maybe$Nothing;
 		} else {
 			return _elm_lang$core$Maybe$Just(
 				_user$project$HtmlZipper$ZipTree(
 					{
 						ctor: '_Tuple2',
-						_0: _p36._0,
+						_0: _p50._0,
 						_1: A2(
 							_elm_lang$core$List_ops['::'],
 							A3(
 								_user$project$HtmlZipper$Context,
-								_p35._0._0,
-								_elm_lang$core$List$reverse(_p36._1),
-								A2(_elm_lang$core$List_ops['::'], _p34._0._0, _p35._0._2)),
-							_p35._1)
+								_p49._0._0,
+								_elm_lang$core$List$reverse(_p50._1),
+								A2(_elm_lang$core$List_ops['::'], _p48._0._0, _p49._0._2)),
+							_p49._1)
 					}));
 		}
 	}
