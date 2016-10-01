@@ -9,6 +9,8 @@ import Http
 import Json.Decode as Json
 import Task exposing (succeed, perform)
 import Data.Integer exposing (fromInt, add, Integer)
+import Html.CssHelpers
+import EditorCss exposing (..)
 import HtmlZipper exposing ( HTML
                            , HtmlZipper
                            , Path
@@ -32,6 +34,10 @@ import TagAttr exposing (TagName)
 import ElmParser exposing ( interpret
                           , renderer
                           )
+
+{ id, class, classList } =
+    Html.CssHelpers.withNamespace "editor"
+
 
 main =
     App.program { init   = (init testinput, Cmd.none) 
@@ -73,7 +79,7 @@ init initInput =
         initPage        
         (renderer pdata)
         nextId
-        False
+        True
         
 
 -- UPDATE
@@ -177,22 +183,23 @@ move f model =
 --reset = Task.perform (\_ -> Reset) (\_ -> Reset) (succeed Reset)
 -- VIEW
 
+
 view : Model -> Html Msg
 view model = 
-    div [ modelStyle model]
-         [ text (String.join "/" 
+    div [ id Editor]
+         [ EditorCss.editorStyle
+         , text (String.join "/" 
                    (List.reverse 
                       (List.map (\(t,p) -> toString t) (.currPath model))))
          , br  [] []
-         , div [ id "leftPane"
-               , paneStyle
+         , div [ class [ Pane ]
                ] 
                [ Html.form 
                   []
                   [ textarea [ onInput Store
                              , rows 15
                              , cols 45
-                             , inputStyle
+                             , id Prompt
                              ]
                              [ case (.procString model) of 
                                 Nothing -> text (.rawString model)
@@ -205,11 +212,17 @@ view model =
                   ]
               ]
         , div [ id "rightPane"
-              , paneStyle
+              , class [Pane]
               ]
               [ explorer (.page model) (.debug model)
               ]
         
+        
+        , div [ id "console"]
+              [ case (.parsedData model) of 
+                 Err s -> text s
+                 Ok r  -> text "parsing complete" 
+              ]
         --, br [] []
         --, text (toString (.parsedData model))
         
@@ -221,12 +234,7 @@ explorer : Maybe HtmlZipper -> Bool -> Html Msg
 explorer page dbug = 
   let 
   explWindow tags =
-    div [ id "explWindow"
-        , style [("width","100%")
-                ,("height","300px")
-                ,("overflow","scroll")
-                ]
-        ]
+    div [ id ExplWindow]
         [ tags ]
   tags = 
     case page of 
@@ -240,7 +248,7 @@ explorer page dbug =
        then ""
        else " " ++ (spacer (indent - 1))
      
-     colors = ["ivory","khaki","lavender","lavenderblush"
+     colors = List.reverse ["ivory","khaki","lavender","lavenderblush"
               ,"lightcoral","lightgreen","lemonchiffon"
               ,"thistle","mediumspringgreen","lightskyblue"
               ]
@@ -259,17 +267,11 @@ explorer page dbug =
 
           (c,cs') = colorPicker cs
           
-      in p [ style [ --("white-space","pre")
-                     --, 
-                     ("padding","0.2em")
-                   , ("border-style", "solid")
-                   , ("border-color", "black")
-                   , ("margin","0.1em")
-                   , ("background-color",c)
-                   ]
+      in p [ class [ExplTag]
+           , style [  ("background-color",c) ]
            , onClick (GoTo pth)
            ]
-           ([text (spacer n ++ tn)] ++ [debug dbug (span [] [text (toString pth)])] ++ 
+           ([text (spacer n ++ tn)] ++ [span [classList [("Debug",dbug)]] [text (toString pth)]] ++ 
             (List.map (render' (n+3) cs') xs))
 
     in render' 0 colors t    
@@ -290,22 +292,7 @@ explorer page dbug =
   
 
 
-inputStyle = 
-  style [("font-family","Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace")
-        ,("width","95%")
-        ]
 
-paneStyle = 
-  style [("width","45%")
-        ,("background-color","lightgrey")
-        ,("display","inline-block")
-        ]
-
-modelStyle model = 
-  style []
-
-debug d t = 
-  if d then t else span [] []
 
 -- SUBSCRIPTIONS
 
@@ -316,17 +303,35 @@ subscriptions model = Sub.none
 -- Test
 
 testinput = 
-  """ div [ class "mainDiv" ]
-          [ p [ style [ ( "color" , "red" ) ] ] [ text "this is a test" 
-                  , p [ ] [ ]
-                  ]
-          , p [ ] [ h2 [ id "very important" , style [ ( "color" , "blue" ) ] ] [ text "big title" ] ]
+  """ div [ class "main"]
+          [ header [] [h1 [] [text "A great page"]]
+          , body []
+                 [form []
+                       [ textarea [] [text "placeholder"] 
+                       , button [] [text "press here!"]
+                       ]
+                  , a [href "http://www.google.com"]
+                      [text "the answer to everything"]
+                 , table []
+                         [ th  [] [text "table header"]
+                         , tr  [] [td [] [text "case 1"]
+                                  ,td [] [text "case 2"]
+                                  ,td [] [text "case 3"]
+                                  ,td [] [text "case 4"]
+                                  ]
+                          , tr  [] [td [] [text "case 5"]
+                                  ,td [] [text "case 6"]
+                                  ,td [] [text "case 7"]
+                                  ,td [] [text "case 8"]
+                                  ]
+                         ]
+                 ]
+          , footer [] [text "this is the end"]
           ]
 
   """
 testinput2 = 
-   """ div [ class "mainDiv" , id "toto" ]
-           [ text "hello!" ]
+   """ textarea [] [text "hello"]
 
   """
 

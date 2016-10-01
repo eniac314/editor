@@ -84,7 +84,7 @@ var _user$project$HtmlZipper$htmlToString = function (html) {
 				_elm_lang$core$List$map,
 				helper((indent + off) + 3),
 				_p5._1);
-			if (A2(_elm_lang$core$String$startsWith, 'text', tn)) {
+			if (A2(_elm_lang$core$String$startsWith, 'text ', tn)) {
 				return tn;
 			} else {
 				var tgln = _elm_lang$core$Native_Utils.eq(

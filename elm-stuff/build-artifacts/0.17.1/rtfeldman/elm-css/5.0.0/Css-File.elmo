@@ -1,0 +1,12 @@
+var _rtfeldman$elm_css$Css_File$compile = _rtfeldman$elm_css$Css$compile;
+var _rtfeldman$elm_css$Css_File$toFileStructure = function (stylesheets) {
+	var asTuple = function (_p0) {
+		var _p1 = _p0;
+		return {
+			success: _elm_lang$core$List$isEmpty(_p1._1.warnings),
+			filename: _p1._0,
+			content: _p1._1.css
+		};
+	};
+	return A2(_elm_lang$core$List$map, asTuple, stylesheets);
+};

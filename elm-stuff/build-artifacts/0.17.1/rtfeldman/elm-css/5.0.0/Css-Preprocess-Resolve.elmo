@@ -1,0 +1,650 @@
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$collectSelectors = function (declarations) {
+	collectSelectors:
+	while (true) {
+		var _p0 = declarations;
+		if (_p0.ctor === '[]') {
+			return _elm_lang$core$Native_List.fromArray(
+				[]);
+		} else {
+			if (_p0._0.ctor === 'StyleBlockDeclaration') {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(_elm_lang$core$List_ops['::'], _p0._0._0._0, _p0._0._0._1),
+					_rtfeldman$elm_css$Css_Preprocess_Resolve$collectSelectors(_p0._1));
+			} else {
+				var _v1 = _p0._1;
+				declarations = _v1;
+				continue collectSelectors;
+			}
+		}
+	}
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarning = function (_p1) {
+	var _p2 = _p1;
+	return {
+		ctor: '_Tuple2',
+		_0: _p2.warnings,
+		_1: {key: _p2.key, value: _p2.value, important: _p2.important}
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings = function (properties) {
+	return {
+		ctor: '_Tuple2',
+		_0: A2(
+			_elm_lang$core$List$concatMap,
+			function (_) {
+				return _.warnings;
+			},
+			properties),
+		_1: A2(
+			_elm_lang$core$List$map,
+			function (prop) {
+				return _elm_lang$core$Basics$snd(
+					_rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarning(prop));
+			},
+			properties)
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$toDocumentRule = F5(
+	function (str1, str2, str3, str4, declaration) {
+		var _p3 = declaration;
+		if (_p3.ctor === 'StyleBlockDeclaration') {
+			return A5(_rtfeldman$elm_css$Css_Structure$DocumentRule, str1, str2, str3, str4, _p3._0);
+		} else {
+			return declaration;
+		}
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$lastDeclaration = function (declarations) {
+	lastDeclaration:
+	while (true) {
+		var _p4 = declarations;
+		if (_p4.ctor === '[]') {
+			return _elm_lang$core$Maybe$Nothing;
+		} else {
+			if (_p4._1.ctor === '[]') {
+				return _elm_lang$core$Maybe$Just(
+					_elm_lang$core$Native_List.fromArray(
+						[_p4._0]));
+			} else {
+				var _v5 = _p4._1;
+				declarations = _v5;
+				continue lastDeclaration;
+			}
+		}
+	}
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings = function (declarationsAndWarnings) {
+	var _p5 = declarationsAndWarnings;
+	if (_p5.ctor === '[]') {
+		return {
+			declarations: _elm_lang$core$Native_List.fromArray(
+				[]),
+			warnings: _elm_lang$core$Native_List.fromArray(
+				[])
+		};
+	} else {
+		var result = _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(_p5._1);
+		return {
+			declarations: A2(_elm_lang$core$Basics_ops['++'], _p5._0.declarations, result.declarations),
+			warnings: A2(_elm_lang$core$Basics_ops['++'], _p5._0.warnings, result.warnings)
+		};
+	}
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFeatureValues = function (tuples) {
+	var expandTuples = function (tuplesToExpand) {
+		var _p6 = tuplesToExpand;
+		if (_p6.ctor === '[]') {
+			return {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$Native_List.fromArray(
+					[]),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[])
+			};
+		} else {
+			var _p7 = expandTuples(_p6._1);
+			var nextWarnings = _p7._0;
+			var nextTuples = _p7._1;
+			var _p8 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(_p6._0._1);
+			var warnings = _p8._0;
+			var properties = _p8._1;
+			return {
+				ctor: '_Tuple2',
+				_0: A2(_elm_lang$core$Basics_ops['++'], warnings, nextWarnings),
+				_1: A2(
+					_elm_lang$core$List_ops['::'],
+					{ctor: '_Tuple2', _0: _p6._0._0, _1: properties},
+					nextTuples)
+			};
+		}
+	};
+	var _p9 = expandTuples(tuples);
+	var warnings = _p9._0;
+	var newTuples = _p9._1;
+	return {
+		declarations: _elm_lang$core$Native_List.fromArray(
+			[
+				_rtfeldman$elm_css$Css_Structure$FontFeatureValues(newTuples)
+			]),
+		warnings: warnings
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveCounterStyle = function (counterStyleProperties) {
+	var _p10 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(counterStyleProperties);
+	var warnings = _p10._0;
+	var properties = _p10._1;
+	return {
+		declarations: _elm_lang$core$Native_List.fromArray(
+			[
+				_rtfeldman$elm_css$Css_Structure$Viewport(properties)
+			]),
+		warnings: warnings
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveViewport = function (viewportProperties) {
+	var _p11 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(viewportProperties);
+	var warnings = _p11._0;
+	var properties = _p11._1;
+	return {
+		declarations: _elm_lang$core$Native_List.fromArray(
+			[
+				_rtfeldman$elm_css$Css_Structure$Viewport(properties)
+			]),
+		warnings: warnings
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveKeyframes = F2(
+	function (str, properties) {
+		return {
+			declarations: _elm_lang$core$Native_List.fromArray(
+				[
+					A2(_rtfeldman$elm_css$Css_Structure$Keyframes, str, properties)
+				]),
+			warnings: _elm_lang$core$Native_List.fromArray(
+				[])
+		};
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFace = function (fontFaceProperties) {
+	var _p12 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(fontFaceProperties);
+	var warnings = _p12._0;
+	var properties = _p12._1;
+	return {
+		declarations: _elm_lang$core$Native_List.fromArray(
+			[
+				_rtfeldman$elm_css$Css_Structure$FontFace(properties)
+			]),
+		warnings: warnings
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolvePageRule = F2(
+	function (str, pageRuleProperties) {
+		var _p13 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarnings(pageRuleProperties);
+		var warnings = _p13._0;
+		var properties = _p13._1;
+		return {
+			declarations: _elm_lang$core$Native_List.fromArray(
+				[
+					A2(_rtfeldman$elm_css$Css_Structure$PageRule, str, properties)
+				]),
+			warnings: warnings
+		};
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$toMediaRule = F2(
+	function (mediaQueries, declaration) {
+		var _p14 = declaration;
+		switch (_p14.ctor) {
+			case 'StyleBlockDeclaration':
+				return A2(
+					_rtfeldman$elm_css$Css_Structure$MediaRule,
+					mediaQueries,
+					_elm_lang$core$Native_List.fromArray(
+						[_p14._0]));
+			case 'MediaRule':
+				return A2(
+					_rtfeldman$elm_css$Css_Structure$MediaRule,
+					A2(_elm_lang$core$Basics_ops['++'], mediaQueries, _p14._0),
+					_p14._1);
+			case 'SupportsRule':
+				return A2(
+					_rtfeldman$elm_css$Css_Structure$SupportsRule,
+					_p14._0,
+					A2(
+						_elm_lang$core$List$map,
+						_rtfeldman$elm_css$Css_Preprocess_Resolve$toMediaRule(mediaQueries),
+						_p14._1));
+			case 'DocumentRule':
+				return A5(_rtfeldman$elm_css$Css_Structure$DocumentRule, _p14._0, _p14._1, _p14._2, _p14._3, _p14._4);
+			case 'PageRule':
+				return declaration;
+			case 'FontFace':
+				return declaration;
+			case 'Keyframes':
+				return declaration;
+			case 'Viewport':
+				return declaration;
+			case 'CounterStyle':
+				return declaration;
+			default:
+				return declaration;
+		}
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveMediaRule = F2(
+	function (mediaQueries, styleBlocks) {
+		var handleStyleBlock = function (styleBlock) {
+			var _p15 = _rtfeldman$elm_css$Css_Preprocess_Resolve$expandStyleBlock(styleBlock);
+			var declarations = _p15.declarations;
+			var warnings = _p15.warnings;
+			return {
+				declarations: A2(
+					_elm_lang$core$List$map,
+					_rtfeldman$elm_css$Css_Preprocess_Resolve$toMediaRule(mediaQueries),
+					declarations),
+				warnings: warnings
+			};
+		};
+		var results = A2(_elm_lang$core$List$map, handleStyleBlock, styleBlocks);
+		return {
+			warnings: A2(
+				_elm_lang$core$List$concatMap,
+				function (_) {
+					return _.warnings;
+				},
+				results),
+			declarations: A2(
+				_elm_lang$core$List$concatMap,
+				function (_) {
+					return _.declarations;
+				},
+				results)
+		};
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$expandStyleBlock = function (_p16) {
+	var _p17 = _p16;
+	return A2(
+		_rtfeldman$elm_css$Css_Preprocess_Resolve$applyMixins,
+		_p17._2,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_rtfeldman$elm_css$Css_Structure$StyleBlockDeclaration(
+				A3(
+					_rtfeldman$elm_css$Css_Structure$StyleBlock,
+					_p17._0,
+					_p17._1,
+					_elm_lang$core$Native_List.fromArray(
+						[])))
+			]));
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$applyMixins = F2(
+	function (mixins, declarations) {
+		applyMixins:
+		while (true) {
+			var _p18 = mixins;
+			if (_p18.ctor === '[]') {
+				return {
+					declarations: declarations,
+					warnings: _elm_lang$core$Native_List.fromArray(
+						[])
+				};
+			} else {
+				switch (_p18._0.ctor) {
+					case 'AppendProperty':
+						var _p19 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extractWarning(_p18._0._0);
+						var warnings = _p19._0;
+						var property = _p19._1;
+						var result = A2(
+							_rtfeldman$elm_css$Css_Preprocess_Resolve$applyMixins,
+							_p18._1,
+							A2(_rtfeldman$elm_css$Css_Structure$appendProperty, property, declarations));
+						return {
+							declarations: result.declarations,
+							warnings: A2(_elm_lang$core$Basics_ops['++'], warnings, result.warnings)
+						};
+					case 'ExtendSelector':
+						return A4(
+							_rtfeldman$elm_css$Css_Preprocess_Resolve$applyNestedMixinsToLast,
+							_p18._0._1,
+							_p18._1,
+							_rtfeldman$elm_css$Css_Structure$appendRepeatableToLastSelector(_p18._0._0),
+							declarations);
+					case 'NestSnippet':
+						var chain = F2(
+							function (_p21, _p20) {
+								var _p22 = _p21;
+								var _p23 = _p20;
+								return A3(
+									_rtfeldman$elm_css$Css_Structure$Selector,
+									_p22._0,
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										_p22._1,
+										A2(
+											_elm_lang$core$List_ops['::'],
+											{ctor: '_Tuple2', _0: _p18._0._0, _1: _p23._0},
+											_p23._1)),
+									_elm_lang$core$Maybe$oneOf(
+										_elm_lang$core$Native_List.fromArray(
+											[_p23._2, _p22._2])));
+							});
+						var expandDeclaration = function (declaration) {
+							var _p24 = declaration;
+							switch (_p24.ctor) {
+								case 'StyleBlockDeclaration':
+									var newSelectors = A2(
+										_elm_lang$core$List$concatMap,
+										function (originalSelector) {
+											return A2(
+												_elm_lang$core$List$map,
+												chain(originalSelector),
+												A2(_elm_lang$core$List_ops['::'], _p24._0._0, _p24._0._1));
+										},
+										_rtfeldman$elm_css$Css_Preprocess_Resolve$collectSelectors(declarations));
+									var newDeclarations = function () {
+										var _p25 = newSelectors;
+										if (_p25.ctor === '[]') {
+											return _elm_lang$core$Native_List.fromArray(
+												[]);
+										} else {
+											return _elm_lang$core$Native_List.fromArray(
+												[
+													_rtfeldman$elm_css$Css_Structure$StyleBlockDeclaration(
+													A3(
+														_rtfeldman$elm_css$Css_Structure$StyleBlock,
+														_p25._0,
+														_p25._1,
+														_elm_lang$core$Native_List.fromArray(
+															[])))
+												]);
+										}
+									}();
+									return _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(
+										_elm_lang$core$Native_List.fromArray(
+											[
+												A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyMixins, _p24._0._2, newDeclarations)
+											]));
+								case 'MediaRule':
+									return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveMediaRule, _p24._0, _p24._1);
+								case 'SupportsRule':
+									return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveSupportsRule, _p24._0, _p24._1);
+								case 'DocumentRule':
+									return A5(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveDocumentRule, _p24._0, _p24._1, _p24._2, _p24._3, _p24._4);
+								case 'PageRule':
+									return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolvePageRule, _p24._0, _p24._1);
+								case 'FontFace':
+									return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFace(_p24._0);
+								case 'Keyframes':
+									return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveKeyframes, _p24._0, _p24._1);
+								case 'Viewport':
+									return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveViewport(_p24._0);
+								case 'CounterStyle':
+									return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveCounterStyle(_p24._0);
+								default:
+									return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFeatureValues(_p24._0);
+							}
+						};
+						return _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(
+							A2(
+								F2(
+									function (x, y) {
+										return A2(_elm_lang$core$Basics_ops['++'], x, y);
+									}),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyMixins, _p18._1, declarations)
+									]),
+								A2(
+									_elm_lang$core$List$map,
+									expandDeclaration,
+									A2(_elm_lang$core$List$concatMap, _rtfeldman$elm_css$Css_Preprocess$unwrapSnippet, _p18._0._1))));
+					case 'WithPseudoElement':
+						return A4(
+							_rtfeldman$elm_css$Css_Preprocess_Resolve$applyNestedMixinsToLast,
+							_p18._0._1,
+							_p18._1,
+							_rtfeldman$elm_css$Css_Structure$appendPseudoElementToLastSelector(_p18._0._0),
+							declarations);
+					case 'WithMedia':
+						var newDeclarations = function () {
+							var _p26 = _rtfeldman$elm_css$Css_Preprocess_Resolve$collectSelectors(declarations);
+							if (_p26.ctor === '[]') {
+								return _elm_lang$core$Native_List.fromArray(
+									[]);
+							} else {
+								return _elm_lang$core$Native_List.fromArray(
+									[
+										A2(
+										_rtfeldman$elm_css$Css_Structure$MediaRule,
+										_p18._0._0,
+										_elm_lang$core$Native_List.fromArray(
+											[
+												A3(
+												_rtfeldman$elm_css$Css_Structure$StyleBlock,
+												_p26._0,
+												_p26._1,
+												_elm_lang$core$Native_List.fromArray(
+													[]))
+											]))
+									]);
+							}
+						}();
+						return _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(
+							_elm_lang$core$Native_List.fromArray(
+								[
+									A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyMixins, _p18._1, declarations),
+									A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyMixins, _p18._0._1, newDeclarations)
+								]));
+					default:
+						var _v16 = A2(_elm_lang$core$Basics_ops['++'], _p18._0._0, _p18._1),
+							_v17 = declarations;
+						mixins = _v16;
+						declarations = _v17;
+						continue applyMixins;
+				}
+			}
+		}
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$applyNestedMixinsToLast = F4(
+	function (nestedMixins, rest, f, declarations) {
+		var withoutParent = function (decls) {
+			return A2(
+				_elm_lang$core$Maybe$withDefault,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$List$tail(decls));
+		};
+		var nextResult = A2(
+			_rtfeldman$elm_css$Css_Preprocess_Resolve$applyMixins,
+			rest,
+			A2(
+				_elm_lang$core$Maybe$withDefault,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_rtfeldman$elm_css$Css_Preprocess_Resolve$lastDeclaration(declarations)));
+		var newDeclarations = function () {
+			var _p27 = {
+				ctor: '_Tuple2',
+				_0: _elm_lang$core$List$head(nextResult.declarations),
+				_1: _elm_lang$core$List$head(
+					_elm_lang$core$List$reverse(declarations))
+			};
+			if (((_p27.ctor === '_Tuple2') && (_p27._0.ctor === 'Just')) && (_p27._1.ctor === 'Just')) {
+				var _p29 = _p27._1._0;
+				var _p28 = _p27._0._0;
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(
+						_elm_lang$core$List$take,
+						_elm_lang$core$List$length(declarations) - 1,
+						declarations),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							(!_elm_lang$core$Native_Utils.eq(_p29, _p28)) ? _p28 : _p29
+						]));
+			} else {
+				return declarations;
+			}
+		}();
+		var handleInitial = function (declarationsAndWarnings) {
+			var result = A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$applyMixins, nestedMixins, declarationsAndWarnings.declarations);
+			return {
+				warnings: A2(_elm_lang$core$Basics_ops['++'], declarationsAndWarnings.warnings, result.warnings),
+				declarations: result.declarations
+			};
+		};
+		var insertMixinsToNestedDecl = function (lastDecl) {
+			return _rtfeldman$elm_css$Css_Preprocess_Resolve$concatDeclarationsAndWarnings(
+				A2(
+					_rtfeldman$elm_css$Css_Structure$mapLast,
+					handleInitial,
+					A2(
+						_elm_lang$core$List$map,
+						function (declaration) {
+							return {
+								declarations: _elm_lang$core$Native_List.fromArray(
+									[declaration]),
+								warnings: _elm_lang$core$Native_List.fromArray(
+									[])
+							};
+						},
+						A2(_rtfeldman$elm_css$Css_Structure$concatMapLastStyleBlock, f, lastDecl))));
+		};
+		var initialResult = A2(
+			_elm_lang$core$Maybe$withDefault,
+			{
+				warnings: _elm_lang$core$Native_List.fromArray(
+					[]),
+				declarations: _elm_lang$core$Native_List.fromArray(
+					[])
+			},
+			A2(
+				_elm_lang$core$Maybe$map,
+				insertMixinsToNestedDecl,
+				_rtfeldman$elm_css$Css_Preprocess_Resolve$lastDeclaration(declarations)));
+		return {
+			warnings: A2(_elm_lang$core$Basics_ops['++'], initialResult.warnings, nextResult.warnings),
+			declarations: A2(
+				_elm_lang$core$Basics_ops['++'],
+				newDeclarations,
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					withoutParent(initialResult.declarations),
+					withoutParent(nextResult.declarations)))
+		};
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveDocumentRule = F5(
+	function (str1, str2, str3, str4, styleBlock) {
+		var _p30 = _rtfeldman$elm_css$Css_Preprocess_Resolve$expandStyleBlock(styleBlock);
+		var declarations = _p30.declarations;
+		var warnings = _p30.warnings;
+		return {
+			declarations: A2(
+				_elm_lang$core$List$map,
+				A4(_rtfeldman$elm_css$Css_Preprocess_Resolve$toDocumentRule, str1, str2, str3, str4),
+				declarations),
+			warnings: warnings
+		};
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveSupportsRule = F2(
+	function (str, snippets) {
+		var _p31 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extract(
+			A2(_elm_lang$core$List$concatMap, _rtfeldman$elm_css$Css_Preprocess$unwrapSnippet, snippets));
+		var declarations = _p31.declarations;
+		var warnings = _p31.warnings;
+		return {
+			declarations: _elm_lang$core$Native_List.fromArray(
+				[
+					A2(_rtfeldman$elm_css$Css_Structure$SupportsRule, str, declarations)
+				]),
+			warnings: warnings
+		};
+	});
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$extract = function (snippetDeclarations) {
+	var _p32 = snippetDeclarations;
+	if (_p32.ctor === '[]') {
+		return {
+			declarations: _elm_lang$core$Native_List.fromArray(
+				[]),
+			warnings: _elm_lang$core$Native_List.fromArray(
+				[])
+		};
+	} else {
+		var _p33 = _rtfeldman$elm_css$Css_Preprocess_Resolve$toDeclarations(_p32._0);
+		var declarations = _p33.declarations;
+		var warnings = _p33.warnings;
+		var nextResult = _rtfeldman$elm_css$Css_Preprocess_Resolve$extract(_p32._1);
+		return {
+			declarations: A2(_elm_lang$core$Basics_ops['++'], declarations, nextResult.declarations),
+			warnings: A2(_elm_lang$core$Basics_ops['++'], warnings, nextResult.warnings)
+		};
+	}
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$toDeclarations = function (snippetDeclaration) {
+	var _p34 = snippetDeclaration;
+	switch (_p34.ctor) {
+		case 'StyleBlockDeclaration':
+			return _rtfeldman$elm_css$Css_Preprocess_Resolve$expandStyleBlock(_p34._0);
+		case 'MediaRule':
+			return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveMediaRule, _p34._0, _p34._1);
+		case 'SupportsRule':
+			return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveSupportsRule, _p34._0, _p34._1);
+		case 'DocumentRule':
+			return A5(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveDocumentRule, _p34._0, _p34._1, _p34._2, _p34._3, _p34._4);
+		case 'PageRule':
+			return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolvePageRule, _p34._0, _p34._1);
+		case 'FontFace':
+			return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFace(_p34._0);
+		case 'Keyframes':
+			return A2(_rtfeldman$elm_css$Css_Preprocess_Resolve$resolveKeyframes, _p34._0, _p34._1);
+		case 'Viewport':
+			return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveViewport(_p34._0);
+		case 'CounterStyle':
+			return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveCounterStyle(_p34._0);
+		default:
+			return _rtfeldman$elm_css$Css_Preprocess_Resolve$resolveFontFeatureValues(_p34._0);
+	}
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$toStructure = function (_p35) {
+	var _p36 = _p35;
+	var _p37 = _rtfeldman$elm_css$Css_Preprocess_Resolve$extract(
+		A2(_elm_lang$core$List$concatMap, _rtfeldman$elm_css$Css_Preprocess$unwrapSnippet, _p36.snippets));
+	var warnings = _p37.warnings;
+	var declarations = _p37.declarations;
+	return {
+		ctor: '_Tuple2',
+		_0: {charset: _p36.charset, imports: _p36.imports, namespaces: _p36.namespaces, declarations: declarations},
+		_1: warnings
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$compile1 = function (sheet) {
+	var _p38 = _rtfeldman$elm_css$Css_Preprocess_Resolve$toStructure(sheet);
+	var structureStylesheet = _p38._0;
+	var warnings = _p38._1;
+	return {
+		warnings: warnings,
+		css: _rtfeldman$elm_css$Css_Structure_Output$prettyPrint(
+			_rtfeldman$elm_css$Css_Structure$dropEmpty(structureStylesheet))
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$compile = function (styles) {
+	var results = A2(_elm_lang$core$List$map, _rtfeldman$elm_css$Css_Preprocess_Resolve$compile1, styles);
+	return {
+		warnings: A2(
+			_elm_lang$core$List$concatMap,
+			function (_) {
+				return _.warnings;
+			},
+			results),
+		css: A2(
+			_elm_lang$core$String$join,
+			'\n\n',
+			A2(
+				_elm_lang$core$List$map,
+				function (_) {
+					return _.css;
+				},
+				results))
+	};
+};
+var _rtfeldman$elm_css$Css_Preprocess_Resolve$DeclarationsAndWarnings = F2(
+	function (a, b) {
+		return {declarations: a, warnings: b};
+	});

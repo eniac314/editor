@@ -177,7 +177,7 @@ htmlToString html =
         atList = attrListToString attr
         tglist = (List.map (helper (indent + off +  3)) childs)
     
-    in if String.startsWith "text" tn
+    in if String.startsWith "text " tn
        then tn
        else let 
                 atln = if atList == []
