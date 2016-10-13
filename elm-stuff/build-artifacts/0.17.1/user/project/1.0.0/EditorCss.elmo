@@ -1,12 +1,22 @@
+var _user$project$EditorCss$mono = _elm_lang$core$Native_List.fromArray(
+	['Consolas', 'Monaco', 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', ' monospace']);
+var _user$project$EditorCss$CurrentPos = {ctor: 'CurrentPos'};
+var _user$project$EditorCss$Error = {ctor: 'Error'};
+var _user$project$EditorCss$Mono = {ctor: 'Mono'};
 var _user$project$EditorCss$TgName = {ctor: 'TgName'};
 var _user$project$EditorCss$ExplTag = {ctor: 'ExplTag'};
 var _user$project$EditorCss$Debug = {ctor: 'Debug'};
 var _user$project$EditorCss$Pane = {ctor: 'Pane'};
+var _user$project$EditorCss$Console = {ctor: 'Console'};
+var _user$project$EditorCss$Menu = {ctor: 'Menu'};
+var _user$project$EditorCss$PathStr = {ctor: 'PathStr'};
+var _user$project$EditorCss$Path = {ctor: 'Path'};
 var _user$project$EditorCss$Prompt = {ctor: 'Prompt'};
 var _user$project$EditorCss$ExplWindow = {ctor: 'ExplWindow'};
 var _user$project$EditorCss$Editor = {ctor: 'Editor'};
 var _user$project$EditorCss$RightPane = {ctor: 'RightPane'};
 var _user$project$EditorCss$LeftPane = {ctor: 'LeftPane'};
+var _user$project$EditorCss$Explorer = {ctor: 'Explorer'};
 var _user$project$EditorCss$css = function (_p0) {
 	return _rtfeldman$elm_css$Css$stylesheet(
 		A2(_rtfeldman$elm_css$Css_Namespace$namespace, 'editor', _p0));
@@ -51,6 +61,10 @@ var _user$project$EditorCss$css = function (_p0) {
 					_rtfeldman$elm_css$Css$borderStyle(_rtfeldman$elm_css$Css$solid),
 					_rtfeldman$elm_css$Css$borderColor(
 					A3(_rtfeldman$elm_css$Css$rgb, 0, 0, 0)),
+					_rtfeldman$elm_css$Css$borderTopWidth(
+					_rtfeldman$elm_css$Css$em(0.1)),
+					_rtfeldman$elm_css$Css$borderLeftWidth(
+					_rtfeldman$elm_css$Css$em(0.1)),
 					_rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$pointer),
 					_rtfeldman$elm_css$Css$minWidth(
 					_rtfeldman$elm_css$Css$px(50))
@@ -70,6 +84,129 @@ var _user$project$EditorCss$css = function (_p0) {
 							_rtfeldman$elm_css$Css$backgroundColor(
 								A3(_rtfeldman$elm_css$Css$rgb, 255, 255, 255)))
 						]))
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['.'], x, y);
+				}),
+			_user$project$EditorCss$Mono,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$fontFamilies(_user$project$EditorCss$mono)
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['.'], x, y);
+				}),
+			_user$project$EditorCss$Error,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$color(
+					A3(_rtfeldman$elm_css$Css$rgb, 255, 0, 0))
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['.'], x, y);
+				}),
+			_user$project$EditorCss$CurrentPos,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$important(
+					_rtfeldman$elm_css$Css$color(
+						A3(_rtfeldman$elm_css$Css$rgb, 255, 255, 255))),
+					_rtfeldman$elm_css$Css$important(
+					_rtfeldman$elm_css$Css$backgroundColor(
+						A3(_rtfeldman$elm_css$Css$rgb, 70, 130, 180)))
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['#'], x, y);
+				}),
+			_user$project$EditorCss$Editor,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$backgroundColor(
+					A3(_rtfeldman$elm_css$Css$rgb, 70, 130, 180))
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['#'], x, y);
+				}),
+			_user$project$EditorCss$Menu,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$backgroundColor(
+					A3(_rtfeldman$elm_css$Css$rgb, 155, 155, 155)),
+					_rtfeldman$elm_css$Css$padding(
+					_rtfeldman$elm_css$Css$em(0.2)),
+					_rtfeldman$elm_css$Css$children(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_rtfeldman$elm_css$Css_Elements$a(
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_rtfeldman$elm_css$Css$display(_rtfeldman$elm_css$Css$inlineBlock),
+									_rtfeldman$elm_css$Css$textDecoration(_rtfeldman$elm_css$Css$none),
+									_rtfeldman$elm_css$Css$backgroundColor(
+									A3(_rtfeldman$elm_css$Css$rgb, 255, 255, 255)),
+									_rtfeldman$elm_css$Css$margin(
+									_rtfeldman$elm_css$Css$em(0.2)),
+									_rtfeldman$elm_css$Css$paddingLeft(
+									_rtfeldman$elm_css$Css$em(0.2)),
+									_rtfeldman$elm_css$Css$paddingRight(
+									_rtfeldman$elm_css$Css$em(0.2)),
+									_rtfeldman$elm_css$Css$color(
+									A3(_rtfeldman$elm_css$Css$rgb, 70, 130, 180)),
+									_rtfeldman$elm_css$Css$hover(
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_rtfeldman$elm_css$Css$color(
+											A3(_rtfeldman$elm_css$Css$rgb, 234, 21, 125)),
+											_rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$pointer)
+										]))
+								]))
+						]))
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['#'], x, y);
+				}),
+			_user$project$EditorCss$Path,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$backgroundColor(
+					A3(_rtfeldman$elm_css$Css$rgb, 155, 155, 155)),
+					_rtfeldman$elm_css$Css$padding(
+					_rtfeldman$elm_css$Css$em(0.2)),
+					_rtfeldman$elm_css$Css$children(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_rtfeldman$elm_css$Css_Elements$p(
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_rtfeldman$elm_css$Css$backgroundColor(
+									A3(_rtfeldman$elm_css$Css$rgb, 255, 255, 255)),
+									_rtfeldman$elm_css$Css$margin(
+									_rtfeldman$elm_css$Css$em(0.2))
+								]))
+						]))
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['#'], x, y);
+				}),
+			_user$project$EditorCss$PathStr,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$color(
+					A3(_rtfeldman$elm_css$Css$rgb, 70, 130, 180))
 				])),
 			A2(
 			F2(
@@ -104,8 +241,19 @@ var _user$project$EditorCss$css = function (_p0) {
 					_rtfeldman$elm_css$Css$width(
 					_rtfeldman$elm_css$Css$pct(100)),
 					_rtfeldman$elm_css$Css$height(
-					_rtfeldman$elm_css$Css$px(300)),
+					_rtfeldman$elm_css$Css$px(287)),
 					_rtfeldman$elm_css$Css$overflow(_rtfeldman$elm_css$Css$scroll)
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['#'], x, y);
+				}),
+			_user$project$EditorCss$Explorer,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$width(
+					_rtfeldman$elm_css$Css$pct(95))
 				])),
 			A2(
 			F2(
@@ -115,11 +263,34 @@ var _user$project$EditorCss$css = function (_p0) {
 			_user$project$EditorCss$Prompt,
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_rtfeldman$elm_css$Css$fontFamilies(
-					_elm_lang$core$Native_List.fromArray(
-						['Consolas', 'Monaco', 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', ' monospace'])),
+					_rtfeldman$elm_css$Css$fontFamilies(_user$project$EditorCss$mono),
 					_rtfeldman$elm_css$Css$width(
 					_rtfeldman$elm_css$Css$pct(95))
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['#'], x, y);
+				}),
+			_user$project$EditorCss$Console,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$backgroundColor(
+					A3(_rtfeldman$elm_css$Css$rgb, 155, 155, 155)),
+					_rtfeldman$elm_css$Css$padding(
+					_rtfeldman$elm_css$Css$em(0.2)),
+					_rtfeldman$elm_css$Css$children(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_rtfeldman$elm_css$Css_Elements$div(
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_rtfeldman$elm_css$Css$backgroundColor(
+									A3(_rtfeldman$elm_css$Css$rgb, 255, 255, 255)),
+									_rtfeldman$elm_css$Css$margin(
+									_rtfeldman$elm_css$Css$em(0.2))
+								]))
+						]))
 				]))
 		]));
 var _user$project$EditorCss$cssString = _rtfeldman$elm_css$Css$compile(

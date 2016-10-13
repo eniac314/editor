@@ -48,13 +48,19 @@ import Window as Win
 
 main =
     Navigation.program urlParser
-                { init   = (\_ -> (init testinput, initWinSize)) 
+                { init   = init'
                 , update = update
                 , urlUpdate = urlUpdate
                 , view   = view
                 , subscriptions = subscriptions
                 }
 
+
+init' result = 
+  let (m,cmd) = urlUpdate result (init testinput)
+  in (m, Cmd.batch [ cmd
+                   , initWinSize
+                   , modifyUrl "#editor"])
 
 initWinSize = 
   perform (\_ -> Failure)
@@ -65,15 +71,22 @@ urlParser : Navigation.Parser (Result String AppPos)
 urlParser = Navigation.makeParser 
   (\s -> 
     let validUrlMap = 
-      Dict.fromList [("main",MainMenu)
-                    ,("editor",Editor)
-                    ,("fileIO",FileIO)
+      Dict.fromList [("#mainmenu",MainMenu)
+                    ,("#editor",Editor)
+                    ,("#fileIO",FileIO)
+                    ,("#renderer",Renderer)
                     ] 
     in case get (.hash s) validUrlMap of
-        Nothing -> Err "invalid url"
+        Nothing -> Err ("invalid url: " ++ (toString s))
         Just ap -> Ok ap)
 
-type AppPos = MainMenu | Editor | FileIO
+urlUpdate : Result String AppPos -> Model -> (Model, Cmd Msg)
+urlUpdate res model = 
+  case res of 
+    Err s -> ({model | rawString = s}, Cmd.none)
+    Ok ap -> { model | position = ap } ! []
+
+type AppPos = MainMenu | Editor | FileIO | Renderer
 
 type alias Model = 
   { position : AppPos
@@ -127,6 +140,7 @@ type Msg = Store String
          | GoTo Path
          | Debug
          | WinSize Win.Size
+         | ChangeUrl String
          | Failure
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -145,10 +159,10 @@ update msg model =
                 } ! []
     Failure -> model ! []
     WinSize s -> {model | winSize = Just s} ! []
+    ChangeUrl s -> model ! [newUrl s]
 
 
-urlUpdate : Result String AppPos -> Model -> (Model, Cmd Msg)
-urlUpdate _ model = (model, Cmd.none)
+
 
 parse model = 
   let pdata = interpret (.rawString model) (.nextId model)
@@ -207,9 +221,6 @@ move f model =
          Just np -> (extractPath np)
 
       newRender  = renderer newParsedData
-        --case newPage of 
-        -- Nothing -> (.toRender model)
-        -- Just np -> renderer (extract np)
 
   in { model | rawString = newRstring
              , procString = newProcString
@@ -220,61 +231,110 @@ move f model =
      }
      
 
---reset = Task.perform (\_ -> Reset) (\_ -> Reset) (succeed Reset)
+
 -- VIEW
 
 
 view : Model -> Html Msg
 view model = 
-    div [ id Editor]
-         [ EditorCss.editorStyle
-         , text (String.join "/" 
-                   (List.reverse 
-                      (List.map (\(t,p) -> toString t) (.currPath model))))
-         , br  [] []
-         , div [ class [ Pane ]
-               , id LeftPane
-               ] 
-               [ Html.form 
-                  []
-                  [ textarea [ onInput Store
-                             , rows 15
-                             , cols 45
-                             , id Prompt
-                             ]
-                             [ case (.procString model) of 
-                                Nothing -> text (.rawString model)
-                                Just s  -> text s
-                             ]
-                  , br [] []
-                  , button [onClick Parse, type' "reset"] [ text "Parse"]
-                  , button [onClick Render, type' "button"] [ text "Render"]
-                  , button [onClick Debug, type' "button"] [ text "Debug"]
-                  ]
-              ]
-        , div [ id RightPane
-              , class [Pane]
-              ]
-              [ explorer model
-              ]
-        
-        
-        , div [ id "console"]
-              [ case (.parsedData model) of 
-                 Err s -> text s
-                 Ok r  -> text "parsing complete" 
-              ]
-        , br [] []
-        , text (toString (.winSize model))
-        
-        , br [] []
-        , (.toRender model )
-        , style' ".TgName:hover {fill: #8FBC8F; } 
-                  .TgName{
-                   cursor:pointer;
-                  }
-                 "
+  div [ id Editor
+      , setHeight (.winSize model)
+      ]
+      (
+      [ EditorCss.editorStyle
+      , renderMenu model
+      ] ++
+      ( case (.position model) of 
+          MainMenu -> renderMainMenu model
+          Editor -> renderEditor model
+          FileIO -> renderFileIO model
+          Renderer -> renderRenderer model
+      ))
+
+    
+         
+
+renderEditor : Model -> List (Html Msg)
+renderEditor model = 
+  [ renderPath (.currPath model)
+  , div [ class [ Pane ]
+        , id LeftPane
+        ] 
+        [ Html.form 
+            []
+            [ textarea [ onInput Store
+                       , rows 15
+                       , cols 45
+                       , id Prompt
+                       ]
+                       [ case (.procString model) of 
+                          Nothing -> text (.rawString model)
+                          Just s  -> text s
+                       ]
+            , br [] []
+            , button [onClick Parse, type' "reset"] [ text "Parse"]
+            , button [onClick Render, type' "button"] [ text "Render"]
+            , button [onClick Debug, type' "button"] [ text "Debug"]
+            ]
         ]
+  , div [ id RightPane
+        , class [Pane]
+        ]
+        [ explorer model
+        ]
+  , renderConsole model
+  ]
+
+renderMainMenu model = []
+renderFileIO model = []
+renderRenderer model = [.toRender model]
+
+renderMenu : Model -> Html Msg
+renderMenu model = 
+  div [ id Menu
+      ]
+      [ a [classList [("CurrentPos",(.position model == MainMenu))]
+          , onClick (ChangeUrl "#mainmenu")
+          ]
+          [text "Main Menu"]
+      , a [classList [("CurrentPos",(.position model == Editor))]
+          , onClick (ChangeUrl "#editor")
+          ]
+          [text "Editor"]
+      , a [classList [("CurrentPos",(.position model == FileIO))]
+          , onClick (ChangeUrl "#fileIO")
+          ]
+          [text "Save/Load"]
+      , a [classList [("CurrentPos",(.position model == Renderer))]
+          , onClick (ChangeUrl "#renderer")
+          ]
+          [text "Html Preview"]
+      ]
+
+renderPath : Path -> Html msg
+renderPath path = 
+  let pathStr = 
+       span [ class [Mono]
+            , id PathStr
+            ]
+            [ text (String.join "/" 
+                     (List.reverse 
+                       (List.map (\(t,p) -> toString t) path)))
+            ]
+  in div [id Path]
+         [p [] [text "Current path: ", pathStr]
+         ]
+
+renderConsole : Model -> Html msg
+renderConsole model = 
+  div [ id Console 
+      ]
+      [ div [ class [Mono] ]
+            [ case (.parsedData model) of 
+                 Err s -> span [class [Error]] [text s]
+                 Ok r  -> text "parsing complete" 
+            ]
+      ]
 
 explorer : Model -> Html Msg
 explorer model = 
@@ -294,64 +354,6 @@ explorer model =
     case page of 
       Nothing -> span [] []
       Just zp -> render zp
-    
-  renderSvg (ZipTree (t ,ctx)) = 
-    let
-     
-     colors = List.reverse ["ivory","khaki","lavender","lavenderblush"
-              ,"lightcoral","lightgreen","lemonchiffon"
-              ,"thistle","mediumspringgreen","lightskyblue"
-              ]
-
-     colorPicker xs = 
-      case xs of
-        [] -> (colorPicker colors) 
-        (x::xs) -> (x,xs)
-     
-     renderSvgTag (xPos,yPos) c (Node tag xs) =
-      let tn   = 
-           case (.tagname tag) of 
-            TagAttr.Text _ -> "Text"
-            tn'    -> toString tn'
-          pth  = .path tag
-      in [rect [ fill c
-               
-               , x (toString xPos)
-               , y (toString yPos)
-               , Svg.Attributes.width "75"
-               , Svg.Attributes.height "20"
-               ]
-               []
-          , text' [fill "black"
-                  , x (toString xPos)
-                  , y (toString (yPos + 15))
-                  , onClick (GoTo pth)
-                  , Svg.Attributes.class "TgName"
-                  ]
-                  [Svg.text tn]
-          ]
-      
-     render' (xPos,yPos) cs (Node tag xs) =
-       let (c,cs') = colorPicker cs 
-           t = renderSvgTag (xPos,yPos) c (Node tag xs)
-           
-           hori (xp,yp) xs = 
-                case xs of 
-                [] -> []
-                (x::xs) -> 
-                  let head = render' (xp, yp) cs' x
-                      n = List.length head
-                  in head :: hori (xp, yp + (n*15)) xs
-        
-        in t ++ (List.concat <| hori (xPos + 15, yPos+30) xs)
-
-         
-    in Svg.svg
-        [ viewBox "0 0 500 4000"
-        , Svg.Attributes.width (toString <| fst sizeExplorer)
-        , Svg.Attributes.height (toString 4000) 
-        ]
-        (render' (10,10) colors t)    
 
   render (ZipTree (t ,ctx)) = 
     let
@@ -395,10 +397,8 @@ explorer model =
     in render' 0 colors t    
 
 
-  in div [ id "explorer"
-         , style [("width","95%")
-                 , ("white-space","pre")
-                 ]
+  in div [ id Explorer
+         , style [("white-space","pre")]
          ]
          [ explWindow tags
          , button [onClick Up, type' "reset"] [ text "Left"]
@@ -406,18 +406,6 @@ explorer model =
          , button [onClick Left, type' "reset"] [ text "Up"]
          , button [onClick Right, type' "reset"] [ text "Down"]
          ]
-
-
-  
-
-style' : String -> Html msg
-style' text =
-    Html.node "style"
-        [ property "textContent" <| Json.Encode.string text
-        , property "type" <| Json.Encode.string "text/css"
-        ]
-        []
-
 
 -- SUBSCRIPTIONS
 
@@ -471,3 +459,8 @@ testinput4 =
       ] 
   
   """
+
+setHeight winSize = 
+  case winSize of 
+    Nothing -> style []
+    Just {width, height} -> style [("height",toString height ++ "px")]
