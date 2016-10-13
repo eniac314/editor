@@ -1,16 +1,20 @@
 module Editor exposing (..)
 
 import Html exposing (..)
-import Html.App as App
+import Task exposing (perform)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import String exposing (words)
 import Http
+import Dict exposing (fromList, toList ,get)
 import Json.Decode as Json
+import Json.Encode exposing (string)
 import Task exposing (succeed, perform)
 import Data.Integer exposing (fromInt, add, Integer)
 import Html.CssHelpers
 import EditorCss exposing (..)
+import Navigation exposing (..)
+import UrlParser exposing (Parser, (</>), format, int, oneOf, s, string)
 import HtmlZipper exposing ( HTML
                            , HtmlZipper
                            , Path
@@ -34,20 +38,46 @@ import TagAttr exposing (TagName)
 import ElmParser exposing ( interpret
                           , renderer
                           )
+import Svg exposing (svg, rect, text')
+import Svg.Attributes exposing (width, height,viewBox, fill, x, y, class)
+import Window as Win
 
 { id, class, classList } =
     Html.CssHelpers.withNamespace "editor"
 
 
 main =
-    App.program { init   = (init testinput, Cmd.none) 
+    Navigation.program urlParser
+                { init   = (\_ -> (init testinput, initWinSize)) 
                 , update = update
+                , urlUpdate = urlUpdate
                 , view   = view
                 , subscriptions = subscriptions
                 }
 
+
+initWinSize = 
+  perform (\_ -> Failure)
+          (\s -> WinSize s)
+          Win.size
+
+urlParser : Navigation.Parser (Result String AppPos)
+urlParser = Navigation.makeParser 
+  (\s -> 
+    let validUrlMap = 
+      Dict.fromList [("main",MainMenu)
+                    ,("editor",Editor)
+                    ,("fileIO",FileIO)
+                    ] 
+    in case get (.hash s) validUrlMap of
+        Nothing -> Err "invalid url"
+        Just ap -> Ok ap)
+
+type AppPos = MainMenu | Editor | FileIO
+
 type alias Model = 
-  { rawString : String
+  { position : AppPos
+  , rawString : String
   , procString : Maybe String
   , parsedData : Result String (HTML,Integer)
   , currPath : Path 
@@ -55,6 +85,7 @@ type alias Model =
   , toRender : Html Msg
   , nextId : Integer
   , debug : Bool
+  , winSize : Maybe Win.Size
   }
 
 init initInput = 
@@ -72,7 +103,8 @@ init initInput =
           Err s -> fromInt 0
           Ok (r,n) -> (add n (fromInt 1)) 
   in
-  Model initInput
+  Model Editor
+        initInput
         Nothing
         pdata
         initPath
@@ -80,6 +112,7 @@ init initInput =
         (renderer pdata)
         nextId
         True
+        Nothing
         
 
 -- UPDATE
@@ -93,22 +126,29 @@ type Msg = Store String
          | Right
          | GoTo Path
          | Debug
+         | WinSize Win.Size
+         | Failure
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = 
   case msg of 
-    Store s -> ({ model | rawString = s}, Cmd.none)
-    Parse   -> (parse model, Cmd.none)
-    Up -> (move zipUp model,Cmd.none)
-    Down -> (move zipDownFirst model, Cmd.none)
-    Left -> (move zipLeft model, Cmd.none)
-    Right -> (move zipRight model, Cmd.none)
-    GoTo path -> (move (cd' path) model, Cmd.none)
-    Debug -> ({model | debug = not (.debug model)}, Cmd.none)
-    Render  -> ({ model | 
+    Store s -> { model | rawString = s} ! []
+    Parse   -> parse model ! []
+    Up -> move zipUp model ! []
+    Down -> move zipDownFirst model ! []
+    Left -> move zipLeft model ! []
+    Right -> move zipRight model ! []
+    GoTo path -> move (cd' path) model ! []
+    Debug -> {model | debug = not (.debug model)} ! []
+    Render  ->  { model | 
                   toRender = (renderer (.parsedData model))
-                }, Cmd.none)
+                } ! []
+    Failure -> model ! []
+    WinSize s -> {model | winSize = Just s} ! []
 
+
+urlUpdate : Result String AppPos -> Model -> (Model, Cmd Msg)
+urlUpdate _ model = (model, Cmd.none)
 
 parse model = 
   let pdata = interpret (.rawString model) (.nextId model)
@@ -193,6 +233,7 @@ view model =
                       (List.map (\(t,p) -> toString t) (.currPath model))))
          , br  [] []
          , div [ class [ Pane ]
+               , id LeftPane
                ] 
                [ Html.form 
                   []
@@ -211,10 +252,10 @@ view model =
                   , button [onClick Debug, type' "button"] [ text "Debug"]
                   ]
               ]
-        , div [ id "rightPane"
+        , div [ id RightPane
               , class [Pane]
               ]
-              [ explorer (.page model) (.debug model)
+              [ explorer model
               ]
         
         
@@ -223,16 +264,29 @@ view model =
                  Err s -> text s
                  Ok r  -> text "parsing complete" 
               ]
-        --, br [] []
-        --, text (toString (.parsedData model))
+        , br [] []
+        , text (toString (.winSize model))
         
         , br [] []
         , (.toRender model )
+        , style' ".TgName:hover {fill: #8FBC8F; } 
+                  .TgName{
+                   cursor:pointer;
+                  }
+                 "
         ]
 
-explorer : Maybe HtmlZipper -> Bool -> Html Msg
-explorer page dbug = 
-  let 
+explorer : Model -> Html Msg
+explorer model = 
+  let
+  page = .page model
+  dbug = .debug model
+  
+  sizeExplorer = 
+    case .winSize model of
+      Nothing -> (560 ,300)
+      Just {width, height} -> (width//2,300)
+  
   explWindow tags =
     div [ id ExplWindow]
         [ tags ]
@@ -240,7 +294,65 @@ explorer page dbug =
     case page of 
       Nothing -> span [] []
       Just zp -> render zp
-  
+    
+  renderSvg (ZipTree (t ,ctx)) = 
+    let
+     
+     colors = List.reverse ["ivory","khaki","lavender","lavenderblush"
+              ,"lightcoral","lightgreen","lemonchiffon"
+              ,"thistle","mediumspringgreen","lightskyblue"
+              ]
+
+     colorPicker xs = 
+      case xs of
+        [] -> (colorPicker colors) 
+        (x::xs) -> (x,xs)
+     
+     renderSvgTag (xPos,yPos) c (Node tag xs) =
+      let tn   = 
+           case (.tagname tag) of 
+            TagAttr.Text _ -> "Text"
+            tn'    -> toString tn'
+          pth  = .path tag
+      in [rect [ fill c
+               
+               , x (toString xPos)
+               , y (toString yPos)
+               , Svg.Attributes.width "75"
+               , Svg.Attributes.height "20"
+               ]
+               []
+          , text' [fill "black"
+                  , x (toString xPos)
+                  , y (toString (yPos + 15))
+                  , onClick (GoTo pth)
+                  , Svg.Attributes.class "TgName"
+                  ]
+                  [Svg.text tn]
+          ]
+      
+     render' (xPos,yPos) cs (Node tag xs) =
+       let (c,cs') = colorPicker cs 
+           t = renderSvgTag (xPos,yPos) c (Node tag xs)
+           
+           hori (xp,yp) xs = 
+                case xs of 
+                [] -> []
+                (x::xs) -> 
+                  let head = render' (xp, yp) cs' x
+                      n = List.length head
+                  in head :: hori (xp, yp + (n*15)) xs
+        
+        in t ++ (List.concat <| hori (xPos + 15, yPos+30) xs)
+
+         
+    in Svg.svg
+        [ viewBox "0 0 500 4000"
+        , Svg.Attributes.width (toString <| fst sizeExplorer)
+        , Svg.Attributes.height (toString 4000) 
+        ]
+        (render' (10,10) colors t)    
+
   render (ZipTree (t ,ctx)) = 
     let
      spacer indent = 
@@ -267,11 +379,17 @@ explorer page dbug =
 
           (c,cs') = colorPicker cs
           
-      in p [ class [ExplTag]
-           , style [  ("background-color",c) ]
+      in p [ class []
+           , style [("margin","0.1em")]
            , onClick (GoTo pth)
            ]
-           ([text (spacer n ++ tn)] ++ [span [classList [("Debug",dbug)]] [text (toString pth)]] ++ 
+           ([ text (spacer n)
+            , span [class [ExplTag]
+            , style [  ("background-color",c) ]
+            ] 
+            [text tn]
+            ] 
+            ++ [span [classList [("Debug",dbug)]] [text (toString pth)]] ++ 
             (List.map (render' (n+3) cs') xs))
 
     in render' 0 colors t    
@@ -279,6 +397,7 @@ explorer page dbug =
 
   in div [ id "explorer"
          , style [("width","95%")
+                 , ("white-space","pre")
                  ]
          ]
          [ explWindow tags
@@ -291,13 +410,20 @@ explorer page dbug =
 
   
 
-
+style' : String -> Html msg
+style' text =
+    Html.node "style"
+        [ property "textContent" <| Json.Encode.string text
+        , property "type" <| Json.Encode.string "text/css"
+        ]
+        []
 
 
 -- SUBSCRIPTIONS
 
 subscriptions : Model -> Sub Msg
-subscriptions model = Sub.none
+subscriptions model = 
+  Sub.batch [Win.resizes WinSize]
 
 
 -- Test

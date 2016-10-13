@@ -4,6 +4,58 @@
 		"selected_items":
 		[
 			[
+				"e",
+				"editor"
+			],
+			[
+				"Ma",
+				"MainMenu"
+			],
+			[
+				"URL",
+				"urlParser"
+			],
+			[
+				"App",
+				"AppPos"
+			],
+			[
+				"attr",
+				"attrname"
+			],
+			[
+				"s",
+				"spacer"
+			],
+			[
+				"h",
+				"helper"
+			],
+			[
+				"a",
+				"attr"
+			],
+			[
+				"Html",
+				"htmlToString"
+			],
+			[
+				"tagna",
+				"tagnames'"
+			],
+			[
+				"tag",
+				"tagname"
+			],
+			[
+				"t",
+				"tagname"
+			],
+			[
+				"attrna",
+				"attrnames"
+			],
+			[
 				"z",
 				"zt'"
 			],
@@ -84,20 +136,12 @@
 				"removeIndexes"
 			],
 			[
-				"e",
-				"exposing"
-			],
-			[
 				"P",
 				"Parse"
 			],
 			[
 				"parse",
 				"parseTag"
-			],
-			[
-				"Html",
-				"HTML"
 			],
 			[
 				"tes",
@@ -272,10 +316,6 @@
 				"indexesGen"
 			],
 			[
-				"h",
-				"hPutStrLn"
-			],
-			[
 				"map",
 				"mapM"
 			],
@@ -330,10 +370,6 @@
 			[
 				"_",
 				"_blank"
-			],
-			[
-				"t",
-				"target"
 			],
 			[
 				"ba",
@@ -476,44 +512,8 @@
 				"background-image"
 			],
 			[
-				"a",
-				"animation"
-			],
-			[
 				"mu",
 				"musee"
-			],
-			[
-				"bo",
-				"body'"
-			],
-			[
-				"sha",
-				"box-shadow"
-			],
-			[
-				"bor",
-				"border-style"
-			],
-			[
-				"bott",
-				"margin-bottom"
-			],
-			[
-				"prin",
-				"printempsEte"
-			],
-			[
-				"printe",
-				"printempsEte"
-			],
-			[
-				"pe",
-				"peri"
-			],
-			[
-				"com",
-				"commune"
 			]
 		]
 	},
@@ -523,8 +523,25 @@
 			"file": "Editor.elm",
 			"settings":
 			{
-				"buffer_size": 1709,
+				"buffer_size": 10245,
 				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Test.elm",
+			"settings":
+			{
+				"buffer_size": 5377,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "EditorCss.elm",
+			"settings":
+			{
+				"buffer_size": 1134,
 				"line_ending": "Unix"
 			}
 		},
@@ -532,7 +549,7 @@
 			"file": "BetterParser.elm",
 			"settings":
 			{
-				"buffer_size": 2557,
+				"buffer_size": 2940,
 				"line_ending": "Unix",
 				"name": "module BetterParser exposing (..)"
 			}
@@ -541,7 +558,7 @@
 			"file": "Tokenizer.elm",
 			"settings":
 			{
-				"buffer_size": 4567,
+				"buffer_size": 4965,
 				"line_ending": "Unix"
 			}
 		},
@@ -549,7 +566,7 @@
 			"file": "ElmParser.elm",
 			"settings":
 			{
-				"buffer_size": 3509,
+				"buffer_size": 4310,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -558,7 +575,8 @@
 			"file": "HtmlZipper.elm",
 			"settings":
 			{
-				"buffer_size": 2367,
+				"buffer_size": 5863,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -566,7 +584,8 @@
 			"file": "TagAttr.elm",
 			"settings":
 			{
-				"buffer_size": 1362,
+				"buffer_size": 8099,
+				"encoding": "UTF-8",
 				"line_ending": "Unix",
 				"name": "module TagAttr exposing (..)"
 			}
@@ -783,6 +802,7 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"get",
 			"Tagname",
 			"Token",
 			"consum",
@@ -909,8 +929,7 @@
 			"decouvrir",
 			"initAt",
 			"init",
-			"touri",
-			"display"
+			"touri"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -963,15 +982,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1709,
+						"buffer_size": 10245,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1088,
-								1088
+								3471,
+								3471
 							]
 						],
 						"settings":
@@ -980,8 +999,8 @@
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 37.0,
-						"translation.y": 0.0,
+						"translation.x": 0.0,
+						"translation.y": 1812.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -989,19 +1008,79 @@
 				},
 				{
 					"buffer": 1,
-					"file": "BetterParser.elm",
+					"file": "Test.elm",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2557,
+						"buffer_size": 5377,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2544,
-								2544
+								734,
+								734
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Elm Language Support/Syntaxes/Elm.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 228.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "EditorCss.elm",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1134,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Elm Language Support/Syntaxes/Elm.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": -0.0,
+						"translation.y": 114.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "BetterParser.elm",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2940,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1012,56 +1091,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1140.0,
+						"translation.y": 912.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 4,
 					"file": "Tokenizer.elm",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4567,
+						"buffer_size": 4965,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4293,
-								4293
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Elm Language Support/Syntaxes/Elm.tmLanguage",
-							"tab_size": 2
-						},
-						"translation.x": -0.0,
-						"translation.y": 3135.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "ElmParser.elm",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3509,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								621,
-								621
+								0,
+								0
 							]
 						],
 						"settings":
@@ -1071,68 +1121,101 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2788.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "HtmlZipper.elm",
+					"buffer": 5,
+					"file": "ElmParser.elm",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2367,
+						"buffer_size": 4310,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1628,
-								1628
+								0,
+								0
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/Elm Language Support/Syntaxes/Elm.tmLanguage",
-							"tab_size": 2
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1824.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "HtmlZipper.elm",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5863,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Elm Language Support/Syntaxes/Elm.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 969.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "TagAttr.elm",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8099,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								136,
+								136
+							]
+						],
+						"settings":
+						{
+							"auto_name": "module TagAttr exposing (..)",
+							"syntax": "Packages/Elm Language Support/Syntaxes/Elm.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "TagAttr.elm",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1362,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								130,
-								130
-							]
-						],
-						"settings":
-						{
-							"auto_name": "module TagAttr exposing (..)",
-							"syntax": "Packages/Elm Language Support/Syntaxes/Elm.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 399.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
 					"type": "text"
 				}
 			]

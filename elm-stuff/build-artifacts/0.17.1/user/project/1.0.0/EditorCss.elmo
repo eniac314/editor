@@ -1,8 +1,12 @@
+var _user$project$EditorCss$TgName = {ctor: 'TgName'};
 var _user$project$EditorCss$ExplTag = {ctor: 'ExplTag'};
 var _user$project$EditorCss$Debug = {ctor: 'Debug'};
 var _user$project$EditorCss$Pane = {ctor: 'Pane'};
 var _user$project$EditorCss$Prompt = {ctor: 'Prompt'};
 var _user$project$EditorCss$ExplWindow = {ctor: 'ExplWindow'};
+var _user$project$EditorCss$Editor = {ctor: 'Editor'};
+var _user$project$EditorCss$RightPane = {ctor: 'RightPane'};
+var _user$project$EditorCss$LeftPane = {ctor: 'LeftPane'};
 var _user$project$EditorCss$css = function (_p0) {
 	return _rtfeldman$elm_css$Css$stylesheet(
 		A2(_rtfeldman$elm_css$Css_Namespace$namespace, 'editor', _p0));
@@ -17,8 +21,6 @@ var _user$project$EditorCss$css = function (_p0) {
 			_user$project$EditorCss$Pane,
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_rtfeldman$elm_css$Css$width(
-					_rtfeldman$elm_css$Css$pct(50)),
 					_rtfeldman$elm_css$Css$backgroundColor(
 					A3(_rtfeldman$elm_css$Css$rgb, 155, 155, 155)),
 					_rtfeldman$elm_css$Css$display(_rtfeldman$elm_css$Css$inlineBlock)
@@ -41,14 +43,55 @@ var _user$project$EditorCss$css = function (_p0) {
 			_user$project$EditorCss$ExplTag,
 			_elm_lang$core$Native_List.fromArray(
 				[
+					_rtfeldman$elm_css$Css$display(_rtfeldman$elm_css$Css$inlineBlock),
+					_rtfeldman$elm_css$Css$margin(
+					_rtfeldman$elm_css$Css$em(0)),
 					_rtfeldman$elm_css$Css$padding(
 					_rtfeldman$elm_css$Css$em(0.2)),
 					_rtfeldman$elm_css$Css$borderStyle(_rtfeldman$elm_css$Css$solid),
 					_rtfeldman$elm_css$Css$borderColor(
 					A3(_rtfeldman$elm_css$Css$rgb, 0, 0, 0)),
-					_rtfeldman$elm_css$Css$margin(
-					_rtfeldman$elm_css$Css$em(0.1)),
-					_rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$pointer)
+					_rtfeldman$elm_css$Css$cursor(_rtfeldman$elm_css$Css$pointer),
+					_rtfeldman$elm_css$Css$minWidth(
+					_rtfeldman$elm_css$Css$px(50))
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['.'], x, y);
+				}),
+			_user$project$EditorCss$ExplTag,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$hover(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_rtfeldman$elm_css$Css$important(
+							_rtfeldman$elm_css$Css$backgroundColor(
+								A3(_rtfeldman$elm_css$Css$rgb, 255, 255, 255)))
+						]))
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['#'], x, y);
+				}),
+			_user$project$EditorCss$LeftPane,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$width(
+					_rtfeldman$elm_css$Css$pct(70))
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['#'], x, y);
+				}),
+			_user$project$EditorCss$RightPane,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$width(
+					_rtfeldman$elm_css$Css$pct(30))
 				])),
 			A2(
 			F2(
@@ -86,4 +129,3 @@ var _user$project$EditorCss$editorStyle = _rtfeldman$elm_css_helpers$Html_CssHel
 	function (_) {
 		return _.css;
 	}(_user$project$EditorCss$cssString));
-var _user$project$EditorCss$Editor = {ctor: 'Editor'};

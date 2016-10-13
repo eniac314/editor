@@ -69,35 +69,3 @@ plist ps f acc =
   in helper ps []
 
 
-{-res = (tokenizer' ( tagPos testinput))
-res2 = tokenizer testinput4
-res3 = parse parseAttrList (words testinput3)
-res4 = parse  parseStyle (words testinput4)
-
-testinput = 
-  """ div [ class "mainDiv" ]
-          [ p [ style [ ( "color" , "red" ) ] ] [ text "this is a test" 
-                  , p [ ] [ ]
-                  ]
-          , p [ ] [ h2 [ id "very important" , style [ ( "color" , "blue" ) ] ] [ text "big title" ] ]
-          ]
-
-  """
-testinput2 = 
-   """ div [ class "mainDiv" , id "toto" ]
-           [ text "hello!" ]
-
-  """
-
-testinput3 = 
-   """ [ class "mainDiv" , id "toto" ]
-   """
-
-testinput4 = 
-  """ div []
-      [ h2 [] [text "first title"]
-      ] 
-  
-  """
-
--}

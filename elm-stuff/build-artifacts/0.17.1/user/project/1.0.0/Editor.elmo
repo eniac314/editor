@@ -2,8 +2,23 @@ var _user$project$Editor$testinput4 = ' div []\n      [ h2 [] [text \"first titl
 var _user$project$Editor$testinput3 = ' [ class \"mainDiv\" , id \"toto\" ]\n   ';
 var _user$project$Editor$testinput2 = ' textarea [] [text \"hello\"]\n\n  ';
 var _user$project$Editor$testinput = ' div [ class \"main\"]\n          [ header [] [h1 [] [text \"A great page\"]]\n          , body []\n                 [form []\n                       [ textarea [] [text \"placeholder\"] \n                       , button [] [text \"press here!\"]\n                       ]\n                  , a [href \"http://www.google.com\"]\n                      [text \"the answer to everything\"]\n                 , table []\n                         [ th  [] [text \"table header\"]\n                         , tr  [] [td [] [text \"case 1\"]\n                                  ,td [] [text \"case 2\"]\n                                  ,td [] [text \"case 3\"]\n                                  ,td [] [text \"case 4\"]\n                                  ]\n                          , tr  [] [td [] [text \"case 5\"]\n                                  ,td [] [text \"case 6\"]\n                                  ,td [] [text \"case 7\"]\n                                  ,td [] [text \"case 8\"]\n                                  ]\n                         ]\n                 ]\n          , footer [] [text \"this is the end\"]\n          ]\n\n  ';
-var _user$project$Editor$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$none;
+var _user$project$Editor$style$ = function (text) {
+	return A3(
+		_elm_lang$html$Html$node,
+		'style',
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html_Attributes$property,
+				'textContent',
+				_elm_lang$core$Json_Encode$string(text)),
+				A2(
+				_elm_lang$html$Html_Attributes$property,
+				'type',
+				_elm_lang$core$Json_Encode$string('text/css'))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[]));
 };
 var _user$project$Editor$move = F2(
 	function (f, model) {
@@ -130,61 +145,65 @@ var _user$project$Editor$parse = function (model) {
 		model,
 		{procString: prString, parsedData: pdata, page: newPage, nextId: nextId, currPath: currPath});
 };
+var _user$project$Editor$urlUpdate = F2(
+	function (_p12, model) {
+		return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+	});
 var _user$project$Editor$update = F2(
 	function (msg, model) {
-		var _p12 = msg;
-		switch (_p12.ctor) {
+		var _p13 = msg;
+		switch (_p13.ctor) {
 			case 'Store':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
 						model,
-						{rawString: _p12._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+						{rawString: _p13._0}),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
 			case 'Parse':
-				return {
-					ctor: '_Tuple2',
-					_0: _user$project$Editor$parse(model),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_user$project$Editor$parse(model),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
 			case 'Up':
-				return {
-					ctor: '_Tuple2',
-					_0: A2(_user$project$Editor$move, _user$project$HtmlZipper$zipUp, model),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					A2(_user$project$Editor$move, _user$project$HtmlZipper$zipUp, model),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
 			case 'Down':
-				return {
-					ctor: '_Tuple2',
-					_0: A2(_user$project$Editor$move, _user$project$HtmlZipper$zipDownFirst, model),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					A2(_user$project$Editor$move, _user$project$HtmlZipper$zipDownFirst, model),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
 			case 'Left':
-				return {
-					ctor: '_Tuple2',
-					_0: A2(_user$project$Editor$move, _user$project$HtmlZipper$zipLeft, model),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					A2(_user$project$Editor$move, _user$project$HtmlZipper$zipLeft, model),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
 			case 'Right':
-				return {
-					ctor: '_Tuple2',
-					_0: A2(_user$project$Editor$move, _user$project$HtmlZipper$zipRight, model),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					A2(_user$project$Editor$move, _user$project$HtmlZipper$zipRight, model),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
 			case 'GoTo':
-				return {
-					ctor: '_Tuple2',
-					_0: A2(
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					A2(
 						_user$project$Editor$move,
-						_user$project$HtmlZipper$cd$(_p12._0),
+						_user$project$HtmlZipper$cd$(_p13._0),
 						model),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+					_elm_lang$core$Native_List.fromArray(
+						[]));
 			case 'Debug':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
 						model,
 						{
 							debug: _elm_lang$core$Basics$not(
@@ -192,12 +211,12 @@ var _user$project$Editor$update = F2(
 									return _.debug;
 								}(model))
 						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
-			default:
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+			case 'Render':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
 						model,
 						{
 							toRender: _user$project$ElmParser$renderer(
@@ -205,62 +224,131 @@ var _user$project$Editor$update = F2(
 									return _.parsedData;
 								}(model))
 						}),
-					_1: _elm_lang$core$Platform_Cmd$none
-				};
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+			case 'Failure':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							winSize: _elm_lang$core$Maybe$Just(_p13._0)
+						}),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
 		}
 	});
-var _user$project$Editor$_p13 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace('editor');
-var _user$project$Editor$id = _user$project$Editor$_p13.id;
-var _user$project$Editor$class = _user$project$Editor$_p13.$class;
-var _user$project$Editor$classList = _user$project$Editor$_p13.classList;
-var _user$project$Editor$Model = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {rawString: a, procString: b, parsedData: c, currPath: d, page: e, toRender: f, nextId: g, debug: h};
-	});
+var _user$project$Editor$_p14 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace('editor');
+var _user$project$Editor$id = _user$project$Editor$_p14.id;
+var _user$project$Editor$class = _user$project$Editor$_p14.$class;
+var _user$project$Editor$classList = _user$project$Editor$_p14.classList;
+var _user$project$Editor$Model = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return {position: a, rawString: b, procString: c, parsedData: d, currPath: e, page: f, toRender: g, nextId: h, debug: i, winSize: j};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
+var _user$project$Editor$FileIO = {ctor: 'FileIO'};
+var _user$project$Editor$Editor = {ctor: 'Editor'};
 var _user$project$Editor$init = function (initInput) {
 	var pdata = A2(
 		_user$project$ElmParser$interpret,
 		initInput,
 		_javcasas$elm_integer$Data_Integer$fromInt(0));
 	var initPage = function () {
-		var _p14 = pdata;
-		if (_p14.ctor === 'Err') {
+		var _p15 = pdata;
+		if (_p15.ctor === 'Err') {
 			return _elm_lang$core$Maybe$Nothing;
 		} else {
 			return _elm_lang$core$Maybe$Just(
-				_user$project$HtmlZipper$initZip(_p14._0._0));
+				_user$project$HtmlZipper$initZip(_p15._0._0));
 		}
 	}();
 	var initPath = function () {
-		var _p15 = initPage;
-		if (_p15.ctor === 'Nothing') {
+		var _p16 = initPage;
+		if (_p16.ctor === 'Nothing') {
 			return _elm_lang$core$Native_List.fromArray(
 				[]);
 		} else {
-			return _user$project$HtmlZipper$extractPath(_p15._0);
+			return _user$project$HtmlZipper$extractPath(_p16._0);
 		}
 	}();
 	var nextId = function () {
-		var _p16 = pdata;
-		if (_p16.ctor === 'Err') {
+		var _p17 = pdata;
+		if (_p17.ctor === 'Err') {
 			return _javcasas$elm_integer$Data_Integer$fromInt(0);
 		} else {
 			return A2(
 				_javcasas$elm_integer$Data_Integer$add,
-				_p16._0._1,
+				_p17._0._1,
 				_javcasas$elm_integer$Data_Integer$fromInt(1));
 		}
 	}();
-	return A8(
-		_user$project$Editor$Model,
-		initInput,
-		_elm_lang$core$Maybe$Nothing,
-		pdata,
-		initPath,
-		initPage,
-		_user$project$ElmParser$renderer(pdata),
-		nextId,
-		true);
+	return _user$project$Editor$Model(_user$project$Editor$Editor)(initInput)(_elm_lang$core$Maybe$Nothing)(pdata)(initPath)(initPage)(
+		_user$project$ElmParser$renderer(pdata))(nextId)(true)(_elm_lang$core$Maybe$Nothing);
+};
+var _user$project$Editor$MainMenu = {ctor: 'MainMenu'};
+var _user$project$Editor$urlParser = _elm_lang$navigation$Navigation$makeParser(
+	function (s) {
+		var validUrlMap = _elm_lang$core$Dict$fromList(
+			_elm_lang$core$Native_List.fromArray(
+				[
+					{ctor: '_Tuple2', _0: 'main', _1: _user$project$Editor$MainMenu},
+					{ctor: '_Tuple2', _0: 'editor', _1: _user$project$Editor$Editor},
+					{ctor: '_Tuple2', _0: 'fileIO', _1: _user$project$Editor$FileIO}
+				]));
+		var _p18 = A2(
+			_elm_lang$core$Dict$get,
+			function (_) {
+				return _.hash;
+			}(s),
+			validUrlMap);
+		if (_p18.ctor === 'Nothing') {
+			return _elm_lang$core$Result$Err('invalid url');
+		} else {
+			return _elm_lang$core$Result$Ok(_p18._0);
+		}
+	});
+var _user$project$Editor$Failure = {ctor: 'Failure'};
+var _user$project$Editor$WinSize = function (a) {
+	return {ctor: 'WinSize', _0: a};
+};
+var _user$project$Editor$initWinSize = A3(
+	_elm_lang$core$Task$perform,
+	function (_p19) {
+		return _user$project$Editor$Failure;
+	},
+	function (s) {
+		return _user$project$Editor$WinSize(s);
+	},
+	_elm_lang$window$Window$size);
+var _user$project$Editor$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$window$Window$resizes(_user$project$Editor$WinSize)
+			]));
 };
 var _user$project$Editor$Debug = {ctor: 'Debug'};
 var _user$project$Editor$GoTo = function (a) {
@@ -270,187 +358,356 @@ var _user$project$Editor$Right = {ctor: 'Right'};
 var _user$project$Editor$Left = {ctor: 'Left'};
 var _user$project$Editor$Down = {ctor: 'Down'};
 var _user$project$Editor$Up = {ctor: 'Up'};
-var _user$project$Editor$explorer = F2(
-	function (page, dbug) {
-		var render = function (_p17) {
-			var _p18 = _p17;
-			var colors = _elm_lang$core$List$reverse(
-				_elm_lang$core$Native_List.fromArray(
-					['ivory', 'khaki', 'lavender', 'lavenderblush', 'lightcoral', 'lightgreen', 'lemonchiffon', 'thistle', 'mediumspringgreen', 'lightskyblue']));
-			var colorPicker = function (xs) {
-				colorPicker:
-				while (true) {
-					var _p19 = xs;
-					if (_p19.ctor === '[]') {
-						var _v16 = colors;
-						xs = _v16;
-						continue colorPicker;
+var _user$project$Editor$explorer = function (model) {
+	var explWindow = function (tags) {
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_user$project$Editor$id(_user$project$EditorCss$ExplWindow)
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[tags]));
+	};
+	var sizeExplorer = function () {
+		var _p20 = function (_) {
+			return _.winSize;
+		}(model);
+		if (_p20.ctor === 'Nothing') {
+			return {ctor: '_Tuple2', _0: 560, _1: 300};
+		} else {
+			return {ctor: '_Tuple2', _0: (_p20._0.width / 2) | 0, _1: 300};
+		}
+	}();
+	var renderSvg = function (_p21) {
+		var _p22 = _p21;
+		var renderSvgTag = F3(
+			function (_p24, c, _p23) {
+				var _p25 = _p24;
+				var _p30 = _p25._1;
+				var _p29 = _p25._0;
+				var _p26 = _p23;
+				var _p28 = _p26._0;
+				var pth = function (_) {
+					return _.path;
+				}(_p28);
+				var tn = function () {
+					var _p27 = function (_) {
+						return _.tagname;
+					}(_p28);
+					if (_p27.ctor === 'Text') {
+						return 'Text';
 					} else {
-						return {ctor: '_Tuple2', _0: _p19._0, _1: _p19._1};
+						return _elm_lang$core$Basics$toString(_p27);
 					}
-				}
-			};
-			var spacer = function (indent) {
-				return _elm_lang$core$Native_Utils.eq(indent, 0) ? '' : A2(
-					_elm_lang$core$Basics_ops['++'],
-					' ',
-					spacer(indent - 1));
-			};
-			var render$ = F3(
-				function (n, cs, _p20) {
-					var _p21 = _p20;
-					var _p24 = _p21._0;
-					var _p22 = colorPicker(cs);
-					var c = _p22._0;
-					var cs$ = _p22._1;
-					var pth = function (_) {
-						return _.path;
-					}(_p24);
-					var tn = function () {
-						var _p23 = function (_) {
-							return _.tagname;
-						}(_p24);
-						if (_p23.ctor === 'Text') {
-							return 'Text';
-						} else {
-							return _elm_lang$core$Basics$toString(_p23);
-						}
-					}();
-					return A2(
-						_elm_lang$html$Html$p,
+				}();
+				return _elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$svg$Svg$rect,
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_user$project$Editor$class(
-								_elm_lang$core$Native_List.fromArray(
-									[_user$project$EditorCss$ExplTag])),
-								_elm_lang$html$Html_Attributes$style(
+								_elm_lang$svg$Svg_Attributes$fill(c),
+								_elm_lang$svg$Svg_Attributes$x(
+								_elm_lang$core$Basics$toString(_p29)),
+								_elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString(_p30)),
+								_elm_lang$svg$Svg_Attributes$width('75'),
+								_elm_lang$svg$Svg_Attributes$height('20')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[])),
+						A2(
+						_elm_lang$svg$Svg$text$,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$svg$Svg_Attributes$fill('black'),
+								_elm_lang$svg$Svg_Attributes$x(
+								_elm_lang$core$Basics$toString(_p29)),
+								_elm_lang$svg$Svg_Attributes$y(
+								_elm_lang$core$Basics$toString(_p30 + 15)),
+								_elm_lang$html$Html_Events$onClick(
+								_user$project$Editor$GoTo(pth)),
+								_elm_lang$svg$Svg_Attributes$class('TgName')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$svg$Svg$text(tn)
+							]))
+					]);
+			});
+		var colors = _elm_lang$core$List$reverse(
+			_elm_lang$core$Native_List.fromArray(
+				['ivory', 'khaki', 'lavender', 'lavenderblush', 'lightcoral', 'lightgreen', 'lemonchiffon', 'thistle', 'mediumspringgreen', 'lightskyblue']));
+		var colorPicker = function (xs) {
+			colorPicker:
+			while (true) {
+				var _p31 = xs;
+				if (_p31.ctor === '[]') {
+					var _v21 = colors;
+					xs = _v21;
+					continue colorPicker;
+				} else {
+					return {ctor: '_Tuple2', _0: _p31._0, _1: _p31._1};
+				}
+			}
+		};
+		var render$ = F3(
+			function (_p33, cs, _p32) {
+				var _p34 = _p33;
+				var _p44 = _p34._1;
+				var _p43 = _p34._0;
+				var _p35 = _p32;
+				var _p42 = _p35._1;
+				var _p36 = colorPicker(cs);
+				var c = _p36._0;
+				var cs$ = _p36._1;
+				var t = A3(
+					renderSvgTag,
+					{ctor: '_Tuple2', _0: _p43, _1: _p44},
+					c,
+					A2(_user$project$HtmlZipper$Node, _p35._0, _p42));
+				var hori = F2(
+					function (_p37, xs) {
+						var _p38 = _p37;
+						var _p41 = _p38._1;
+						var _p40 = _p38._0;
+						var _p39 = xs;
+						if (_p39.ctor === '[]') {
+							return _elm_lang$core$Native_List.fromArray(
+								[]);
+						} else {
+							var head = A3(
+								render$,
+								{ctor: '_Tuple2', _0: _p40, _1: _p41},
+								cs$,
+								_p39._0);
+							var n = _elm_lang$core$List$length(head);
+							return A2(
+								_elm_lang$core$List_ops['::'],
+								head,
+								A2(
+									hori,
+									{ctor: '_Tuple2', _0: _p40, _1: _p41 + (n * 15)},
+									_p39._1));
+						}
+					});
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					t,
+					_elm_lang$core$List$concat(
+						A2(
+							hori,
+							{ctor: '_Tuple2', _0: _p43 + 15, _1: _p44 + 30},
+							_p42)));
+			});
+		return A2(
+			_elm_lang$svg$Svg$svg,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$viewBox('0 0 500 4000'),
+					_elm_lang$svg$Svg_Attributes$width(
+					_elm_lang$core$Basics$toString(
+						_elm_lang$core$Basics$fst(sizeExplorer))),
+					_elm_lang$svg$Svg_Attributes$height(
+					_elm_lang$core$Basics$toString(4000))
+				]),
+			A3(
+				render$,
+				{ctor: '_Tuple2', _0: 10, _1: 10},
+				colors,
+				_p22._0._0));
+	};
+	var dbug = function (_) {
+		return _.debug;
+	}(model);
+	var render = function (_p45) {
+		var _p46 = _p45;
+		var colors = _elm_lang$core$List$reverse(
+			_elm_lang$core$Native_List.fromArray(
+				['ivory', 'khaki', 'lavender', 'lavenderblush', 'lightcoral', 'lightgreen', 'lemonchiffon', 'thistle', 'mediumspringgreen', 'lightskyblue']));
+		var colorPicker = function (xs) {
+			colorPicker:
+			while (true) {
+				var _p47 = xs;
+				if (_p47.ctor === '[]') {
+					var _v28 = colors;
+					xs = _v28;
+					continue colorPicker;
+				} else {
+					return {ctor: '_Tuple2', _0: _p47._0, _1: _p47._1};
+				}
+			}
+		};
+		var spacer = function (indent) {
+			return _elm_lang$core$Native_Utils.eq(indent, 0) ? '' : A2(
+				_elm_lang$core$Basics_ops['++'],
+				' ',
+				spacer(indent - 1));
+		};
+		var render$ = F3(
+			function (n, cs, _p48) {
+				var _p49 = _p48;
+				var _p52 = _p49._0;
+				var _p50 = colorPicker(cs);
+				var c = _p50._0;
+				var cs$ = _p50._1;
+				var pth = function (_) {
+					return _.path;
+				}(_p52);
+				var tn = function () {
+					var _p51 = function (_) {
+						return _.tagname;
+					}(_p52);
+					if (_p51.ctor === 'Text') {
+						return 'Text';
+					} else {
+						return _elm_lang$core$Basics$toString(_p51);
+					}
+				}();
+				return A2(
+					_elm_lang$html$Html$p,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_user$project$Editor$class(
+							_elm_lang$core$Native_List.fromArray(
+								[])),
+							_elm_lang$html$Html_Attributes$style(
+							_elm_lang$core$Native_List.fromArray(
+								[
+									{ctor: '_Tuple2', _0: 'margin', _1: '0.1em'}
+								])),
+							_elm_lang$html$Html_Events$onClick(
+							_user$project$Editor$GoTo(pth))
+						]),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text(
+								spacer(n)),
+								A2(
+								_elm_lang$html$Html$span,
 								_elm_lang$core$Native_List.fromArray(
 									[
-										{ctor: '_Tuple2', _0: 'background-color', _1: c}
-									])),
-								_elm_lang$html$Html_Events$onClick(
-								_user$project$Editor$GoTo(pth))
+										_user$project$Editor$class(
+										_elm_lang$core$Native_List.fromArray(
+											[_user$project$EditorCss$ExplTag])),
+										_elm_lang$html$Html_Attributes$style(
+										_elm_lang$core$Native_List.fromArray(
+											[
+												{ctor: '_Tuple2', _0: 'background-color', _1: c}
+											]))
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(tn)
+									]))
 							]),
 						A2(
 							_elm_lang$core$Basics_ops['++'],
 							_elm_lang$core$Native_List.fromArray(
 								[
-									_elm_lang$html$Html$text(
 									A2(
-										_elm_lang$core$Basics_ops['++'],
-										spacer(n),
-										tn))
+									_elm_lang$html$Html$span,
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_user$project$Editor$classList(
+											_elm_lang$core$Native_List.fromArray(
+												[
+													{ctor: '_Tuple2', _0: 'Debug', _1: dbug}
+												]))
+										]),
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_elm_lang$html$Html$text(
+											_elm_lang$core$Basics$toString(pth))
+										]))
 								]),
 							A2(
-								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Native_List.fromArray(
-									[
-										A2(
-										_elm_lang$html$Html$span,
-										_elm_lang$core$Native_List.fromArray(
-											[
-												_user$project$Editor$classList(
-												_elm_lang$core$Native_List.fromArray(
-													[
-														{ctor: '_Tuple2', _0: 'Debug', _1: dbug}
-													]))
-											]),
-										_elm_lang$core$Native_List.fromArray(
-											[
-												_elm_lang$html$Html$text(
-												_elm_lang$core$Basics$toString(pth))
-											]))
-									]),
-								A2(
-									_elm_lang$core$List$map,
-									A2(render$, n + 3, cs$),
-									_p21._1))));
-				});
-			return A3(render$, 0, colors, _p18._0._0);
-		};
-		var tags = function () {
-			var _p25 = page;
-			if (_p25.ctor === 'Nothing') {
-				return A2(
-					_elm_lang$html$Html$span,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					_elm_lang$core$Native_List.fromArray(
-						[]));
-			} else {
-				return render(_p25._0);
-			}
-		}();
-		var explWindow = function (tags) {
+								_elm_lang$core$List$map,
+								A2(render$, n + 3, cs$),
+								_p49._1))));
+			});
+		return A3(render$, 0, colors, _p46._0._0);
+	};
+	var page = function (_) {
+		return _.page;
+	}(model);
+	var tags = function () {
+		var _p53 = page;
+		if (_p53.ctor === 'Nothing') {
 			return A2(
-				_elm_lang$html$Html$div,
+				_elm_lang$html$Html$span,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[]));
+		} else {
+			return render(_p53._0);
+		}
+	}();
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$Editor$id('explorer'),
+				_elm_lang$html$Html_Attributes$style(
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_user$project$Editor$id(_user$project$EditorCss$ExplWindow)
+						{ctor: '_Tuple2', _0: 'width', _1: '95%'},
+						{ctor: '_Tuple2', _0: 'white-space', _1: 'pre'}
+					]))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				explWindow(tags),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$Editor$Up),
+						_elm_lang$html$Html_Attributes$type$('reset')
 					]),
 				_elm_lang$core$Native_List.fromArray(
-					[tags]));
-		};
-		return A2(
-			_elm_lang$html$Html$div,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_user$project$Editor$id('explorer'),
-					_elm_lang$html$Html_Attributes$style(
-					_elm_lang$core$Native_List.fromArray(
-						[
-							{ctor: '_Tuple2', _0: 'width', _1: '95%'}
-						]))
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					explWindow(tags),
-					A2(
-					_elm_lang$html$Html$button,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Events$onClick(_user$project$Editor$Up),
-							_elm_lang$html$Html_Attributes$type$('reset')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html$text('Left')
-						])),
-					A2(
-					_elm_lang$html$Html$button,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Events$onClick(_user$project$Editor$Down),
-							_elm_lang$html$Html_Attributes$type$('reset')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html$text('Right')
-						])),
-					A2(
-					_elm_lang$html$Html$button,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Events$onClick(_user$project$Editor$Left),
-							_elm_lang$html$Html_Attributes$type$('reset')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html$text('Up')
-						])),
-					A2(
-					_elm_lang$html$Html$button,
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html_Events$onClick(_user$project$Editor$Right),
-							_elm_lang$html$Html_Attributes$type$('reset')
-						]),
-					_elm_lang$core$Native_List.fromArray(
-						[
-							_elm_lang$html$Html$text('Down')
-						]))
-				]));
-	});
+					[
+						_elm_lang$html$Html$text('Left')
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$Editor$Down),
+						_elm_lang$html$Html_Attributes$type$('reset')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Right')
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$Editor$Left),
+						_elm_lang$html$Html_Attributes$type$('reset')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Up')
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$Editor$Right),
+						_elm_lang$html$Html_Attributes$type$('reset')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Down')
+					]))
+			]));
+};
 var _user$project$Editor$Render = {ctor: 'Render'};
 var _user$project$Editor$Parse = {ctor: 'Parse'};
 var _user$project$Editor$Store = function (a) {
@@ -461,7 +718,7 @@ var _user$project$Editor$view = function (model) {
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_user$project$Editor$id(_user$project$EditorCss$Editor)
+				_user$project$Editor$id(_user$project$Editor$Editor)
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
@@ -473,9 +730,9 @@ var _user$project$Editor$view = function (model) {
 					_elm_lang$core$List$reverse(
 						A2(
 							_elm_lang$core$List$map,
-							function (_p26) {
-								var _p27 = _p26;
-								return _elm_lang$core$Basics$toString(_p27._0);
+							function (_p54) {
+								var _p55 = _p54;
+								return _elm_lang$core$Basics$toString(_p55._0);
 							},
 							function (_) {
 								return _.currPath;
@@ -492,7 +749,8 @@ var _user$project$Editor$view = function (model) {
 					[
 						_user$project$Editor$class(
 						_elm_lang$core$Native_List.fromArray(
-							[_user$project$EditorCss$Pane]))
+							[_user$project$EditorCss$Pane])),
+						_user$project$Editor$id(_user$project$EditorCss$LeftPane)
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
@@ -514,16 +772,16 @@ var _user$project$Editor$view = function (model) {
 								_elm_lang$core$Native_List.fromArray(
 									[
 										function () {
-										var _p28 = function (_) {
+										var _p56 = function (_) {
 											return _.procString;
 										}(model);
-										if (_p28.ctor === 'Nothing') {
+										if (_p56.ctor === 'Nothing') {
 											return _elm_lang$html$Html$text(
 												function (_) {
 													return _.rawString;
 												}(model));
 										} else {
-											return _elm_lang$html$Html$text(_p28._0);
+											return _elm_lang$html$Html$text(_p56._0);
 										}
 									}()
 									])),
@@ -572,21 +830,14 @@ var _user$project$Editor$view = function (model) {
 				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_user$project$Editor$id('rightPane'),
+						_user$project$Editor$id(_user$project$EditorCss$RightPane),
 						_user$project$Editor$class(
 						_elm_lang$core$Native_List.fromArray(
 							[_user$project$EditorCss$Pane]))
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						A2(
-						_user$project$Editor$explorer,
-						function (_) {
-							return _.page;
-						}(model),
-						function (_) {
-							return _.debug;
-						}(model))
+						_user$project$Editor$explorer(model)
 					])),
 				A2(
 				_elm_lang$html$Html$div,
@@ -597,11 +848,11 @@ var _user$project$Editor$view = function (model) {
 				_elm_lang$core$Native_List.fromArray(
 					[
 						function () {
-						var _p29 = function (_) {
+						var _p57 = function (_) {
 							return _.parsedData;
 						}(model);
-						if (_p29.ctor === 'Err') {
-							return _elm_lang$html$Html$text(_p29._0);
+						if (_p57.ctor === 'Err') {
+							return _elm_lang$html$Html$text(_p57._0);
 						} else {
 							return _elm_lang$html$Html$text('parsing complete');
 						}
@@ -613,20 +864,37 @@ var _user$project$Editor$view = function (model) {
 					[]),
 				_elm_lang$core$Native_List.fromArray(
 					[])),
+				_elm_lang$html$Html$text(
+				_elm_lang$core$Basics$toString(
+					function (_) {
+						return _.winSize;
+					}(model))),
+				A2(
+				_elm_lang$html$Html$br,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
 				function (_) {
 				return _.toRender;
-			}(model)
+			}(model),
+				_user$project$Editor$style$('.TgName:hover {fill: #8FBC8F; } \n                  .TgName{\n                   cursor:pointer;\n                  }\n                 ')
 			]));
 };
 var _user$project$Editor$main = {
-	main: _elm_lang$html$Html_App$program(
+	main: A2(
+		_elm_lang$navigation$Navigation$program,
+		_user$project$Editor$urlParser,
 		{
-			init: {
-				ctor: '_Tuple2',
-				_0: _user$project$Editor$init(_user$project$Editor$testinput),
-				_1: _elm_lang$core$Platform_Cmd$none
+			init: function (_p58) {
+				return {
+					ctor: '_Tuple2',
+					_0: _user$project$Editor$init(_user$project$Editor$testinput),
+					_1: _user$project$Editor$initWinSize
+				};
 			},
 			update: _user$project$Editor$update,
+			urlUpdate: _user$project$Editor$urlUpdate,
 			view: _user$project$Editor$view,
 			subscriptions: _user$project$Editor$subscriptions
 		})

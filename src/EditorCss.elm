@@ -1,17 +1,17 @@
 module EditorCss exposing (..)
 
 import Css exposing (..)
-import Css.Elements exposing (body, li)
+import Css.Elements exposing (body, li, span)
 import Css.Namespace exposing (namespace)
 import Html.CssHelpers
 import Html.Attributes
 
 type CssClasses
-    = Pane | Debug | ExplTag
+    = Pane | Debug | ExplTag | TgName
 
 
 type CssIds
-    = Editor | ExplWindow | Prompt
+    = LeftPane | RightPane| Editor | ExplWindow | Prompt
       
 
 
@@ -19,19 +19,33 @@ type CssIds
 css =
     (stylesheet << namespace "editor")
     [ (.) Pane
-        [ width (pct 50)
-        , backgroundColor (rgb 155 155 155)
+        [ backgroundColor (rgb 155 155 155)
         , display inlineBlock
         ]
     , (.) Debug
         [ display none]
     , (.) ExplTag 
-        [ padding (em 0.2)
+        [ display inlineBlock
+        , margin (em 0)
+        , padding (em 0.2)
         , borderStyle solid
         , borderColor (rgb 0 0 0)
-        , margin (em 0.1)
         , cursor pointer
-        ]               
+        , minWidth (px 50)
+        ]
+    , (.) ExplTag  
+        [ hover
+           [ important (backgroundColor (rgb 255 255 255))
+           ]
+        ]
+    
+    , (#) LeftPane
+        [ width (pct 70)
+        ]          
+    
+    , (#) RightPane
+        [ width (pct 30)
+        ]
 
     , (#) ExplWindow
         [ width (pct 100)

@@ -1,1 +1,5 @@
 var _user$project$Repl$t_s_o_l = {ctor: '_Tuple0'};
+var _user$project$Repl$d_e_l_t_r_o_n_3_0_3_0 = F2(
+	function (x, y) {
+		return A2(_elm_lang$core$Platform_Cmd_ops['!'], x, y);
+	});
