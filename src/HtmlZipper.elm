@@ -2,7 +2,7 @@ module HtmlZipper exposing (..)
 
 import TagAttr exposing (TagName,Attr, splitAttr)
 import Dict exposing (get)
-import String exposing (toLower, dropRight, dropLeft)
+import String exposing (toLower, dropRight, dropLeft, lines, join)
 import Data.Integer exposing (add, fromInt, Integer)
 
 ---------------------------------------------------------------------------
@@ -176,21 +176,40 @@ htmlToString html =
         off  =  (String.length tn)
         atList = attrListToString attr
         tglist = (List.map (helper (indent + off +  3)) childs)
-    
-    in if String.startsWith "text " tn
-       then tn
-       else let 
-                atln = if atList == []
-                       then " []"
-                       else " [ " ++ (String.join ("\n" ++ buff ++ " , ") atList) 
-                            ++ ("\n" ++ buff ++ " ]")
-                tgln = if tglist == []
-                       then " []"
-                       else " [ " ++ (String.join ("\n" ++ buff ++ " , ") tglist) 
-                             ++ ("\n" ++ buff ++ " ]")
-            in
-            tn ++ atln ++ "\n" ++
-            buff ++ tgln 
+        
+        atln = if atList == []
+               then " []"
+               else " [ " ++ (String.join ("\n" ++ buff ++ " , ") atList) 
+                    ++ ("\n" ++ buff ++ " ]")
+        tgln = if tglist == []
+               then " []"
+               else " [ " ++ (String.join ("\n" ++ buff ++ " , ") tglist) 
+                     ++ ("\n" ++ buff ++ " ]")
+
+    in case tagname of
+      TagAttr.Text s -> 
+        "text \"" ++ s ++ "\"" 
+      TagAttr.Markdown s -> 
+        "markdown \n\"" ++ s ++ "\""
+      _ -> tn ++ atln ++ "\n" ++
+           buff ++ tgln
+
+    --in if ((String.startsWith "text " tn) || 
+    --       (String.startsWith "markdown " tn)
+    --      )
+    --   then tn
+    --   else let 
+    --            atln = if atList == []
+    --                   then " []"
+    --                   else " [ " ++ (String.join ("\n" ++ buff ++ " , ") atList) 
+    --                        ++ ("\n" ++ buff ++ " ]")
+    --            tgln = if tglist == []
+    --                   then " []"
+    --                   else " [ " ++ (String.join ("\n" ++ buff ++ " , ") tglist) 
+    --                         ++ ("\n" ++ buff ++ " ]")
+    --        in
+    --        tn ++ atln ++ "\n" ++
+    --        buff ++ tgln 
 
   in helper 0 html
 

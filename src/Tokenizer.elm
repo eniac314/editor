@@ -42,6 +42,9 @@ isSpace c =
   c == '\t' ||
   c == '\n'
 
+--isSpace : Char -> Bool
+--isSpace c = c == ' '
+
 isTokenChar : Char-> Bool
 isTokenChar c = 
   c == '(' ||
@@ -78,12 +81,13 @@ type alias CharMeta = List CharPos
 
 tagPos : String -> CharMeta
 tagPos s = 
-  let ls = addIndexes (lines s)
+  let ls = addIndexes (List.map (\s -> s ++ "\n") <| lines s)
       cs = List.map
             (\(n,l) -> toList l  
                        |> addIndexes
                        |> List.map 
-                           (\(m,c) -> CharPos c n m)) ls 
+                           (\(m,c) -> CharPos c n m)) ls
+      separator =  {ch = '\n', lnp = 0 , chp = 0}
   in List.concat cs 
 
 
@@ -91,18 +95,7 @@ getStringLit : CharMeta -> Result String (CharMeta,CharMeta)
 getStringLit xs = 
   case xs of 
     [] -> Err "getStringLit: Invalid String literal"
-    --(c::c'::xs) -> 
-    --  if (.ch c == '\\') && (.ch c' == '\"')
-    --  then 
-    --    case getStringLit xs of 
-    --        Err s -> Err s
-    --        Ok (l,r) -> Ok (c'::l, r)
-    --    else if (.ch c' == '\"')
-    --         then  Ok ([],xs)
-    --         else 
-    --          case getStringLit (c'::xs) of 
-    --            Err s -> Err s
-    --            Ok (l,r) -> Ok (c::l, r)
+
     (x::xs) -> 
       if (.ch x == '\"')
       then Ok ([],xs)

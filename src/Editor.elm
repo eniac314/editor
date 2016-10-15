@@ -4,7 +4,7 @@ import Html exposing (..)
 import Task exposing (perform)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import String exposing (words)
+import String exposing (words, lines, join)
 import Http
 import Dict exposing (fromList, toList ,get)
 import Json.Decode as Json
@@ -15,6 +15,7 @@ import Html.CssHelpers
 import EditorCss exposing (..)
 import Navigation exposing (..)
 import UrlParser exposing (Parser, (</>), format, int, oneOf, s, string)
+import Types exposing (..)
 import HtmlZipper exposing ( HTML
                            , HtmlZipper
                            , Path
@@ -41,6 +42,8 @@ import ElmParser exposing ( interpret
 import Svg exposing (svg, rect, text')
 import Svg.Attributes exposing (width, height,viewBox, fill, x, y, class)
 import Window as Win
+import EditorView exposing (..)
+import Pad exposing (..)
 
 { id, class, classList } =
     Html.CssHelpers.withNamespace "editor"
@@ -86,20 +89,7 @@ urlUpdate res model =
     Err s -> ({model | rawString = s}, Cmd.none)
     Ok ap -> { model | position = ap } ! []
 
-type AppPos = MainMenu | Editor | FileIO | Renderer
 
-type alias Model = 
-  { position : AppPos
-  , rawString : String
-  , procString : Maybe String
-  , parsedData : Result String (HTML,Integer)
-  , currPath : Path 
-  , page : Maybe HtmlZipper
-  , toRender : Html Msg
-  , nextId : Integer
-  , debug : Bool
-  , winSize : Maybe Win.Size
-  }
 
 init initInput = 
   let pdata = interpret initInput (fromInt 0)
@@ -126,27 +116,16 @@ init initInput =
         nextId
         True
         Nothing
-        
+        0
 
 -- UPDATE
 
-type Msg = Store String
-         | Parse
-         | Render
-         | Up 
-         | Down
-         | Left
-         | Right
-         | GoTo Path
-         | Debug
-         | WinSize Win.Size
-         | ChangeUrl String
-         | Failure
+
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = 
   case msg of 
-    Store s -> { model | rawString = s} ! []
+    Store s -> { model | rawString = s , nblines = List.length (lines s)} ! []
     Parse   -> parse model ! []
     Up -> move zipUp model ! []
     Down -> move zipDownFirst model ! []
@@ -237,7 +216,7 @@ move f model =
 
 view : Model -> Html Msg
 view model = 
-  div [ id Editor
+  div [ id Container
       , setHeight (.winSize model)
       ]
       (
@@ -254,40 +233,14 @@ view model =
     
          
 
-renderEditor : Model -> List (Html Msg)
-renderEditor model = 
-  [ renderPath (.currPath model)
-  , div [ class [ Pane ]
-        , id LeftPane
-        ] 
-        [ Html.form 
-            []
-            [ textarea [ onInput Store
-                       , rows 15
-                       , cols 45
-                       , id Prompt
-                       ]
-                       [ case (.procString model) of 
-                          Nothing -> text (.rawString model)
-                          Just s  -> text s
-                       ]
-            , br [] []
-            , button [onClick Parse, type' "reset"] [ text "Parse"]
-            , button [onClick Render, type' "button"] [ text "Render"]
-            , button [onClick Debug, type' "button"] [ text "Debug"]
-            ]
-        ]
-  , div [ id RightPane
-        , class [Pane]
-        ]
-        [ explorer model
-        ]
-  , renderConsole model
-  ]
+
 
 renderMainMenu model = []
 renderFileIO model = []
-renderRenderer model = [.toRender model]
+renderRenderer model = 
+  [ div [id RendererId] 
+        [.toRender model]
+  ]
 
 renderMenu : Model -> Html Msg
 renderMenu model = 
@@ -311,101 +264,8 @@ renderMenu model =
           [text "Html Preview"]
       ]
 
-renderPath : Path -> Html msg
-renderPath path = 
-  let pathStr = 
-       span [ class [Mono]
-            , id PathStr
-            ]
-            [ text (String.join "/" 
-                     (List.reverse 
-                       (List.map (\(t,p) -> toString t) path)))
-            ]
-  in div [id Path]
-         [p [] [text "Current path: ", pathStr]
-         ]
-
-renderConsole : Model -> Html msg
-renderConsole model = 
-  div [ id Console 
-      ]
-      [ div [ class [Mono] ]
-            [ case (.parsedData model) of 
-                 Err s -> span [class [Error]] [text s]
-                 Ok r  -> text "parsing complete" 
-            ]
-      ]
-
-explorer : Model -> Html Msg
-explorer model = 
-  let
-  page = .page model
-  dbug = .debug model
-  
-  sizeExplorer = 
-    case .winSize model of
-      Nothing -> (560 ,300)
-      Just {width, height} -> (width//2,300)
-  
-  explWindow tags =
-    div [ id ExplWindow]
-        [ tags ]
-  tags = 
-    case page of 
-      Nothing -> span [] []
-      Just zp -> render zp
-
-  render (ZipTree (t ,ctx)) = 
-    let
-     spacer indent = 
-       if indent == 0
-       then ""
-       else " " ++ (spacer (indent - 1))
-     
-     colors = List.reverse ["ivory","khaki","lavender","lavenderblush"
-              ,"lightcoral","lightgreen","lemonchiffon"
-              ,"thistle","mediumspringgreen","lightskyblue"
-              ]
-
-     colorPicker xs = 
-      case xs of
-        [] -> (colorPicker colors) 
-        (x::xs) -> (x,xs)
-
-     render' n cs (Node tag xs) =
-      let tn   = 
-           case (.tagname tag) of 
-            TagAttr.Text _ -> "Text"
-            tn'    -> toString tn'
-          pth  = .path tag
-
-          (c,cs') = colorPicker cs
-          
-      in p [ class []
-           , style [("margin","0.1em")]
-           , onClick (GoTo pth)
-           ]
-           ([ text (spacer n)
-            , span [class [ExplTag]
-            , style [  ("background-color",c) ]
-            ] 
-            [text tn]
-            ] 
-            ++ [span [classList [("Debug",dbug)]] [text (toString pth)]] ++ 
-            (List.map (render' (n+3) cs') xs))
-
-    in render' 0 colors t    
 
 
-  in div [ id Explorer
-         , style [("white-space","pre")]
-         ]
-         [ explWindow tags
-         , button [onClick Up, type' "reset"] [ text "Left"]
-         , button [onClick Down, type' "reset"] [ text "Right"]
-         , button [onClick Left, type' "reset"] [ text "Up"]
-         , button [onClick Right, type' "reset"] [ text "Down"]
-         ]
 
 -- SUBSCRIPTIONS
 
@@ -414,51 +274,6 @@ subscriptions model =
   Sub.batch [Win.resizes WinSize]
 
 
--- Test
-
-testinput = 
-  """ div [ class "main"]
-          [ header [] [h1 [] [text "A great page"]]
-          , body []
-                 [form []
-                       [ textarea [] [text "placeholder"] 
-                       , button [] [text "press here!"]
-                       ]
-                  , a [href "http://www.google.com"]
-                      [text "the answer to everything"]
-                 , table []
-                         [ th  [] [text "table header"]
-                         , tr  [] [td [] [text "case 1"]
-                                  ,td [] [text "case 2"]
-                                  ,td [] [text "case 3"]
-                                  ,td [] [text "case 4"]
-                                  ]
-                          , tr  [] [td [] [text "case 5"]
-                                  ,td [] [text "case 6"]
-                                  ,td [] [text "case 7"]
-                                  ,td [] [text "case 8"]
-                                  ]
-                         ]
-                 ]
-          , footer [] [text "this is the end"]
-          ]
-
-  """
-testinput2 = 
-   """ textarea [] [text "hello"]
-
-  """
-
-testinput3 = 
-   """ [ class "mainDiv" , id "toto" ]
-   """
-
-testinput4 = 
-  """ div []
-      [ h2 [] [text "first title"]
-      ] 
-  
-  """
 
 setHeight winSize = 
   case winSize of 

@@ -7,6 +7,7 @@
     "evancz/elm-http": "3.0.1",
     "javcasas/elm-integer": "2.0.2",
     "elm-lang/lazy": "1.0.0",
+    "evancz/elm-markdown": "3.0.0",
     "elm-lang/dom": "1.1.0",
     "elm-lang/html": "1.1.0",
     "rtfeldman/elm-css": "5.0.0",

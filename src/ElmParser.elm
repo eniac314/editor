@@ -96,6 +96,13 @@ parseText path n =
   >>* parseStringLiteral
   >>= (\s -> return ((Node (Tag (Text s) ((TextNode,n) :: path) []) []),n))
 
+parseMarkdown : Path -> Integer -> Parser (List Token) (HTML, Integer)
+parseMarkdown path n = 
+  sat consumerLS (\t -> (.val t) == "markdown")
+  >>* parseStringLiteral
+  >>= (\s -> return ((Node (Tag (Markdown s) ((MarkdownNode,n) :: path) []) []),n))
+
+
 parseStyle : Parser (List Token) Attr
 parseStyle = 
   let parseTuple = 
@@ -130,6 +137,9 @@ parseTag path n =
 
   +++
   
+  (coma (parseMarkdown path n))
+
+  +++
   (
   (coma parseTagName)
   >>= (\tn -> parseAttrList

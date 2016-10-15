@@ -209,6 +209,11 @@ var _user$project$TagAttr$toTag = function (tn) {
 				function (_p10, _p9) {
 					return _elm_lang$html$Html$text('should never happen');
 				});
+		case 'MarkdownNode':
+			return F2(
+				function (_p12, _p11) {
+					return _elm_lang$html$Html$text('should never happen');
+				});
 		case 'Hr':
 			return _elm_lang$html$Html$hr;
 		case 'Pre':
@@ -305,9 +310,34 @@ var _user$project$TagAttr$toTag = function (tn) {
 			return _elm_lang$html$Html$tr;
 		case 'Td':
 			return _elm_lang$html$Html$td;
-		default:
+		case 'Th':
 			return _elm_lang$html$Html$th;
+		default:
+			return F2(
+				function (_p14, _p13) {
+					return A3(
+						_evancz$elm_markdown$Markdown$toHtmlWith,
+						{
+							githubFlavored: _elm_lang$core$Maybe$Just(
+								{tables: true, breaks: false}),
+							sanitize: true,
+							defaultHighlighting: _elm_lang$core$Maybe$Nothing,
+							smartypants: false
+						},
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$style(
+								_elm_lang$core$Native_List.fromArray(
+									[
+										{ctor: '_Tuple2', _0: 'white-space', _1: 'pre'}
+									]))
+							]),
+						_p6._0);
+				});
 	}
+};
+var _user$project$TagAttr$Markdown = function (a) {
+	return {ctor: 'Markdown', _0: a};
 };
 var _user$project$TagAttr$Th = {ctor: 'Th'};
 var _user$project$TagAttr$Td = {ctor: 'Td'};
@@ -358,6 +388,7 @@ var _user$project$TagAttr$Span = {ctor: 'Span'};
 var _user$project$TagAttr$Blockquote = {ctor: 'Blockquote'};
 var _user$project$TagAttr$Pre = {ctor: 'Pre'};
 var _user$project$TagAttr$Hr = {ctor: 'Hr'};
+var _user$project$TagAttr$MarkdownNode = {ctor: 'MarkdownNode'};
 var _user$project$TagAttr$TextNode = {ctor: 'TextNode'};
 var _user$project$TagAttr$A = {ctor: 'A'};
 var _user$project$TagAttr$Div = {ctor: 'Div'};

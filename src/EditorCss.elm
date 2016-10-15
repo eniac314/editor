@@ -7,15 +7,15 @@ import Html.CssHelpers
 import Html.Attributes
 
 type CssClasses
-    = Pane | Debug | ExplTag | TgName |
+    = Pane | DebugClass | ExplTag | TgName |
       Mono | Error | CurrentPos
 
 
 type CssIds
     = Explorer | LeftPane | RightPane |
-      Editor | ExplWindow | Prompt |
+      Container | ExplWindow | Prompt |
       Path | PathStr | Menu | 
-      Console
+      Console | RendererId
       
 
 
@@ -26,7 +26,7 @@ css =
         [ backgroundColor (rgb 155 155 155)
         , display inlineBlock
         ]
-    , (.) Debug
+    , (.) DebugClass
         [ display none]
     , (.) ExplTag 
         [ display inlineBlock
@@ -53,7 +53,7 @@ css =
         , important <| backgroundColor (rgb 70 130 180) 
         ]
 
-    , (#) Editor
+    , (#) Container
         [ backgroundColor (rgb 70 130 180)
         ]
     , (#) Menu
@@ -117,7 +117,13 @@ css =
              ]
            ]
         ]
+    , rendererCss
     ]
+
+rendererCss = 
+    (#) RendererId
+      [ backgroundColor (rgb 255 255 255)
+      ]
 
 mono = ["Consolas","Monaco","Lucida Console","Liberation Mono"
        ,"DejaVu Sans Mono","Bitstream Vera Sans Mono"

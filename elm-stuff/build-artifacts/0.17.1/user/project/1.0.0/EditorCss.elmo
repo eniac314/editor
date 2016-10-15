@@ -5,15 +5,27 @@ var _user$project$EditorCss$Error = {ctor: 'Error'};
 var _user$project$EditorCss$Mono = {ctor: 'Mono'};
 var _user$project$EditorCss$TgName = {ctor: 'TgName'};
 var _user$project$EditorCss$ExplTag = {ctor: 'ExplTag'};
-var _user$project$EditorCss$Debug = {ctor: 'Debug'};
+var _user$project$EditorCss$DebugClass = {ctor: 'DebugClass'};
 var _user$project$EditorCss$Pane = {ctor: 'Pane'};
+var _user$project$EditorCss$RendererId = {ctor: 'RendererId'};
+var _user$project$EditorCss$rendererCss = A2(
+	F2(
+		function (x, y) {
+			return A2(_rtfeldman$elm_css$Css_ops['#'], x, y);
+		}),
+	_user$project$EditorCss$RendererId,
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_rtfeldman$elm_css$Css$backgroundColor(
+			A3(_rtfeldman$elm_css$Css$rgb, 255, 255, 255))
+		]));
 var _user$project$EditorCss$Console = {ctor: 'Console'};
 var _user$project$EditorCss$Menu = {ctor: 'Menu'};
 var _user$project$EditorCss$PathStr = {ctor: 'PathStr'};
 var _user$project$EditorCss$Path = {ctor: 'Path'};
 var _user$project$EditorCss$Prompt = {ctor: 'Prompt'};
 var _user$project$EditorCss$ExplWindow = {ctor: 'ExplWindow'};
-var _user$project$EditorCss$Editor = {ctor: 'Editor'};
+var _user$project$EditorCss$Container = {ctor: 'Container'};
 var _user$project$EditorCss$RightPane = {ctor: 'RightPane'};
 var _user$project$EditorCss$LeftPane = {ctor: 'LeftPane'};
 var _user$project$EditorCss$Explorer = {ctor: 'Explorer'};
@@ -40,7 +52,7 @@ var _user$project$EditorCss$css = function (_p0) {
 				function (x, y) {
 					return A2(_rtfeldman$elm_css$Css_ops['.'], x, y);
 				}),
-			_user$project$EditorCss$Debug,
+			_user$project$EditorCss$DebugClass,
 			_elm_lang$core$Native_List.fromArray(
 				[
 					_rtfeldman$elm_css$Css$display(_rtfeldman$elm_css$Css$none)
@@ -126,7 +138,7 @@ var _user$project$EditorCss$css = function (_p0) {
 				function (x, y) {
 					return A2(_rtfeldman$elm_css$Css_ops['#'], x, y);
 				}),
-			_user$project$EditorCss$Editor,
+			_user$project$EditorCss$Container,
 			_elm_lang$core$Native_List.fromArray(
 				[
 					_rtfeldman$elm_css$Css$backgroundColor(
@@ -291,7 +303,8 @@ var _user$project$EditorCss$css = function (_p0) {
 									_rtfeldman$elm_css$Css$em(0.2))
 								]))
 						]))
-				]))
+				])),
+			_user$project$EditorCss$rendererCss
 		]));
 var _user$project$EditorCss$cssString = _rtfeldman$elm_css$Css$compile(
 	_elm_lang$core$Native_List.fromArray(

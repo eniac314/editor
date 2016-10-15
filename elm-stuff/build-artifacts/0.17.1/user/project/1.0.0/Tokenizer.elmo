@@ -392,8 +392,18 @@ var _user$project$Tokenizer$CharPos = F3(
 		return {ch: a, lnp: b, chp: c};
 	});
 var _user$project$Tokenizer$tagPos = function (s) {
+	var separator = {
+		ch: _elm_lang$core$Native_Utils.chr('\n'),
+		lnp: 0,
+		chp: 0
+	};
 	var ls = _user$project$Tokenizer$addIndexes(
-		_elm_lang$core$String$lines(s));
+		A2(
+			_elm_lang$core$List$map,
+			function (s) {
+				return A2(_elm_lang$core$Basics_ops['++'], s, '\n');
+			},
+			_elm_lang$core$String$lines(s)));
 	var cs = A2(
 		_elm_lang$core$List$map,
 		function (_p22) {

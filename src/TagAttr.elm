@@ -6,20 +6,20 @@ import Dict exposing (fromList, toList ,get)
 import List exposing (map)
 import String exposing (fromList, toList )
 import Char exposing (toUpper)
-
+import Markdown exposing (..)
 
 -------------------------------------------------------------------------------
 type TagName = 
   P | Input | Img | H1 | H2 | H3 | H4 | H5 | H6 |
-  Text String  | Div | A | TextNode | Hr | Pre |
-  Blockquote | Span | Code | Em | Strong |
+  Text String  | Div | A | TextNode | MarkdownNode | Hr 
+  | Pre | Blockquote | Span | Code | Em | Strong |
   I | B | U | Sub | Sup | Br | Ol | Ul | Li |
   Dl | Dt | Dd | Iframe | Canvas  | Svg | Math |
   Form | Textarea | Button | Select | Option |
   Section | Nav | Article | Aside | Header | 
   Footer | Address | Main | Body | Figure | Figcaption |
   Table | Caption | Colgroup | Col | Tbody | Thead | Tfoot |
-  Tr | Td | Th
+  Tr | Td | Th | Markdown String 
 
 tagnames = 
   Dict.fromList
@@ -100,6 +100,7 @@ toTag tn  =
     A     -> a  
     Text s -> (\_ _-> text s)
     TextNode -> (\_ _-> text "should never happen")
+    MarkdownNode -> (\_ _-> text "should never happen")
     Hr -> hr
     Pre -> pre
     Blockquote -> blockquote
@@ -149,6 +150,15 @@ toTag tn  =
     Tr -> tr
     Td -> td
     Th -> th
+    Markdown s -> 
+      (\_ _-> 
+        toHtmlWith 
+          { githubFlavored =
+            Just { tables = True, breaks = False }
+          , sanitize = True
+          , defaultHighlighting = Nothing
+          , smartypants = False
+          } [style [("white-space", "pre")]] s)
 
 
 -------------------------------------------------------------------------------

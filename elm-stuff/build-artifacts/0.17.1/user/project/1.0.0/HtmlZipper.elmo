@@ -76,65 +76,76 @@ var _user$project$HtmlZipper$htmlToString = function (html) {
 	var helper = F2(
 		function (indent, _p4) {
 			var _p5 = _p4;
+			var _p7 = _p5._0.tagname;
 			var atList = attrListToString(_p5._0.attr);
-			var tn = getT(_p5._0.tagname);
+			var tn = getT(_p7);
 			var off = _elm_lang$core$String$length(tn);
 			var buff = spacer(indent + off);
+			var atln = _elm_lang$core$Native_Utils.eq(
+				atList,
+				_elm_lang$core$Native_List.fromArray(
+					[])) ? ' []' : A2(
+				_elm_lang$core$Basics_ops['++'],
+				' [ ',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					A2(
+						_elm_lang$core$String$join,
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'\n',
+							A2(_elm_lang$core$Basics_ops['++'], buff, ' , ')),
+						atList),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'\n',
+						A2(_elm_lang$core$Basics_ops['++'], buff, ' ]'))));
 			var tglist = A2(
 				_elm_lang$core$List$map,
 				helper((indent + off) + 3),
 				_p5._1);
-			if (A2(_elm_lang$core$String$startsWith, 'text ', tn)) {
-				return tn;
-			} else {
-				var tgln = _elm_lang$core$Native_Utils.eq(
-					tglist,
-					_elm_lang$core$Native_List.fromArray(
-						[])) ? ' []' : A2(
+			var tgln = _elm_lang$core$Native_Utils.eq(
+				tglist,
+				_elm_lang$core$Native_List.fromArray(
+					[])) ? ' []' : A2(
+				_elm_lang$core$Basics_ops['++'],
+				' [ ',
+				A2(
 					_elm_lang$core$Basics_ops['++'],
-					' [ ',
+					A2(
+						_elm_lang$core$String$join,
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'\n',
+							A2(_elm_lang$core$Basics_ops['++'], buff, ' , ')),
+						tglist),
 					A2(
 						_elm_lang$core$Basics_ops['++'],
+						'\n',
+						A2(_elm_lang$core$Basics_ops['++'], buff, ' ]'))));
+			var _p6 = _p7;
+			switch (_p6.ctor) {
+				case 'Text':
+					return A2(
+						_elm_lang$core$Basics_ops['++'],
+						'text \"',
+						A2(_elm_lang$core$Basics_ops['++'], _p6._0, '\"'));
+				case 'Markdown':
+					return A2(
+						_elm_lang$core$Basics_ops['++'],
+						'markdown \n\"',
+						A2(_elm_lang$core$Basics_ops['++'], _p6._0, '\"'));
+				default:
+					return A2(
+						_elm_lang$core$Basics_ops['++'],
+						tn,
 						A2(
-							_elm_lang$core$String$join,
+							_elm_lang$core$Basics_ops['++'],
+							atln,
 							A2(
 								_elm_lang$core$Basics_ops['++'],
 								'\n',
-								A2(_elm_lang$core$Basics_ops['++'], buff, ' , ')),
-							tglist),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							'\n',
-							A2(_elm_lang$core$Basics_ops['++'], buff, ' ]'))));
-				var atln = _elm_lang$core$Native_Utils.eq(
-					atList,
-					_elm_lang$core$Native_List.fromArray(
-						[])) ? ' []' : A2(
-					_elm_lang$core$Basics_ops['++'],
-					' [ ',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						A2(
-							_elm_lang$core$String$join,
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								'\n',
-								A2(_elm_lang$core$Basics_ops['++'], buff, ' , ')),
-							atList),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							'\n',
-							A2(_elm_lang$core$Basics_ops['++'], buff, ' ]'))));
-				return A2(
-					_elm_lang$core$Basics_ops['++'],
-					tn,
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						atln,
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							'\n',
-							A2(_elm_lang$core$Basics_ops['++'], buff, tgln))));
+								A2(_elm_lang$core$Basics_ops['++'], buff, tgln))));
 			}
 		});
 	return A2(helper, 0, html);
@@ -142,9 +153,9 @@ var _user$project$HtmlZipper$htmlToString = function (html) {
 var _user$project$HtmlZipper$root = function (path) {
 	return _elm_lang$core$List$head(path);
 };
-var _user$project$HtmlZipper$extractTag = function (_p6) {
-	var _p7 = _p6;
-	return _p7._0._0._0;
+var _user$project$HtmlZipper$extractTag = function (_p8) {
+	var _p9 = _p8;
+	return _p9._0._0._0;
 };
 var _user$project$HtmlZipper$extractPath = function (z) {
 	return function (_) {
@@ -160,9 +171,9 @@ var _user$project$HtmlZipper$Node = F2(
 	function (a, b) {
 		return {ctor: 'Node', _0: a, _1: b};
 	});
-var _user$project$HtmlZipper$extractTree = function (_p8) {
-	var _p9 = _p8;
-	return A2(_user$project$HtmlZipper$Node, _p9._0._0._0, _p9._0._0._1);
+var _user$project$HtmlZipper$extractTree = function (_p10) {
+	var _p11 = _p10;
+	return A2(_user$project$HtmlZipper$Node, _p11._0._0._0, _p11._0._0._1);
 };
 var _user$project$HtmlZipper$Context = F3(
 	function (a, b, c) {
@@ -181,25 +192,25 @@ var _user$project$HtmlZipper$initZip = function (t) {
 		});
 };
 var _user$project$HtmlZipper$updateTag = F2(
-	function (_p11, _p10) {
-		var _p12 = _p11;
-		var _p15 = _p12._0;
-		var _p13 = _p10;
+	function (_p13, _p12) {
+		var _p14 = _p13;
+		var _p17 = _p14._0;
+		var _p15 = _p12;
 		var path = function () {
-			var _p14 = function (_) {
+			var _p16 = function (_) {
 				return _.path;
-			}(_p13._0._0._0);
-			if (_p14.ctor === '[]') {
+			}(_p15._0._0._0);
+			if (_p16.ctor === '[]') {
 				return function (_) {
 					return _.path;
-				}(_p15);
+				}(_p17);
 			} else {
 				return A2(
 					_elm_lang$core$Basics_ops['++'],
 					function (_) {
 						return _.path;
-					}(_p15),
-					_p14._1);
+					}(_p17),
+					_p16._1);
 			}
 		}();
 		return _user$project$HtmlZipper$ZipTree(
@@ -211,25 +222,25 @@ var _user$project$HtmlZipper$updateTag = F2(
 						_user$project$HtmlZipper$Tag,
 						function (_) {
 							return _.tagname;
-						}(_p15),
+						}(_p17),
 						path,
 						function (_) {
 							return _.attr;
-						}(_p15)),
-					_p12._1),
-				_1: _p13._0._1
+						}(_p17)),
+					_p14._1),
+				_1: _p15._0._1
 			});
 	});
 var _user$project$HtmlZipper$updateFocus = F2(
-	function (t, _p16) {
-		var _p17 = _p16;
+	function (t, _p18) {
+		var _p19 = _p18;
 		return _user$project$HtmlZipper$ZipTree(
-			{ctor: '_Tuple2', _0: t, _1: _p17._0._1});
+			{ctor: '_Tuple2', _0: t, _1: _p19._0._1});
 	});
-var _user$project$HtmlZipper$zipUp = function (_p18) {
-	var _p19 = _p18;
-	var _p20 = _p19._0._1;
-	if (_p20.ctor === '[]') {
+var _user$project$HtmlZipper$zipUp = function (_p20) {
+	var _p21 = _p20;
+	var _p22 = _p21._0._1;
+	if (_p22.ctor === '[]') {
 		return _elm_lang$core$Maybe$Nothing;
 	} else {
 		return _elm_lang$core$Maybe$Just(
@@ -238,42 +249,42 @@ var _user$project$HtmlZipper$zipUp = function (_p18) {
 					ctor: '_Tuple2',
 					_0: A2(
 						_user$project$HtmlZipper$Node,
-						_p20._0._0,
+						_p22._0._0,
 						A2(
 							_elm_lang$core$Basics_ops['++'],
-							_p20._0._1,
+							_p22._0._1,
 							A2(
 								_elm_lang$core$Basics_ops['++'],
 								_elm_lang$core$Native_List.fromArray(
-									[_p19._0._0]),
-								_p20._0._2))),
-					_1: _p20._1
+									[_p21._0._0]),
+								_p22._0._2))),
+					_1: _p22._1
 				}));
 	}
 };
 var _user$project$HtmlZipper$zipDown = F2(
-	function (p, _p21) {
-		var _p22 = _p21;
-		var _p23 = _p22._0._0._1;
-		if (_p23.ctor === '[]') {
+	function (p, _p23) {
+		var _p24 = _p23;
+		var _p25 = _p24._0._0._1;
+		if (_p25.ctor === '[]') {
 			return _elm_lang$core$Maybe$Nothing;
 		} else {
-			var _p24 = A2(_user$project$HtmlZipper$break, p, _p23);
-			var l = _p24._0;
-			var r = _p24._1;
-			var _p25 = r;
-			if (_p25.ctor === '[]') {
+			var _p26 = A2(_user$project$HtmlZipper$break, p, _p25);
+			var l = _p26._0;
+			var r = _p26._1;
+			var _p27 = r;
+			if (_p27.ctor === '[]') {
 				return _elm_lang$core$Maybe$Nothing;
 			} else {
 				return _elm_lang$core$Maybe$Just(
 					_user$project$HtmlZipper$ZipTree(
 						{
 							ctor: '_Tuple2',
-							_0: _p25._0,
+							_0: _p27._0,
 							_1: A2(
 								_elm_lang$core$List_ops['::'],
-								A3(_user$project$HtmlZipper$Context, _p22._0._0._0, l, _p25._1),
-								_p22._0._1)
+								A3(_user$project$HtmlZipper$Context, _p24._0._0._0, l, _p27._1),
+								_p24._0._1)
 						}));
 			}
 		}
@@ -282,41 +293,41 @@ var _user$project$HtmlZipper$cd = F3(
 	function (path, f, zt) {
 		cd:
 		while (true) {
-			var _p26 = path;
-			if (_p26.ctor === '[]') {
+			var _p28 = path;
+			if (_p28.ctor === '[]') {
 				return _elm_lang$core$Maybe$Nothing;
 			} else {
-				if (_p26._1.ctor === '[]') {
-					var g = function (_p27) {
-						var _p28 = _p27;
-						var _p29 = f(_p28._0);
-						if (_p29.ctor === 'Nothing') {
+				if (_p28._1.ctor === '[]') {
+					var g = function (_p29) {
+						var _p30 = _p29;
+						var _p31 = f(_p30._0);
+						if (_p31.ctor === 'Nothing') {
 							return false;
 						} else {
-							return _elm_lang$core$Native_Utils.eq(_p29._0, _p26._0);
+							return _elm_lang$core$Native_Utils.eq(_p31._0, _p28._0);
 						}
 					};
 					return A2(_user$project$HtmlZipper$zipDown, g, zt);
 				} else {
-					var g = function (_p30) {
-						var _p31 = _p30;
-						var _p32 = f(_p31._0);
-						if (_p32.ctor === 'Nothing') {
+					var g = function (_p32) {
+						var _p33 = _p32;
+						var _p34 = f(_p33._0);
+						if (_p34.ctor === 'Nothing') {
 							return false;
 						} else {
-							return _elm_lang$core$Native_Utils.eq(_p32._0, _p26._0);
+							return _elm_lang$core$Native_Utils.eq(_p34._0, _p28._0);
 						}
 					};
-					var _p33 = A2(_user$project$HtmlZipper$zipDown, g, zt);
-					if (_p33.ctor === 'Nothing') {
+					var _p35 = A2(_user$project$HtmlZipper$zipDown, g, zt);
+					if (_p35.ctor === 'Nothing') {
 						return _elm_lang$core$Maybe$Nothing;
 					} else {
-						var _v21 = _p26._1,
-							_v22 = f,
-							_v23 = _p33._0;
-						path = _v21;
-						f = _v22;
-						zt = _v23;
+						var _v22 = _p28._1,
+							_v23 = f,
+							_v24 = _p35._0;
+						path = _v22;
+						f = _v23;
+						zt = _v24;
 						continue cd;
 					}
 				}
@@ -326,37 +337,37 @@ var _user$project$HtmlZipper$cd = F3(
 var _user$project$HtmlZipper$cd$ = F2(
 	function (path, zt) {
 		var hasSameName = F2(
-			function (d, _p34) {
-				var _p35 = _p34;
+			function (d, _p36) {
+				var _p37 = _p36;
 				var tn = function (_) {
 					return _.path;
-				}(_p35._0);
-				var _p36 = _user$project$HtmlZipper$root(tn);
-				if (_p36.ctor === 'Nothing') {
+				}(_p37._0);
+				var _p38 = _user$project$HtmlZipper$root(tn);
+				if (_p38.ctor === 'Nothing') {
 					return false;
 				} else {
-					return _elm_lang$core$Native_Utils.eq(_p36._0, d);
+					return _elm_lang$core$Native_Utils.eq(_p38._0, d);
 				}
 			});
 		var helper = F2(
 			function (dest, zt) {
 				helper:
 				while (true) {
-					var _p37 = dest;
-					if (_p37.ctor === '[]') {
+					var _p39 = dest;
+					if (_p39.ctor === '[]') {
 						return _elm_lang$core$Maybe$Just(zt);
 					} else {
-						var _p38 = A2(
+						var _p40 = A2(
 							_user$project$HtmlZipper$zipDown,
-							hasSameName(_p37._0),
+							hasSameName(_p39._0),
 							zt);
-						if (_p38.ctor === 'Nothing') {
+						if (_p40.ctor === 'Nothing') {
 							return _elm_lang$core$Maybe$Nothing;
 						} else {
-							var _v28 = _p37._1,
-								_v29 = _p38._0;
-							dest = _v28;
-							zt = _v29;
+							var _v29 = _p39._1,
+								_v30 = _p40._0;
+							dest = _v29;
+							zt = _v30;
 							continue helper;
 						}
 					}
@@ -366,24 +377,24 @@ var _user$project$HtmlZipper$cd$ = F2(
 			function (cs, ds) {
 				trimPath:
 				while (true) {
-					var _p39 = {ctor: '_Tuple2', _0: cs, _1: ds};
-					if (_p39._0.ctor === '[]') {
-						if (_p39._1.ctor === '[]') {
+					var _p41 = {ctor: '_Tuple2', _0: cs, _1: ds};
+					if (_p41._0.ctor === '[]') {
+						if (_p41._1.ctor === '[]') {
 							return _elm_lang$core$Native_List.fromArray(
 								[]);
 						} else {
-							return _p39._1;
+							return _p41._1;
 						}
 					} else {
-						if (_p39._1.ctor === '[]') {
+						if (_p41._1.ctor === '[]') {
 							return _elm_lang$core$Native_List.fromArray(
 								[]);
 						} else {
-							if (_elm_lang$core$Native_Utils.eq(_p39._0._0, _p39._1._0)) {
-								var _v31 = _p39._0._1,
-									_v32 = _p39._1._1;
-								cs = _v31;
-								ds = _v32;
+							if (_elm_lang$core$Native_Utils.eq(_p41._0._0, _p41._1._0)) {
+								var _v32 = _p41._0._1,
+									_v33 = _p41._1._1;
+								cs = _v32;
+								ds = _v33;
 								continue trimPath;
 							} else {
 								return _elm_lang$core$Native_List.fromArray(
@@ -399,83 +410,83 @@ var _user$project$HtmlZipper$cd$ = F2(
 		var directions = A2(trimPath, current, dest);
 		return A2(helper, directions, zt);
 	});
-var _user$project$HtmlZipper$zipDownFirst = function (_p40) {
-	var _p41 = _p40;
-	var _p42 = _p41._0._0._1;
-	if (_p42.ctor === '[]') {
+var _user$project$HtmlZipper$zipDownFirst = function (_p42) {
+	var _p43 = _p42;
+	var _p44 = _p43._0._0._1;
+	if (_p44.ctor === '[]') {
 		return _elm_lang$core$Maybe$Nothing;
 	} else {
 		return _elm_lang$core$Maybe$Just(
 			_user$project$HtmlZipper$ZipTree(
 				{
 					ctor: '_Tuple2',
-					_0: _p42._0,
+					_0: _p44._0,
 					_1: A2(
 						_elm_lang$core$List_ops['::'],
 						A3(
 							_user$project$HtmlZipper$Context,
-							_p41._0._0._0,
+							_p43._0._0._0,
 							_elm_lang$core$Native_List.fromArray(
 								[]),
-							_p42._1),
-						_p41._0._1)
+							_p44._1),
+						_p43._0._1)
 				}));
 	}
 };
-var _user$project$HtmlZipper$zipRight = function (_p43) {
-	var _p44 = _p43;
-	var _p45 = _p44._0._1;
-	if (_p45.ctor === '[]') {
+var _user$project$HtmlZipper$zipRight = function (_p45) {
+	var _p46 = _p45;
+	var _p47 = _p46._0._1;
+	if (_p47.ctor === '[]') {
 		return _elm_lang$core$Maybe$Nothing;
 	} else {
-		var _p46 = _p45._0._2;
-		if (_p46.ctor === '[]') {
+		var _p48 = _p47._0._2;
+		if (_p48.ctor === '[]') {
 			return _elm_lang$core$Maybe$Nothing;
 		} else {
 			return _elm_lang$core$Maybe$Just(
 				_user$project$HtmlZipper$ZipTree(
 					{
 						ctor: '_Tuple2',
-						_0: _p46._0,
+						_0: _p48._0,
 						_1: A2(
 							_elm_lang$core$List_ops['::'],
 							A3(
 								_user$project$HtmlZipper$Context,
-								_p45._0._0,
+								_p47._0._0,
 								A2(
 									_elm_lang$core$Basics_ops['++'],
-									_p45._0._1,
+									_p47._0._1,
 									_elm_lang$core$Native_List.fromArray(
-										[_p44._0._0])),
-								_p46._1),
-							_p45._1)
+										[_p46._0._0])),
+								_p48._1),
+							_p47._1)
 					}));
 		}
 	}
 };
-var _user$project$HtmlZipper$zipLeft = function (_p47) {
-	var _p48 = _p47;
-	var _p49 = _p48._0._1;
-	if (_p49.ctor === '[]') {
+var _user$project$HtmlZipper$zipLeft = function (_p49) {
+	var _p50 = _p49;
+	var _p51 = _p50._0._1;
+	if (_p51.ctor === '[]') {
 		return _elm_lang$core$Maybe$Nothing;
 	} else {
-		var _p50 = _elm_lang$core$List$reverse(_p49._0._1);
-		if (_p50.ctor === '[]') {
+		var _p52 = _elm_lang$core$List$reverse(_p51._0._1);
+		if (_p52.ctor === '[]') {
 			return _elm_lang$core$Maybe$Nothing;
 		} else {
 			return _elm_lang$core$Maybe$Just(
 				_user$project$HtmlZipper$ZipTree(
 					{
 						ctor: '_Tuple2',
-						_0: _p50._0,
+						_0: _p52._0,
 						_1: A2(
 							_elm_lang$core$List_ops['::'],
 							A3(
 								_user$project$HtmlZipper$Context,
-								_p49._0._0,
-								_elm_lang$core$List$reverse(_p50._1),
-								A2(_elm_lang$core$List_ops['::'], _p48._0._0, _p49._0._2)),
-							_p49._1)
+								_p51._0._0,
+								_elm_lang$core$List$reverse(_p52._1),
+								A2(_elm_lang$core$List_ops['::'], _p50._0._0, _p51._0._2)),
+							_p51._1)
 					}));
 		}
 	}

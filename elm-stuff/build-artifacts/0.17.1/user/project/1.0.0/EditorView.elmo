@@ -1,0 +1,472 @@
+var _user$project$EditorView$_p0 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace('editor');
+var _user$project$EditorView$id = _user$project$EditorView$_p0.id;
+var _user$project$EditorView$class = _user$project$EditorView$_p0.$class;
+var _user$project$EditorView$classList = _user$project$EditorView$_p0.classList;
+var _user$project$EditorView$explorer = function (model) {
+	var explWindow = function (tags) {
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_user$project$EditorView$id(_user$project$EditorCss$ExplWindow)
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[tags]));
+	};
+	var sizeExplorer = function () {
+		var _p1 = function (_) {
+			return _.winSize;
+		}(model);
+		if (_p1.ctor === 'Nothing') {
+			return {ctor: '_Tuple2', _0: 560, _1: 300};
+		} else {
+			return {ctor: '_Tuple2', _0: (_p1._0.width / 2) | 0, _1: 300};
+		}
+	}();
+	var dbug = function (_) {
+		return _.debug;
+	}(model);
+	var render = function (_p2) {
+		var _p3 = _p2;
+		var colors = _elm_lang$core$List$reverse(
+			_elm_lang$core$Native_List.fromArray(
+				['ivory', 'khaki', 'lavender', 'lavenderblush', 'lightcoral', 'lightgreen', 'lemonchiffon', 'thistle', 'mediumspringgreen', 'lightskyblue']));
+		var colorPicker = function (xs) {
+			colorPicker:
+			while (true) {
+				var _p4 = xs;
+				if (_p4.ctor === '[]') {
+					var _v3 = colors;
+					xs = _v3;
+					continue colorPicker;
+				} else {
+					return {ctor: '_Tuple2', _0: _p4._0, _1: _p4._1};
+				}
+			}
+		};
+		var spacer = function (indent) {
+			return _elm_lang$core$Native_Utils.eq(indent, 0) ? '' : A2(
+				_elm_lang$core$Basics_ops['++'],
+				' ',
+				spacer(indent - 1));
+		};
+		var render$ = F3(
+			function (n, cs, _p5) {
+				var _p6 = _p5;
+				var _p9 = _p6._0;
+				var _p7 = colorPicker(cs);
+				var c = _p7._0;
+				var cs$ = _p7._1;
+				var pth = function (_) {
+					return _.path;
+				}(_p9);
+				var tn = function () {
+					var _p8 = function (_) {
+						return _.tagname;
+					}(_p9);
+					switch (_p8.ctor) {
+						case 'Text':
+							return 'Text';
+						case 'Markdown':
+							return 'Markdown';
+						default:
+							return _elm_lang$core$Basics$toString(_p8);
+					}
+				}();
+				return A2(
+					_elm_lang$html$Html$p,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_user$project$EditorView$class(
+							_elm_lang$core$Native_List.fromArray(
+								[])),
+							_elm_lang$html$Html_Attributes$style(
+							_elm_lang$core$Native_List.fromArray(
+								[
+									{ctor: '_Tuple2', _0: 'margin', _1: '0.1em'}
+								])),
+							_elm_lang$html$Html_Events$onClick(
+							_user$project$Types$GoTo(pth))
+						]),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text(
+								spacer(n)),
+								A2(
+								_elm_lang$html$Html$span,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_user$project$EditorView$class(
+										_elm_lang$core$Native_List.fromArray(
+											[_user$project$EditorCss$ExplTag])),
+										_elm_lang$html$Html_Attributes$style(
+										_elm_lang$core$Native_List.fromArray(
+											[
+												{ctor: '_Tuple2', _0: 'background-color', _1: c}
+											]))
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(tn)
+									]))
+							]),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Native_List.fromArray(
+								[
+									A2(
+									_elm_lang$html$Html$span,
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_user$project$EditorView$classList(
+											_elm_lang$core$Native_List.fromArray(
+												[
+													{ctor: '_Tuple2', _0: 'DebugClass', _1: dbug}
+												]))
+										]),
+									_elm_lang$core$Native_List.fromArray(
+										[
+											_elm_lang$html$Html$text(
+											_elm_lang$core$Basics$toString(pth))
+										]))
+								]),
+							A2(
+								_elm_lang$core$List$map,
+								A2(render$, n + 3, cs$),
+								_p6._1))));
+			});
+		return A3(render$, 0, colors, _p3._0._0);
+	};
+	var page = function (_) {
+		return _.page;
+	}(model);
+	var tags = function () {
+		var _p10 = page;
+		if (_p10.ctor === 'Nothing') {
+			return A2(
+				_elm_lang$html$Html$span,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[]));
+		} else {
+			return render(_p10._0);
+		}
+	}();
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$EditorView$id(_user$project$EditorCss$Explorer),
+				_elm_lang$html$Html_Attributes$style(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						{ctor: '_Tuple2', _0: 'white-space', _1: 'pre'}
+					]))
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				explWindow(tags),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$Types$Up),
+						_elm_lang$html$Html_Attributes$type$('reset')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Left')
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$Types$Down),
+						_elm_lang$html$Html_Attributes$type$('reset')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Right')
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$Types$Left),
+						_elm_lang$html$Html_Attributes$type$('reset')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Up')
+					])),
+				A2(
+				_elm_lang$html$Html$button,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Events$onClick(_user$project$Types$Right),
+						_elm_lang$html$Html_Attributes$type$('reset')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Down')
+					]))
+			]));
+};
+var _user$project$EditorView$renderPath = function (path) {
+	var pathStr = A2(
+		_elm_lang$html$Html$span,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$EditorView$class(
+				_elm_lang$core$Native_List.fromArray(
+					[_user$project$EditorCss$Mono])),
+				_user$project$EditorView$id(_user$project$EditorCss$PathStr)
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html$text(
+				A2(
+					_elm_lang$core$String$join,
+					'/',
+					_elm_lang$core$List$reverse(
+						A2(
+							_elm_lang$core$List$map,
+							function (_p11) {
+								var _p12 = _p11;
+								return _elm_lang$core$Basics$toString(_p12._0);
+							},
+							path))))
+			]));
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$EditorView$id(_user$project$EditorCss$Path)
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Current path: '),
+						pathStr
+					]))
+			]));
+};
+var _user$project$EditorView$renderConsole = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$EditorView$id(_user$project$EditorCss$Console)
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$EditorView$class(
+						_elm_lang$core$Native_List.fromArray(
+							[_user$project$EditorCss$Mono]))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						function () {
+						var _p13 = function (_) {
+							return _.parsedData;
+						}(model);
+						if (_p13.ctor === 'Err') {
+							return A2(
+								_elm_lang$html$Html$span,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_user$project$EditorView$class(
+										_elm_lang$core$Native_List.fromArray(
+											[_user$project$EditorCss$Error]))
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text(_p13._0)
+									]));
+						} else {
+							return _elm_lang$html$Html$text('parsing complete');
+						}
+					}()
+					]))
+			]));
+};
+var _user$project$EditorView$renderEditor = function (model) {
+	return _elm_lang$core$Native_List.fromArray(
+		[
+			_user$project$EditorView$renderPath(
+			function (_) {
+				return _.currPath;
+			}(model)),
+			A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_user$project$EditorView$class(
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$EditorCss$Pane])),
+					_user$project$EditorView$id(_user$project$EditorCss$LeftPane)
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					A2(
+					_elm_lang$html$Html$form,
+					_elm_lang$core$Native_List.fromArray(
+						[]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							A2(
+							_elm_lang$html$Html$textarea,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Events$onInput(_user$project$Types$Store),
+									_elm_lang$html$Html_Attributes$rows(15),
+									_elm_lang$html$Html_Attributes$cols(45),
+									_user$project$EditorView$id(_user$project$EditorCss$Prompt)
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									function () {
+									var _p14 = function (_) {
+										return _.procString;
+									}(model);
+									if (_p14.ctor === 'Nothing') {
+										return _elm_lang$html$Html$text(
+											function (_) {
+												return _.rawString;
+											}(model));
+									} else {
+										return _elm_lang$html$Html$text(_p14._0);
+									}
+								}()
+								])),
+							A2(
+							_elm_lang$html$Html$br,
+							_elm_lang$core$Native_List.fromArray(
+								[]),
+							_elm_lang$core$Native_List.fromArray(
+								[])),
+							A2(
+							_elm_lang$html$Html$button,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Events$onClick(_user$project$Types$Parse),
+									_elm_lang$html$Html_Attributes$type$('reset')
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('Parse')
+								])),
+							A2(
+							_elm_lang$html$Html$button,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Events$onClick(_user$project$Types$Render),
+									_elm_lang$html$Html_Attributes$type$('button')
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('Render')
+								])),
+							A2(
+							_elm_lang$html$Html$button,
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html_Events$onClick(_user$project$Types$Debug),
+									_elm_lang$html$Html_Attributes$type$('button')
+								]),
+							_elm_lang$core$Native_List.fromArray(
+								[
+									_elm_lang$html$Html$text('Debug')
+								]))
+						]))
+				])),
+			A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_user$project$EditorView$id(_user$project$EditorCss$RightPane),
+					_user$project$EditorView$class(
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$EditorCss$Pane]))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_user$project$EditorView$explorer(model)
+				])),
+			_user$project$EditorView$renderConsole(model),
+			A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_user$project$EditorView$classList(
+					_elm_lang$core$Native_List.fromArray(
+						[
+							{
+							ctor: '_Tuple2',
+							_0: 'DebugClass',
+							_1: function (_) {
+								return _.debug;
+							}(model)
+						}
+						]))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text(
+					_elm_lang$core$Basics$toString(
+						function (_) {
+							return _.nblines;
+						}(model))),
+					A3(
+					_evancz$elm_markdown$Markdown$toHtmlWith,
+					{
+						githubFlavored: _elm_lang$core$Maybe$Just(
+							{tables: true, breaks: false}),
+						sanitize: true,
+						defaultHighlighting: _elm_lang$core$Maybe$Nothing,
+						smartypants: false
+					},
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$style(
+							_elm_lang$core$Native_List.fromArray(
+								[
+									{ctor: '_Tuple2', _0: 'white-space', _1: 'pre'}
+								]))
+						]),
+					function (_) {
+						return _.rawString;
+					}(model)),
+					A2(
+					_elm_lang$html$Html$div,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html_Attributes$style(
+							_elm_lang$core$Native_List.fromArray(
+								[
+									{ctor: '_Tuple2', _0: 'white-space', _1: 'pre'}
+								]))
+						]),
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$html$Html$text(
+							_elm_lang$core$Basics$toString(
+								function (_) {
+									return _.parsedData;
+								}(model)))
+						]))
+				]))
+		]);
+};

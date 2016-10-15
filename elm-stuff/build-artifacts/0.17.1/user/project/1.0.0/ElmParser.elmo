@@ -219,12 +219,54 @@ var _user$project$ElmParser$parseText = F2(
 					});
 			});
 	});
+var _user$project$ElmParser$parseMarkdown = F2(
+	function (path, n) {
+		return A2(
+			_user$project$BetterParser_ops['>>='],
+			A2(
+				_user$project$BetterParser_ops['>>*'],
+				A2(
+					_user$project$BetterParser$sat,
+					_user$project$ElmParser$consumerLS,
+					function (t) {
+						return _elm_lang$core$Native_Utils.eq(
+							function (_) {
+								return _.val;
+							}(t),
+							'markdown');
+					}),
+				_user$project$ElmParser$parseStringLiteral),
+			function (s) {
+				return _user$project$BetterParser$return(
+					{
+						ctor: '_Tuple2',
+						_0: A2(
+							_user$project$HtmlZipper$Node,
+							A3(
+								_user$project$HtmlZipper$Tag,
+								_user$project$TagAttr$Markdown(s),
+								A2(
+									_elm_lang$core$List_ops['::'],
+									{ctor: '_Tuple2', _0: _user$project$TagAttr$MarkdownNode, _1: n},
+									path),
+								_elm_lang$core$Native_List.fromArray(
+									[])),
+							_elm_lang$core$Native_List.fromArray(
+								[])),
+						_1: n
+					});
+			});
+	});
 var _user$project$ElmParser$parseTag = F2(
 	function (path, n) {
 		return A2(
 			_user$project$BetterParser_ops['+++'],
-			_user$project$ElmParser$coma(
-				A2(_user$project$ElmParser$parseText, path, n)),
+			A2(
+				_user$project$BetterParser_ops['+++'],
+				_user$project$ElmParser$coma(
+					A2(_user$project$ElmParser$parseText, path, n)),
+				_user$project$ElmParser$coma(
+					A2(_user$project$ElmParser$parseMarkdown, path, n))),
 			A2(
 				_user$project$BetterParser_ops['>>='],
 				_user$project$ElmParser$coma(_user$project$ElmParser$parseTagName),
