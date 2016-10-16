@@ -37,20 +37,10 @@ interpret input n =
                Err s  -> Err ("Parser error: " ++ s) 
                Ok (res,_) -> Ok res
 
-test = interpret testinput (fromInt 0)
 
 zero =  fromInt 0
 
-testinput = 
- """ div [ class "mainDiv" ]
-          [ p [ style [ ( "color" , "red" ) ] ] [ text "this is a test" 
-                  , p [ ] [ ]
-                  ]
-          , p [ ] [ h2 [ id "very important" , style [ ( "color" , "blue" ) ] ] [ text "big title" ] ]
-          ]
-
-  """
-
+consumerLS : List Token -> Result String (Token, List Token)
 consumerLS xs =
   case xs of
     [] -> Err "no more tokens"

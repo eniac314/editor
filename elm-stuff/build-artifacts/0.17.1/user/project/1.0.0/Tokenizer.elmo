@@ -112,6 +112,8 @@ var _user$project$Tokenizer$isTokenChar = function (c) {
 		c,
 		_elm_lang$core$Native_Utils.chr(';')) || (_elm_lang$core$Native_Utils.eq(
 		c,
+		_elm_lang$core$Native_Utils.chr(':')) || (_elm_lang$core$Native_Utils.eq(
+		c,
 		_elm_lang$core$Native_Utils.chr(',')) || (_elm_lang$core$Native_Utils.eq(
 		c,
 		_elm_lang$core$Native_Utils.chr('.')) || (_elm_lang$core$Native_Utils.eq(
@@ -130,7 +132,7 @@ var _user$project$Tokenizer$isTokenChar = function (c) {
 		c,
 		_elm_lang$core$Native_Utils.chr('=')) || _elm_lang$core$Native_Utils.eq(
 		c,
-		_elm_lang$core$Native_Utils.chr('~')))))))))))))))))));
+		_elm_lang$core$Native_Utils.chr('~'))))))))))))))))))));
 };
 var _user$project$Tokenizer$isSpace = function (c) {
 	return _elm_lang$core$Native_Utils.eq(
@@ -171,6 +173,9 @@ var _user$project$Tokenizer$tokError = function (t) {
 									return _.ln;
 								}(t)),
 							' }'))))));
+};
+var _user$project$Tokenizer$getVal = function (_) {
+	return _.val;
 };
 var _user$project$Tokenizer$Token = F3(
 	function (a, b, c) {
@@ -220,7 +225,7 @@ var _user$project$Tokenizer$tokenString = function (xs) {
 		}
 	}
 };
-var _user$project$Tokenizer$getTokens$ = function (xs) {
+var _user$project$Tokenizer$getTokens = function (xs) {
 	var tString = function (xs) {
 		return _elm_lang$core$String$fromList(
 			A2(
@@ -371,7 +376,7 @@ var _user$project$Tokenizer$tokenizer$ = function (cs) {
 					cs = _v14;
 					continue tokenizer$;
 				} else {
-					var _p18 = _user$project$Tokenizer$getTokens$(
+					var _p18 = _user$project$Tokenizer$getTokens(
 						A2(_elm_lang$core$List_ops['::'], _p20, _p21));
 					var ts = _p18._0;
 					var rest = _p18._1;
@@ -392,11 +397,6 @@ var _user$project$Tokenizer$CharPos = F3(
 		return {ch: a, lnp: b, chp: c};
 	});
 var _user$project$Tokenizer$tagPos = function (s) {
-	var separator = {
-		ch: _elm_lang$core$Native_Utils.chr('\n'),
-		lnp: 0,
-		chp: 0
-	};
 	var ls = _user$project$Tokenizer$addIndexes(
 		A2(
 			_elm_lang$core$List$map,

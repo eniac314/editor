@@ -19,11 +19,26 @@ var _user$project$Editor$setHeight = function (winSize) {
 				]));
 	}
 };
+var _user$project$Editor$keyToMsg = function (k) {
+	var keys = _elm_lang$core$Dict$fromList(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				{ctor: '_Tuple2', _0: 112, _1: _user$project$Types$Parse},
+				{ctor: '_Tuple2', _0: 113, _1: _user$project$Types$SwapEditorRender}
+			]));
+	var _p1 = A2(_elm_lang$core$Dict$get, k, keys);
+	if (_p1.ctor === 'Nothing') {
+		return _user$project$Types$Failure;
+	} else {
+		return _p1._0;
+	}
+};
 var _user$project$Editor$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$window$Window$resizes(_user$project$Types$WinSize)
+				_elm_lang$window$Window$resizes(_user$project$Types$WinSize),
+				_elm_lang$keyboard$Keyboard$presses(_user$project$Editor$keyToMsg)
 			]));
 };
 var _user$project$Editor$renderFileIO = function (model) {
@@ -37,42 +52,42 @@ var _user$project$Editor$renderMainMenu = function (model) {
 var _user$project$Editor$move = F2(
 	function (f, model) {
 		var newPage = function () {
-			var _p1 = function (_) {
+			var _p2 = function (_) {
 				return _.page;
 			}(model);
-			if (_p1.ctor === 'Nothing') {
+			if (_p2.ctor === 'Nothing') {
 				return _elm_lang$core$Maybe$Nothing;
 			} else {
-				var _p3 = _p1._0;
-				var _p2 = f(_p3);
-				if (_p2.ctor === 'Nothing') {
-					return _elm_lang$core$Maybe$Just(_p3);
+				var _p4 = _p2._0;
+				var _p3 = f(_p4);
+				if (_p3.ctor === 'Nothing') {
+					return _elm_lang$core$Maybe$Just(_p4);
 				} else {
-					return _elm_lang$core$Maybe$Just(_p2._0);
+					return _elm_lang$core$Maybe$Just(_p3._0);
 				}
 			}
 		}();
 		var newRstring = function () {
-			var _p4 = newPage;
-			if (_p4.ctor === 'Nothing') {
+			var _p5 = newPage;
+			if (_p5.ctor === 'Nothing') {
 				return function (_) {
 					return _.rawString;
 				}(model);
 			} else {
 				return _user$project$HtmlZipper$htmlToString(
-					_user$project$HtmlZipper$extractTree(_p4._0));
+					_user$project$HtmlZipper$extractTree(_p5._0));
 			}
 		}();
 		var newProcString = _elm_lang$core$Maybe$Just(newRstring);
 		var newParsedData = function () {
-			var _p5 = newPage;
-			if (_p5.ctor === 'Nothing') {
+			var _p6 = newPage;
+			if (_p6.ctor === 'Nothing') {
 				return _elm_lang$core$Result$Err('wrong Html tree');
 			} else {
 				return _elm_lang$core$Result$Ok(
 					{
 						ctor: '_Tuple2',
-						_0: _user$project$HtmlZipper$extractTree(_p5._0),
+						_0: _user$project$HtmlZipper$extractTree(_p6._0),
 						_1: function (_) {
 							return _.nextId;
 						}(model)
@@ -81,13 +96,13 @@ var _user$project$Editor$move = F2(
 		}();
 		var newRender = _user$project$ElmParser$renderer(newParsedData);
 		var newPath = function () {
-			var _p6 = newPage;
-			if (_p6.ctor === 'Nothing') {
+			var _p7 = newPage;
+			if (_p7.ctor === 'Nothing') {
 				return function (_) {
 					return _.currPath;
 				}(model);
 			} else {
-				return _user$project$HtmlZipper$extractPath(_p6._0);
+				return _user$project$HtmlZipper$extractPath(_p7._0);
 			}
 		}();
 		return _elm_lang$core$Native_Utils.update(
@@ -104,76 +119,107 @@ var _user$project$Editor$parse = function (model) {
 			return _.nextId;
 		}(model));
 	var prString = function () {
-		var _p7 = pdata;
-		if (_p7.ctor === 'Err') {
+		var _p8 = pdata;
+		if (_p8.ctor === 'Err') {
 			return _elm_lang$core$Maybe$Nothing;
 		} else {
 			return _elm_lang$core$Maybe$Just(
-				_user$project$HtmlZipper$htmlToString(_p7._0._0));
+				_user$project$HtmlZipper$htmlToString(_p8._0._0));
 		}
 	}();
 	var newPage = function () {
-		var _p8 = pdata;
-		if (_p8.ctor === 'Err') {
+		var _p9 = pdata;
+		if (_p9.ctor === 'Err') {
 			return function (_) {
 				return _.page;
 			}(model);
 		} else {
-			var _p10 = _p8._0._0;
-			var _p9 = function (_) {
+			var _p11 = _p9._0._0;
+			var _p10 = function (_) {
 				return _.page;
 			}(model);
-			if (_p9.ctor === 'Nothing') {
+			if (_p10.ctor === 'Nothing') {
 				return _elm_lang$core$Maybe$Just(
-					_user$project$HtmlZipper$initZip(_p10));
+					_user$project$HtmlZipper$initZip(_p11));
 			} else {
 				return _elm_lang$core$Maybe$Just(
-					A2(_user$project$HtmlZipper$updateTag, _p10, _p9._0));
+					A2(_user$project$HtmlZipper$updateTag, _p11, _p10._0));
 			}
 		}
 	}();
 	var currPath = function () {
-		var _p11 = newPage;
-		if (_p11.ctor === 'Nothing') {
+		var _p12 = newPage;
+		if (_p12.ctor === 'Nothing') {
 			return function (_) {
 				return _.currPath;
 			}(model);
 		} else {
-			return _user$project$HtmlZipper$extractPath(_p11._0);
+			return _user$project$HtmlZipper$extractPath(_p12._0);
 		}
 	}();
 	var nextId = function () {
-		var _p12 = pdata;
-		if (_p12.ctor === 'Err') {
+		var _p13 = pdata;
+		if (_p13.ctor === 'Err') {
 			return function (_) {
 				return _.nextId;
 			}(model);
 		} else {
 			return A2(
 				_javcasas$elm_integer$Data_Integer$add,
-				_p12._0._1,
+				_p13._0._1,
 				_javcasas$elm_integer$Data_Integer$fromInt(1));
 		}
 	}();
 	return _elm_lang$core$Native_Utils.update(
 		model,
-		{procString: prString, parsedData: pdata, page: newPage, nextId: nextId, currPath: currPath});
+		{
+			procString: prString,
+			parsedData: pdata,
+			page: newPage,
+			nextId: nextId,
+			currPath: currPath,
+			toRender: _user$project$ElmParser$renderer(pdata)
+		});
+};
+var _user$project$Editor$swapEditorRender = function (model) {
+	var _p14 = function (_) {
+		return _.position;
+	}(model);
+	switch (_p14.ctor) {
+		case 'Editor':
+			return A3(
+				_elm_lang$core$Task$perform,
+				function (_p15) {
+					return _user$project$Types$Failure;
+				},
+				function (url) {
+					return _user$project$Types$ChangeUrl(url);
+				},
+				_elm_lang$core$Task$succeed('#renderer'));
+		case 'Renderer':
+			return A3(
+				_elm_lang$core$Task$perform,
+				function (_p16) {
+					return _user$project$Types$Failure;
+				},
+				function (url) {
+					return _user$project$Types$ChangeUrl(url);
+				},
+				_elm_lang$core$Task$succeed('#editor'));
+		default:
+			return _elm_lang$core$Platform_Cmd$none;
+	}
 };
 var _user$project$Editor$update = F2(
 	function (msg, model) {
-		var _p13 = msg;
-		switch (_p13.ctor) {
+		var _p17 = msg;
+		switch (_p17.ctor) {
 			case 'Store':
-				var _p14 = _p13._0;
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{
-							rawString: _p14,
-							nblines: _elm_lang$core$List$length(
-								_elm_lang$core$String$lines(_p14))
-						}),
+						{rawString: _p17._0}),
 					_elm_lang$core$Native_List.fromArray(
 						[]));
 			case 'Parse':
@@ -211,7 +257,7 @@ var _user$project$Editor$update = F2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					A2(
 						_user$project$Editor$move,
-						_user$project$HtmlZipper$cd$(_p13._0),
+						_user$project$HtmlZipper$cd$(_p17._0),
 						model),
 					_elm_lang$core$Native_List.fromArray(
 						[]));
@@ -228,19 +274,6 @@ var _user$project$Editor$update = F2(
 						}),
 					_elm_lang$core$Native_List.fromArray(
 						[]));
-			case 'Render':
-				return A2(
-					_elm_lang$core$Platform_Cmd_ops['!'],
-					_elm_lang$core$Native_Utils.update(
-						model,
-						{
-							toRender: _user$project$ElmParser$renderer(
-								function (_) {
-									return _.parsedData;
-								}(model))
-						}),
-					_elm_lang$core$Native_List.fromArray(
-						[]));
 			case 'Failure':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
@@ -253,17 +286,25 @@ var _user$project$Editor$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							winSize: _elm_lang$core$Maybe$Just(_p13._0)
+							winSize: _elm_lang$core$Maybe$Just(_p17._0)
 						}),
 					_elm_lang$core$Native_List.fromArray(
 						[]));
+			case 'ChangeUrl':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					_elm_lang$core$Native_List.fromArray(
+						[
+							_elm_lang$navigation$Navigation$newUrl(_p17._0)
+						]));
 			default:
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					_elm_lang$core$Native_List.fromArray(
 						[
-							_elm_lang$navigation$Navigation$newUrl(_p13._0)
+							_user$project$Editor$swapEditorRender(model)
 						]));
 		}
 	});
@@ -273,46 +314,46 @@ var _user$project$Editor$init = function (initInput) {
 		initInput,
 		_javcasas$elm_integer$Data_Integer$fromInt(0));
 	var initPage = function () {
-		var _p15 = pdata;
-		if (_p15.ctor === 'Err') {
+		var _p18 = pdata;
+		if (_p18.ctor === 'Err') {
 			return _elm_lang$core$Maybe$Nothing;
 		} else {
 			return _elm_lang$core$Maybe$Just(
-				_user$project$HtmlZipper$initZip(_p15._0._0));
+				_user$project$HtmlZipper$initZip(_p18._0._0));
 		}
 	}();
 	var initPath = function () {
-		var _p16 = initPage;
-		if (_p16.ctor === 'Nothing') {
+		var _p19 = initPage;
+		if (_p19.ctor === 'Nothing') {
 			return _elm_lang$core$Native_List.fromArray(
 				[]);
 		} else {
-			return _user$project$HtmlZipper$extractPath(_p16._0);
+			return _user$project$HtmlZipper$extractPath(_p19._0);
 		}
 	}();
 	var nextId = function () {
-		var _p17 = pdata;
-		if (_p17.ctor === 'Err') {
+		var _p20 = pdata;
+		if (_p20.ctor === 'Err') {
 			return _javcasas$elm_integer$Data_Integer$fromInt(0);
 		} else {
 			return A2(
 				_javcasas$elm_integer$Data_Integer$add,
-				_p17._0._1,
+				_p20._0._1,
 				_javcasas$elm_integer$Data_Integer$fromInt(1));
 		}
 	}();
 	return _user$project$Types$Model(_user$project$Types$Editor)(initInput)(_elm_lang$core$Maybe$Nothing)(pdata)(initPath)(initPage)(
-		_user$project$ElmParser$renderer(pdata))(nextId)(true)(_elm_lang$core$Maybe$Nothing)(0);
+		_user$project$ElmParser$renderer(pdata))(nextId)(true)(_elm_lang$core$Maybe$Nothing);
 };
 var _user$project$Editor$urlUpdate = F2(
 	function (res, model) {
-		var _p18 = res;
-		if (_p18.ctor === 'Err') {
+		var _p21 = res;
+		if (_p21.ctor === 'Err') {
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
 					model,
-					{rawString: _p18._0}),
+					{rawString: _p21._0}),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
@@ -320,7 +361,7 @@ var _user$project$Editor$urlUpdate = F2(
 				_elm_lang$core$Platform_Cmd_ops['!'],
 				_elm_lang$core$Native_Utils.update(
 					model,
-					{position: _p18._0}),
+					{position: _p21._0}),
 				_elm_lang$core$Native_List.fromArray(
 					[]));
 		}
@@ -335,25 +376,25 @@ var _user$project$Editor$urlParser = _elm_lang$navigation$Navigation$makeParser(
 					{ctor: '_Tuple2', _0: '#fileIO', _1: _user$project$Types$FileIO},
 					{ctor: '_Tuple2', _0: '#renderer', _1: _user$project$Types$Renderer}
 				]));
-		var _p19 = A2(
+		var _p22 = A2(
 			_elm_lang$core$Dict$get,
 			function (_) {
 				return _.hash;
 			}(s),
 			validUrlMap);
-		if (_p19.ctor === 'Nothing') {
+		if (_p22.ctor === 'Nothing') {
 			return _elm_lang$core$Result$Err(
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					'invalid url: ',
 					_elm_lang$core$Basics$toString(s)));
 		} else {
-			return _elm_lang$core$Result$Ok(_p19._0);
+			return _elm_lang$core$Result$Ok(_p22._0);
 		}
 	});
 var _user$project$Editor$initWinSize = A3(
 	_elm_lang$core$Task$perform,
-	function (_p20) {
+	function (_p23) {
 		return _user$project$Types$Failure;
 	},
 	function (s) {
@@ -361,12 +402,12 @@ var _user$project$Editor$initWinSize = A3(
 	},
 	_elm_lang$window$Window$size);
 var _user$project$Editor$init$ = function (result) {
-	var _p21 = A2(
+	var _p24 = A2(
 		_user$project$Editor$urlUpdate,
 		result,
 		_user$project$Editor$init(_user$project$Pad$testinput));
-	var m = _p21._0;
-	var cmd = _p21._1;
+	var m = _p24._0;
+	var cmd = _p24._1;
 	return {
 		ctor: '_Tuple2',
 		_0: m,
@@ -379,10 +420,10 @@ var _user$project$Editor$init$ = function (result) {
 				]))
 	};
 };
-var _user$project$Editor$_p22 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace('editor');
-var _user$project$Editor$id = _user$project$Editor$_p22.id;
-var _user$project$Editor$class = _user$project$Editor$_p22.$class;
-var _user$project$Editor$classList = _user$project$Editor$_p22.classList;
+var _user$project$Editor$_p25 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace('editor');
+var _user$project$Editor$id = _user$project$Editor$_p25.id;
+var _user$project$Editor$class = _user$project$Editor$_p25.$class;
+var _user$project$Editor$classList = _user$project$Editor$_p25.classList;
 var _user$project$Editor$renderRenderer = function (model) {
 	return _elm_lang$core$Native_List.fromArray(
 		[
@@ -526,10 +567,10 @@ var _user$project$Editor$view = function (model) {
 					_user$project$Editor$renderMenu(model)
 				]),
 			function () {
-				var _p23 = function (_) {
+				var _p26 = function (_) {
 					return _.position;
 				}(model);
-				switch (_p23.ctor) {
+				switch (_p26.ctor) {
 					case 'MainMenu':
 						return _user$project$Editor$renderMainMenu(model);
 					case 'Editor':

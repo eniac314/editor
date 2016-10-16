@@ -333,7 +333,8 @@ var _user$project$EditorView$renderEditor = function (model) {
 									_elm_lang$html$Html_Events$onInput(_user$project$Types$Store),
 									_elm_lang$html$Html_Attributes$rows(15),
 									_elm_lang$html$Html_Attributes$cols(45),
-									_user$project$EditorView$id(_user$project$EditorCss$Prompt)
+									_user$project$EditorView$id(_user$project$EditorCss$Prompt),
+									_elm_lang$html$Html_Attributes$spellcheck(false)
 								]),
 							_elm_lang$core$Native_List.fromArray(
 								[
@@ -367,17 +368,6 @@ var _user$project$EditorView$renderEditor = function (model) {
 							_elm_lang$core$Native_List.fromArray(
 								[
 									_elm_lang$html$Html$text('Parse')
-								])),
-							A2(
-							_elm_lang$html$Html$button,
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html_Events$onClick(_user$project$Types$Render),
-									_elm_lang$html$Html_Attributes$type$('button')
-								]),
-							_elm_lang$core$Native_List.fromArray(
-								[
-									_elm_lang$html$Html$text('Render')
 								])),
 							A2(
 							_elm_lang$html$Html$button,
@@ -424,11 +414,6 @@ var _user$project$EditorView$renderEditor = function (model) {
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_elm_lang$html$Html$text(
-					_elm_lang$core$Basics$toString(
-						function (_) {
-							return _.nblines;
-						}(model))),
 					A3(
 					_evancz$elm_markdown$Markdown$toHtmlWith,
 					{

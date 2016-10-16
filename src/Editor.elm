@@ -44,6 +44,8 @@ import Svg.Attributes exposing (width, height,viewBox, fill, x, y, class)
 import Window as Win
 import EditorView exposing (..)
 import Pad exposing (..)
+import Keyboard exposing (..)
+import CssParser exposing (..)
 
 { id, class, classList } =
     Html.CssHelpers.withNamespace "editor"
@@ -116,7 +118,6 @@ init initInput =
         nextId
         True
         Nothing
-        0
 
 -- UPDATE
 
@@ -125,7 +126,7 @@ init initInput =
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = 
   case msg of 
-    Store s -> { model | rawString = s , nblines = List.length (lines s)} ! []
+    Store s -> { model | rawString = s } ! []
     Parse   -> parse model ! []
     Up -> move zipUp model ! []
     Down -> move zipDownFirst model ! []
@@ -133,15 +134,23 @@ update msg model =
     Right -> move zipRight model ! []
     GoTo path -> move (cd' path) model ! []
     Debug -> {model | debug = not (.debug model)} ! []
-    Render  ->  { model | 
-                  toRender = (renderer (.parsedData model))
-                } ! []
     Failure -> model ! []
     WinSize s -> {model | winSize = Just s} ! []
     ChangeUrl s -> model ! [newUrl s]
+    SwapEditorRender -> model ! [swapEditorRender model]
 
 
-
+swapEditorRender model = 
+  case .position model of
+    Editor -> 
+      perform (\_ -> Failure)
+              (\url -> ChangeUrl url)
+              (succeed "#renderer")
+    Renderer -> 
+      perform (\_ -> Failure)
+              (\url -> ChangeUrl url)
+              (succeed "#editor")
+    _ -> Cmd.none
 
 parse model = 
   let pdata = interpret (.rawString model) (.nextId model)
@@ -170,6 +179,7 @@ parse model =
              , page = newPage
              , nextId = nextId
              , currPath = currPath
+             , toRender = renderer pdata
      } 
 
 move : (HtmlZipper -> Maybe HtmlZipper) -> Model -> Model
@@ -271,7 +281,27 @@ renderMenu model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model = 
-  Sub.batch [Win.resizes WinSize]
+  Sub.batch [Win.resizes WinSize, presses keyToMsg]
+
+
+--Keyboard 
+keyToMsg : (KeyCode -> Msg)
+keyToMsg k = 
+  let keys = 
+        Dict.fromList 
+          [
+          --(37,Up)
+          --,(39,Down)
+          --,(38,Left)
+          --,(40,Right)
+          --,
+           (112,Parse)
+          ,(113,SwapEditorRender)
+          ]
+  in case get k keys of
+    Nothing -> Failure
+    Just msg -> msg
+
 
 
 

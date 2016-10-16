@@ -32,7 +32,7 @@ renderEditor model =
                        , rows 15
                        , cols 45
                        , id Prompt
-                       --, style [("white-space","pre")]
+                       , spellcheck False
                        ]
                        [ case (.procString model) of 
                           Nothing -> text (.rawString model)
@@ -40,7 +40,6 @@ renderEditor model =
                        ]
             , br [] []
             , button [onClick Parse, type' "reset"] [ text "Parse"]
-            , button [onClick Render, type' "button"] [ text "Render"]
             , button [onClick Debug, type' "button"] [ text "Debug"]
             ]
         ]
@@ -51,8 +50,7 @@ renderEditor model =
         ]
   , renderConsole model
   , div [classList [("DebugClass",.debug model)]]
-        [ text (toString (.nblines model))
-        , toHtmlWith 
+        [ toHtmlWith 
               { githubFlavored =
                 Just { tables = True, breaks = False }
               , sanitize = True

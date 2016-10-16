@@ -26,6 +26,8 @@ type alias Token =
   , ln   : Int
   }
 
+getVal = .val 
+
 tokError : Token -> String
 tokError t = "{ val: " ++ (.val t) 
              ++ ", char " ++ (toString (.ch t))
@@ -42,8 +44,6 @@ isSpace c =
   c == '\t' ||
   c == '\n'
 
---isSpace : Char -> Bool
---isSpace c = c == ' '
 
 isTokenChar : Char-> Bool
 isTokenChar c = 
@@ -56,6 +56,7 @@ isTokenChar c =
   c == '/' ||
   c == '*' ||
   c == ';' ||
+  c == ':' ||
   c == ',' ||
   c == '.' ||
   c == '[' ||
@@ -87,7 +88,6 @@ tagPos s =
                        |> addIndexes
                        |> List.map 
                            (\(m,c) -> CharPos c n m)) ls
-      separator =  {ch = '\n', lnp = 0 , chp = 0}
   in List.concat cs 
 
 
@@ -117,8 +117,8 @@ tokenString xs =
       in Ok ((Token ("\"" ++ val ++ "\"") ch ln),rest)
 
 
-getTokens' : CharMeta -> (List Token,CharMeta)
-getTokens' xs = 
+getTokens : CharMeta -> (List Token,CharMeta)
+getTokens xs = 
   let tokenize buff = 
         let ys = List.reverse buff
         in case ys of 
@@ -168,7 +168,7 @@ tokenizer' cs =
         then tokenizer' xs
         
         else 
-          let (ts,rest) = getTokens' (x::xs)
+          let (ts,rest) = getTokens (x::xs)
           in case tokenizer' rest of
               Err s  -> Err s
               Ok ts' -> Ok (ts ++ ts')   

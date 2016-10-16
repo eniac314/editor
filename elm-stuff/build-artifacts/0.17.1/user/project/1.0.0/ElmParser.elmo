@@ -362,7 +362,6 @@ var _user$project$ElmParser$parseTagList = F2(
 					_user$project$BetterParser$return(res));
 			});
 	});
-var _user$project$ElmParser$testinput = ' div [ class \"mainDiv\" ]\n          [ p [ style [ ( \"color\" , \"red\" ) ] ] [ text \"this is a test\" \n                  , p [ ] [ ]\n                  ]\n          , p [ ] [ h2 [ id \"very important\" , style [ ( \"color\" , \"blue\" ) ] ] [ text \"big title\" ] ]\n          ]\n\n  ';
 var _user$project$ElmParser$zero = _javcasas$elm_integer$Data_Integer$fromInt(0);
 var _user$project$ElmParser$interpret = F2(
 	function (input, n) {
@@ -387,10 +386,6 @@ var _user$project$ElmParser$interpret = F2(
 			}
 		}
 	});
-var _user$project$ElmParser$test = A2(
-	_user$project$ElmParser$interpret,
-	_user$project$ElmParser$testinput,
-	_javcasas$elm_integer$Data_Integer$fromInt(0));
 var _user$project$ElmParser$renderer = function (res) {
 	var renderer$ = function (_p15) {
 		var _p16 = _p15;

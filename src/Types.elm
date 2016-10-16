@@ -26,12 +26,10 @@ type alias Model =
   , nextId : Integer
   , debug : Bool
   , winSize : Maybe Win.Size
-  , nblines : Int
   }
 
 type Msg = Store String
          | Parse
-         | Render
          | Up 
          | Down
          | Left
@@ -40,4 +38,5 @@ type Msg = Store String
          | Debug
          | WinSize Win.Size
          | ChangeUrl String
+         | SwapEditorRender
          | Failure

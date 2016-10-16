@@ -1,0 +1,380 @@
+var _user$project$CssParser$removeIndexes = function (xs) {
+	return A2(_elm_lang$core$List$map, _elm_lang$core$Basics$snd, xs);
+};
+var _user$project$CssParser$addIndexes = function (xs) {
+	var helper = F2(
+		function (n, xs) {
+			var _p0 = xs;
+			if (_p0.ctor === '[]') {
+				return _elm_lang$core$Native_List.fromArray(
+					[]);
+			} else {
+				return A2(
+					_elm_lang$core$List_ops['::'],
+					{ctor: '_Tuple2', _0: n, _1: _p0._0},
+					A2(helper, n + 1, _p0._1));
+			}
+		});
+	return A2(helper, 0, xs);
+};
+var _user$project$CssParser$consumerLS = function (xs) {
+	var _p1 = xs;
+	if (_p1.ctor === '[]') {
+		return _elm_lang$core$Result$Err('no more tokens');
+	} else {
+		return _elm_lang$core$Result$Ok(
+			{ctor: '_Tuple2', _0: _p1._0, _1: _p1._1});
+	}
+};
+var _user$project$CssParser$token = function (s) {
+	return A2(
+		_user$project$BetterParser$sat,
+		_user$project$CssParser$consumerLS,
+		function (t) {
+			return _elm_lang$core$Native_Utils.eq(
+				function (_) {
+					return _.val;
+				}(t),
+				s);
+		});
+};
+var _user$project$CssParser$parseProperty = A2(
+	_user$project$BetterParser_ops['>>='],
+	_user$project$BetterParser$item(_user$project$CssParser$consumerLS),
+	function (v1) {
+		return A2(
+			_user$project$BetterParser_ops['>>='],
+			A3(
+				_user$project$BetterParser$many,
+				A2(
+					_user$project$BetterParser_ops['>>='],
+					A2(
+						_user$project$BetterParser_ops['>>*'],
+						_user$project$CssParser$token('-'),
+						_user$project$BetterParser$item(_user$project$CssParser$consumerLS)),
+					function (v) {
+						return _user$project$BetterParser$return(
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								'-',
+								function (_) {
+									return _.val;
+								}(v)));
+					}),
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				F2(
+					function (x, y) {
+						return A2(_elm_lang$core$List_ops['::'], x, y);
+					})),
+			function (res) {
+				return _user$project$BetterParser$return(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						function (_) {
+							return _.val;
+						}(v1),
+						_elm_lang$core$String$concat(res)));
+			});
+	});
+var _user$project$CssParser$parseValue = A2(
+	_user$project$BetterParser_ops['>>='],
+	A3(
+		_user$project$BetterParser$many1,
+		_user$project$BetterParser$item(_user$project$CssParser$consumerLS),
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		F2(
+			function (x, y) {
+				return A2(_elm_lang$core$List_ops['::'], x, y);
+			})),
+	function (res) {
+		return A2(
+			_user$project$BetterParser_ops['>>*'],
+			_user$project$CssParser$token(';'),
+			_user$project$BetterParser$return(
+				A2(
+					_elm_lang$core$String$join,
+					' ',
+					A2(
+						_elm_lang$core$List$map,
+						function (_) {
+							return _.val;
+						},
+						res))));
+	});
+var _user$project$CssParser$parseDeclaration = A2(
+	_user$project$BetterParser_ops['>>='],
+	A3(
+		_user$project$BetterParser$many1,
+		A2(
+			_user$project$BetterParser_ops['>>='],
+			_user$project$CssParser$parseProperty,
+			function (p) {
+				return A2(
+					_user$project$BetterParser_ops['>>='],
+					A2(
+						_user$project$BetterParser_ops['>>*'],
+						_user$project$CssParser$token(':'),
+						_user$project$CssParser$parseValue),
+					function (v) {
+						return _user$project$BetterParser$return(
+							{ctor: '_Tuple2', _0: p, _1: v});
+					});
+			}),
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		F2(
+			function (x, y) {
+				return A2(_elm_lang$core$List_ops['::'], x, y);
+			})),
+	_user$project$BetterParser$return);
+var _user$project$CssParser$CssNode = F2(
+	function (a, b) {
+		return {selectors: a, declaration: b};
+	});
+var _user$project$CssParser$IndexedCss = F5(
+	function (a, b, c, d, e) {
+		return {cssDict: a, classDict: b, idDict: c, pseudoDict: d, tagDict: e};
+	});
+var _user$project$CssParser$toIndexedCss = function (xs) {
+	var cons$ = F2(
+		function (x, mv) {
+			var _p2 = mv;
+			if (_p2.ctor === 'Nothing') {
+				return _elm_lang$core$Maybe$Just(
+					_elm_lang$core$Native_List.fromArray(
+						[x]));
+			} else {
+				return _elm_lang$core$Maybe$Just(
+					A2(_elm_lang$core$List_ops['::'], x, _p2._0));
+			}
+		});
+	var populate = F2(
+		function (_p4, _p3) {
+			var _p5 = _p4;
+			var _p12 = _p5._0;
+			var _p6 = _p3;
+			var _p11 = _p6._3;
+			var _p10 = _p6._2;
+			var _p9 = _p6._1;
+			var _p8 = _p6._0;
+			return A3(
+				_elm_lang$core$List$foldl,
+				F2(
+					function (v, acc) {
+						var _p7 = v;
+						switch (_p7.ctor) {
+							case 'Class':
+								return {
+									ctor: '_Tuple4',
+									_0: A3(
+										_elm_lang$core$Dict$update,
+										_p7._0,
+										cons$(_p12),
+										_p8),
+									_1: _p9,
+									_2: _p10,
+									_3: _p11
+								};
+							case 'Id':
+								return {
+									ctor: '_Tuple4',
+									_0: _p8,
+									_1: A3(
+										_elm_lang$core$Dict$update,
+										_p7._0,
+										cons$(_p12),
+										_p9),
+									_2: _p10,
+									_3: _p11
+								};
+							case 'Pseudo':
+								return {
+									ctor: '_Tuple4',
+									_0: _p8,
+									_1: _p9,
+									_2: A3(
+										_elm_lang$core$Dict$update,
+										_p7._0,
+										cons$(_p12),
+										_p10),
+									_3: _p11
+								};
+							case 'Tag':
+								return {
+									ctor: '_Tuple4',
+									_0: _p8,
+									_1: _p9,
+									_2: _p10,
+									_3: A3(
+										_elm_lang$core$Dict$update,
+										_p7._0,
+										cons$(_p12),
+										_p11)
+								};
+							default:
+								return acc;
+						}
+					}),
+				{ctor: '_Tuple4', _0: _p8, _1: _p9, _2: _p10, _3: _p11},
+				function (_) {
+					return _.selectors;
+				}(_p5._1));
+		});
+	var indexedNodes = _user$project$CssParser$addIndexes(xs);
+	var _p13 = A3(
+		_elm_lang$core$List$foldl,
+		populate,
+		{ctor: '_Tuple4', _0: _elm_lang$core$Dict$empty, _1: _elm_lang$core$Dict$empty, _2: _elm_lang$core$Dict$empty, _3: _elm_lang$core$Dict$empty},
+		indexedNodes);
+	var classDict = _p13._0;
+	var idDict = _p13._1;
+	var pseudoDict = _p13._2;
+	var tagDict = _p13._3;
+	return A5(
+		_user$project$CssParser$IndexedCss,
+		_elm_lang$core$Dict$fromList(indexedNodes),
+		classDict,
+		idDict,
+		pseudoDict,
+		tagDict);
+};
+var _user$project$CssParser$Coma = {ctor: 'Coma'};
+var _user$project$CssParser$parseComa = A2(
+	_user$project$BetterParser_ops['>>*'],
+	_user$project$CssParser$token(','),
+	_user$project$BetterParser$return(_user$project$CssParser$Coma));
+var _user$project$CssParser$Tag = function (a) {
+	return {ctor: 'Tag', _0: a};
+};
+var _user$project$CssParser$parseTagSelector = A2(
+	_user$project$BetterParser_ops['>>='],
+	_user$project$BetterParser$item(_user$project$CssParser$consumerLS),
+	function (res) {
+		return _user$project$BetterParser$return(
+			_user$project$CssParser$Tag(
+				function (_) {
+					return _.val;
+				}(res)));
+	});
+var _user$project$CssParser$Pseudo = function (a) {
+	return {ctor: 'Pseudo', _0: a};
+};
+var _user$project$CssParser$parsePseudoSelector = A2(
+	_user$project$BetterParser_ops['>>='],
+	A2(
+		_user$project$BetterParser_ops['>>*'],
+		_user$project$CssParser$token(':'),
+		_user$project$BetterParser$item(_user$project$CssParser$consumerLS)),
+	function (res) {
+		return _user$project$BetterParser$return(
+			_user$project$CssParser$Pseudo(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					':',
+					function (_) {
+						return _.val;
+					}(res))));
+	});
+var _user$project$CssParser$Id = function (a) {
+	return {ctor: 'Id', _0: a};
+};
+var _user$project$CssParser$parseIdSelector = A2(
+	_user$project$BetterParser_ops['>>='],
+	A2(
+		_user$project$BetterParser_ops['>>*'],
+		_user$project$CssParser$token('#'),
+		_user$project$BetterParser$item(_user$project$CssParser$consumerLS)),
+	function (res) {
+		return _user$project$BetterParser$return(
+			_user$project$CssParser$Id(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'#',
+					function (_) {
+						return _.val;
+					}(res))));
+	});
+var _user$project$CssParser$Class = function (a) {
+	return {ctor: 'Class', _0: a};
+};
+var _user$project$CssParser$parseClassSelector = A2(
+	_user$project$BetterParser_ops['>>='],
+	A2(
+		_user$project$BetterParser_ops['>>*'],
+		_user$project$CssParser$token('.'),
+		_user$project$BetterParser$item(_user$project$CssParser$consumerLS)),
+	function (res) {
+		return _user$project$BetterParser$return(
+			_user$project$CssParser$Class(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'.',
+					function (_) {
+						return _.val;
+					}(res))));
+	});
+var _user$project$CssParser$parseSelector = A2(
+	_user$project$BetterParser_ops['+++'],
+	A2(
+		_user$project$BetterParser_ops['+++'],
+		A2(_user$project$BetterParser_ops['+++'], _user$project$CssParser$parseClassSelector, _user$project$CssParser$parseIdSelector),
+		_user$project$CssParser$parsePseudoSelector),
+	_user$project$CssParser$parseTagSelector);
+var _user$project$CssParser$parseSelectors = A2(
+	_user$project$BetterParser_ops['>>='],
+	_user$project$CssParser$parseSelector,
+	function (s1) {
+		return A2(
+			_user$project$BetterParser_ops['>>='],
+			A3(
+				_user$project$BetterParser$many,
+				A2(
+					_user$project$BetterParser_ops['+++'],
+					A2(_user$project$BetterParser_ops['+++'], _user$project$CssParser$parseComa, _user$project$CssParser$parseSelector),
+					_user$project$CssParser$parseSelector),
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				F2(
+					function (x, y) {
+						return A2(_elm_lang$core$List_ops['::'], x, y);
+					})),
+			function (ss) {
+				return A2(
+					_user$project$BetterParser_ops['>>*'],
+					_user$project$CssParser$token('{'),
+					_user$project$BetterParser$return(
+						A2(_elm_lang$core$List_ops['::'], s1, ss)));
+			});
+	});
+var _user$project$CssParser$parseCssNode = A2(
+	_user$project$BetterParser_ops['>>='],
+	_user$project$CssParser$parseSelectors,
+	function (v1) {
+		return A2(
+			_user$project$BetterParser_ops['>>='],
+			_user$project$CssParser$parseDeclaration,
+			function (v2) {
+				return A2(
+					_user$project$BetterParser_ops['>>*'],
+					_user$project$CssParser$token('}'),
+					_user$project$BetterParser$return(
+						A2(_user$project$CssParser$CssNode, v1, v2)));
+			});
+	});
+var _user$project$CssParser$parseCss = A2(
+	_user$project$BetterParser_ops['>>='],
+	A3(
+		_user$project$BetterParser$many1,
+		_user$project$CssParser$parseCssNode,
+		_elm_lang$core$Native_List.fromArray(
+			[]),
+		F2(
+			function (x, y) {
+				return A2(_elm_lang$core$List_ops['::'], x, y);
+			})),
+	function (res) {
+		return _user$project$BetterParser$return(
+			_user$project$CssParser$toIndexedCss(res));
+	});
