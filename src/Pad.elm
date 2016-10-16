@@ -1,5 +1,16 @@
 module Pad exposing (..)
 
+initCss = 
+ """.main body{
+ background-color: lightgrey;
+}
+
+.main h1 {
+ border-style: solid;
+}
+
+ """
+
 testinput = 
   """ div [ class "main"
     ]

@@ -13,8 +13,9 @@ type CssClasses
 
 type CssIds
     = Explorer | LeftPane | RightPane |
+      LeftPaneCss |
       Container | ExplWindow | Prompt |
-      Path | PathStr | Menu | 
+      Path | PathStr | Menu | PromptCss |
       Console | RendererId
       
 
@@ -90,7 +91,9 @@ css =
     , (#) LeftPane
         [ width (pct 70)
         ]          
-    
+    , (#) LeftPaneCss
+        [ width (pct 70)
+        ]
     , (#) RightPane
         [ width (pct 30)
         ]
@@ -104,6 +107,10 @@ css =
         [ width (pct 95)
         ]
     , (#) Prompt 
+        [ fontFamilies mono
+        , width (pct 95)
+        ]
+    , (#) PromptCss 
         [ fontFamilies mono
         , width (pct 95)
         ]

@@ -5,6 +5,7 @@ import Html.Attributes exposing (..)
 import Dict exposing (fromList, toList ,get)
 import List exposing (map)
 import String exposing (fromList, toList )
+import Json.Encode exposing (string)
 import Char exposing (toUpper)
 import Markdown exposing (..)
 
@@ -19,7 +20,7 @@ type TagName =
   Section | Nav | Article | Aside | Header | 
   Footer | Address | Main | Body | Figure | Figcaption |
   Table | Caption | Colgroup | Col | Tbody | Thead | Tfoot |
-  Tr | Td | Th | Markdown String 
+  Tr | Td | Th | Markdown String | CssTag String
 
 tagnames = 
   Dict.fromList
@@ -159,6 +160,12 @@ toTag tn  =
           , defaultHighlighting = Nothing
           , smartypants = False
           } [style [("white-space", "pre")]] s)
+    CssTag css -> 
+      (\ _ _ -> Html.node "style"
+                   [ property "textContent" <| string css
+                   , property "type" <| string "text/css"
+                   ]
+                   [])
 
 
 -------------------------------------------------------------------------------

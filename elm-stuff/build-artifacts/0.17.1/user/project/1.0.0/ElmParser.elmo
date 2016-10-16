@@ -382,45 +382,10 @@ var _user$project$ElmParser$interpret = F2(
 				return _elm_lang$core$Result$Err(
 					A2(_elm_lang$core$Basics_ops['++'], 'Parser error: ', _p14._0));
 			} else {
-				return _elm_lang$core$Result$Ok(_p14._0._0);
+				return _elm_lang$core$Native_Utils.eq(
+					_p14._0._1,
+					_elm_lang$core$Native_List.fromArray(
+						[])) ? _elm_lang$core$Result$Ok(_p14._0._0) : _elm_lang$core$Result$Err('Parser error: unprocessed input');
 			}
 		}
 	});
-var _user$project$ElmParser$renderer = function (res) {
-	var renderer$ = function (_p15) {
-		var _p16 = _p15;
-		var _p17 = _p16._0;
-		return A3(
-			_user$project$TagAttr$toTag,
-			function (_) {
-				return _.tagname;
-			}(_p17),
-			A2(
-				_elm_lang$core$List$map,
-				_user$project$TagAttr$toAttr,
-				function (_) {
-					return _.attr;
-				}(_p17)),
-			A2(_elm_lang$core$List$map, renderer$, _p16._1));
-	};
-	var _p18 = res;
-	if (_p18.ctor === 'Err') {
-		return A2(
-			_elm_lang$html$Html$div,
-			_elm_lang$core$Native_List.fromArray(
-				[]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$html$Html$text('Oh no!'),
-					A2(
-					_elm_lang$html$Html$br,
-					_elm_lang$core$Native_List.fromArray(
-						[]),
-					_elm_lang$core$Native_List.fromArray(
-						[])),
-					_elm_lang$html$Html$text(_p18._0)
-				]));
-	} else {
-		return renderer$(_p18._0._0);
-	}
-};

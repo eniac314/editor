@@ -37,8 +37,8 @@ import HtmlZipper exposing ( HTML
                            )
 import TagAttr exposing (TagName)
 import ElmParser exposing ( interpret
-                          , renderer
                           )
+import CssParser exposing (interpretCss)
 import Svg exposing (svg, rect, text')
 import Svg.Attributes exposing (width, height,viewBox, fill, x, y, class)
 import Window as Win
@@ -62,7 +62,7 @@ main =
 
 
 init' result = 
-  let (m,cmd) = urlUpdate result (init testinput)
+  let (m,cmd) = urlUpdate result (init testinput initCss)
   in (m, Cmd.batch [ cmd
                    , initWinSize
                    , modifyUrl "#editor"])
@@ -93,8 +93,9 @@ urlUpdate res model =
 
 
 
-init initInput = 
+init initInput initCssInput = 
   let pdata = interpret initInput (fromInt 0)
+      pCssData = interpretCss initCssInput
       initPage = 
         case pdata of 
           Err s -> Nothing
@@ -110,11 +111,14 @@ init initInput =
   in
   Model Editor
         initInput
+        initCssInput
+        Nothing
         Nothing
         pdata
+        pCssData
         initPath
         initPage        
-        (renderer pdata)
+        (renderer pdata pCssData)
         nextId
         True
         Nothing
@@ -127,7 +131,9 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model = 
   case msg of 
     Store s -> { model | rawString = s } ! []
+    StoreCss s -> { model | rawCssString = s } ! []
     Parse   -> parse model ! []
+    ParseCss -> parseCss model ! []
     Up -> move zipUp model ! []
     Down -> move zipDownFirst model ! []
     Left -> move zipLeft model ! []
@@ -179,8 +185,21 @@ parse model =
              , page = newPage
              , nextId = nextId
              , currPath = currPath
-             , toRender = renderer pdata
+             , toRender = renderer pdata (.parsedCssData model)
      } 
+
+parseCss model =
+  let pCssData = interpretCss (.rawCssString model)
+      newProcCssString = 
+        case pCssData of 
+          Err s -> Nothing
+          Ok indCss -> Just (toCssString indCss)   
+
+  in  { model | parsedCssData = pCssData
+              , procCssString = newProcCssString 
+              , toRender = renderer (.parsedData model) 
+                                    pCssData 
+      }
 
 move : (HtmlZipper -> Maybe HtmlZipper) -> Model -> Model
 move f model = 
@@ -209,7 +228,7 @@ move f model =
          Nothing -> (.currPath model)
          Just np -> (extractPath np)
 
-      newRender  = renderer newParsedData
+      newRender  = renderer newParsedData (.parsedCssData model)
 
   in { model | rawString = newRstring
              , procString = newProcString

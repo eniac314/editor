@@ -312,7 +312,7 @@ var _user$project$TagAttr$toTag = function (tn) {
 			return _elm_lang$html$Html$td;
 		case 'Th':
 			return _elm_lang$html$Html$th;
-		default:
+		case 'Markdown':
 			return F2(
 				function (_p14, _p13) {
 					return A3(
@@ -334,7 +334,30 @@ var _user$project$TagAttr$toTag = function (tn) {
 							]),
 						_p6._0);
 				});
+		default:
+			return F2(
+				function (_p16, _p15) {
+					return A3(
+						_elm_lang$html$Html$node,
+						'style',
+						_elm_lang$core$Native_List.fromArray(
+							[
+								A2(
+								_elm_lang$html$Html_Attributes$property,
+								'textContent',
+								_elm_lang$core$Json_Encode$string(_p6._0)),
+								A2(
+								_elm_lang$html$Html_Attributes$property,
+								'type',
+								_elm_lang$core$Json_Encode$string('text/css'))
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[]));
+				});
 	}
+};
+var _user$project$TagAttr$CssTag = function (a) {
+	return {ctor: 'CssTag', _0: a};
 };
 var _user$project$TagAttr$Markdown = function (a) {
 	return {ctor: 'Markdown', _0: a};

@@ -194,23 +194,6 @@ htmlToString html =
       _ -> tn ++ atln ++ "\n" ++
            buff ++ tgln
 
-    --in if ((String.startsWith "text " tn) || 
-    --       (String.startsWith "markdown " tn)
-    --      )
-    --   then tn
-    --   else let 
-    --            atln = if atList == []
-    --                   then " []"
-    --                   else " [ " ++ (String.join ("\n" ++ buff ++ " , ") atList) 
-    --                        ++ ("\n" ++ buff ++ " ]")
-    --            tgln = if tglist == []
-    --                   then " []"
-    --                   else " [ " ++ (String.join ("\n" ++ buff ++ " , ") tglist) 
-    --                         ++ ("\n" ++ buff ++ " ]")
-    --        in
-    --        tn ++ atln ++ "\n" ++
-    --        buff ++ tgln 
-
   in helper 0 html
 
 

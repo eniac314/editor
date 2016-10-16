@@ -8,7 +8,13 @@ var _user$project$Types$Model = function (a) {
 							return function (h) {
 								return function (i) {
 									return function (j) {
-										return {position: a, rawString: b, procString: c, parsedData: d, currPath: e, page: f, toRender: g, nextId: h, debug: i, winSize: j};
+										return function (k) {
+											return function (l) {
+												return function (m) {
+													return {position: a, rawString: b, rawCssString: c, procString: d, procCssString: e, parsedData: f, parsedCssData: g, currPath: h, page: i, toRender: j, nextId: k, debug: l, winSize: m};
+												};
+											};
+										};
 									};
 								};
 							};
@@ -39,7 +45,11 @@ var _user$project$Types$Right = {ctor: 'Right'};
 var _user$project$Types$Left = {ctor: 'Left'};
 var _user$project$Types$Down = {ctor: 'Down'};
 var _user$project$Types$Up = {ctor: 'Up'};
+var _user$project$Types$ParseCss = {ctor: 'ParseCss'};
 var _user$project$Types$Parse = {ctor: 'Parse'};
+var _user$project$Types$StoreCss = function (a) {
+	return {ctor: 'StoreCss', _0: a};
+};
 var _user$project$Types$Store = function (a) {
 	return {ctor: 'Store', _0: a};
 };

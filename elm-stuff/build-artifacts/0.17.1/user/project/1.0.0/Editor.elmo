@@ -94,7 +94,12 @@ var _user$project$Editor$move = F2(
 					});
 			}
 		}();
-		var newRender = _user$project$ElmParser$renderer(newParsedData);
+		var newRender = A2(
+			_user$project$EditorView$renderer,
+			newParsedData,
+			function (_) {
+				return _.parsedCssData;
+			}(model));
 		var newPath = function () {
 			var _p7 = newPage;
 			if (_p7.ctor === 'Nothing') {
@@ -109,6 +114,33 @@ var _user$project$Editor$move = F2(
 			model,
 			{rawString: newRstring, procString: newProcString, parsedData: newParsedData, currPath: newPath, page: newPage, toRender: newRender});
 	});
+var _user$project$Editor$parseCss = function (model) {
+	var pCssData = _user$project$CssParser$interpretCss(
+		function (_) {
+			return _.rawCssString;
+		}(model));
+	var newProcCssString = function () {
+		var _p8 = pCssData;
+		if (_p8.ctor === 'Err') {
+			return _elm_lang$core$Maybe$Nothing;
+		} else {
+			return _elm_lang$core$Maybe$Just(
+				_user$project$CssParser$toCssString(_p8._0));
+		}
+	}();
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			parsedCssData: pCssData,
+			procCssString: newProcCssString,
+			toRender: A2(
+				_user$project$EditorView$renderer,
+				function (_) {
+					return _.parsedData;
+				}(model),
+				pCssData)
+		});
+};
 var _user$project$Editor$parse = function (model) {
 	var pdata = A2(
 		_user$project$ElmParser$interpret,
@@ -119,54 +151,54 @@ var _user$project$Editor$parse = function (model) {
 			return _.nextId;
 		}(model));
 	var prString = function () {
-		var _p8 = pdata;
-		if (_p8.ctor === 'Err') {
+		var _p9 = pdata;
+		if (_p9.ctor === 'Err') {
 			return _elm_lang$core$Maybe$Nothing;
 		} else {
 			return _elm_lang$core$Maybe$Just(
-				_user$project$HtmlZipper$htmlToString(_p8._0._0));
+				_user$project$HtmlZipper$htmlToString(_p9._0._0));
 		}
 	}();
 	var newPage = function () {
-		var _p9 = pdata;
-		if (_p9.ctor === 'Err') {
+		var _p10 = pdata;
+		if (_p10.ctor === 'Err') {
 			return function (_) {
 				return _.page;
 			}(model);
 		} else {
-			var _p11 = _p9._0._0;
-			var _p10 = function (_) {
+			var _p12 = _p10._0._0;
+			var _p11 = function (_) {
 				return _.page;
 			}(model);
-			if (_p10.ctor === 'Nothing') {
+			if (_p11.ctor === 'Nothing') {
 				return _elm_lang$core$Maybe$Just(
-					_user$project$HtmlZipper$initZip(_p11));
+					_user$project$HtmlZipper$initZip(_p12));
 			} else {
 				return _elm_lang$core$Maybe$Just(
-					A2(_user$project$HtmlZipper$updateTag, _p11, _p10._0));
+					A2(_user$project$HtmlZipper$updateTag, _p12, _p11._0));
 			}
 		}
 	}();
 	var currPath = function () {
-		var _p12 = newPage;
-		if (_p12.ctor === 'Nothing') {
+		var _p13 = newPage;
+		if (_p13.ctor === 'Nothing') {
 			return function (_) {
 				return _.currPath;
 			}(model);
 		} else {
-			return _user$project$HtmlZipper$extractPath(_p12._0);
+			return _user$project$HtmlZipper$extractPath(_p13._0);
 		}
 	}();
 	var nextId = function () {
-		var _p13 = pdata;
-		if (_p13.ctor === 'Err') {
+		var _p14 = pdata;
+		if (_p14.ctor === 'Err') {
 			return function (_) {
 				return _.nextId;
 			}(model);
 		} else {
 			return A2(
 				_javcasas$elm_integer$Data_Integer$add,
-				_p13._0._1,
+				_p14._0._1,
 				_javcasas$elm_integer$Data_Integer$fromInt(1));
 		}
 	}();
@@ -178,18 +210,23 @@ var _user$project$Editor$parse = function (model) {
 			page: newPage,
 			nextId: nextId,
 			currPath: currPath,
-			toRender: _user$project$ElmParser$renderer(pdata)
+			toRender: A2(
+				_user$project$EditorView$renderer,
+				pdata,
+				function (_) {
+					return _.parsedCssData;
+				}(model))
 		});
 };
 var _user$project$Editor$swapEditorRender = function (model) {
-	var _p14 = function (_) {
+	var _p15 = function (_) {
 		return _.position;
 	}(model);
-	switch (_p14.ctor) {
+	switch (_p15.ctor) {
 		case 'Editor':
 			return A3(
 				_elm_lang$core$Task$perform,
-				function (_p15) {
+				function (_p16) {
 					return _user$project$Types$Failure;
 				},
 				function (url) {
@@ -199,7 +236,7 @@ var _user$project$Editor$swapEditorRender = function (model) {
 		case 'Renderer':
 			return A3(
 				_elm_lang$core$Task$perform,
-				function (_p16) {
+				function (_p17) {
 					return _user$project$Types$Failure;
 				},
 				function (url) {
@@ -212,20 +249,34 @@ var _user$project$Editor$swapEditorRender = function (model) {
 };
 var _user$project$Editor$update = F2(
 	function (msg, model) {
-		var _p17 = msg;
-		switch (_p17.ctor) {
+		var _p18 = msg;
+		switch (_p18.ctor) {
 			case 'Store':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{rawString: _p17._0}),
+						{rawString: _p18._0}),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+			case 'StoreCss':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{rawCssString: _p18._0}),
 					_elm_lang$core$Native_List.fromArray(
 						[]));
 			case 'Parse':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_user$project$Editor$parse(model),
+					_elm_lang$core$Native_List.fromArray(
+						[]));
+			case 'ParseCss':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_user$project$Editor$parseCss(model),
 					_elm_lang$core$Native_List.fromArray(
 						[]));
 			case 'Up':
@@ -257,7 +308,7 @@ var _user$project$Editor$update = F2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					A2(
 						_user$project$Editor$move,
-						_user$project$HtmlZipper$cd$(_p17._0),
+						_user$project$HtmlZipper$cd$(_p18._0),
 						model),
 					_elm_lang$core$Native_List.fromArray(
 						[]));
@@ -286,7 +337,7 @@ var _user$project$Editor$update = F2(
 					_elm_lang$core$Native_Utils.update(
 						model,
 						{
-							winSize: _elm_lang$core$Maybe$Just(_p17._0)
+							winSize: _elm_lang$core$Maybe$Just(_p18._0)
 						}),
 					_elm_lang$core$Native_List.fromArray(
 						[]));
@@ -296,7 +347,7 @@ var _user$project$Editor$update = F2(
 					model,
 					_elm_lang$core$Native_List.fromArray(
 						[
-							_elm_lang$navigation$Navigation$newUrl(_p17._0)
+							_elm_lang$navigation$Navigation$newUrl(_p18._0)
 						]));
 			default:
 				return A2(
@@ -308,52 +359,54 @@ var _user$project$Editor$update = F2(
 						]));
 		}
 	});
-var _user$project$Editor$init = function (initInput) {
-	var pdata = A2(
-		_user$project$ElmParser$interpret,
-		initInput,
-		_javcasas$elm_integer$Data_Integer$fromInt(0));
-	var initPage = function () {
-		var _p18 = pdata;
-		if (_p18.ctor === 'Err') {
-			return _elm_lang$core$Maybe$Nothing;
-		} else {
-			return _elm_lang$core$Maybe$Just(
-				_user$project$HtmlZipper$initZip(_p18._0._0));
-		}
-	}();
-	var initPath = function () {
-		var _p19 = initPage;
-		if (_p19.ctor === 'Nothing') {
-			return _elm_lang$core$Native_List.fromArray(
-				[]);
-		} else {
-			return _user$project$HtmlZipper$extractPath(_p19._0);
-		}
-	}();
-	var nextId = function () {
-		var _p20 = pdata;
-		if (_p20.ctor === 'Err') {
-			return _javcasas$elm_integer$Data_Integer$fromInt(0);
-		} else {
-			return A2(
-				_javcasas$elm_integer$Data_Integer$add,
-				_p20._0._1,
-				_javcasas$elm_integer$Data_Integer$fromInt(1));
-		}
-	}();
-	return _user$project$Types$Model(_user$project$Types$Editor)(initInput)(_elm_lang$core$Maybe$Nothing)(pdata)(initPath)(initPage)(
-		_user$project$ElmParser$renderer(pdata))(nextId)(true)(_elm_lang$core$Maybe$Nothing);
-};
+var _user$project$Editor$init = F2(
+	function (initInput, initCssInput) {
+		var pCssData = _user$project$CssParser$interpretCss(initCssInput);
+		var pdata = A2(
+			_user$project$ElmParser$interpret,
+			initInput,
+			_javcasas$elm_integer$Data_Integer$fromInt(0));
+		var initPage = function () {
+			var _p19 = pdata;
+			if (_p19.ctor === 'Err') {
+				return _elm_lang$core$Maybe$Nothing;
+			} else {
+				return _elm_lang$core$Maybe$Just(
+					_user$project$HtmlZipper$initZip(_p19._0._0));
+			}
+		}();
+		var initPath = function () {
+			var _p20 = initPage;
+			if (_p20.ctor === 'Nothing') {
+				return _elm_lang$core$Native_List.fromArray(
+					[]);
+			} else {
+				return _user$project$HtmlZipper$extractPath(_p20._0);
+			}
+		}();
+		var nextId = function () {
+			var _p21 = pdata;
+			if (_p21.ctor === 'Err') {
+				return _javcasas$elm_integer$Data_Integer$fromInt(0);
+			} else {
+				return A2(
+					_javcasas$elm_integer$Data_Integer$add,
+					_p21._0._1,
+					_javcasas$elm_integer$Data_Integer$fromInt(1));
+			}
+		}();
+		return _user$project$Types$Model(_user$project$Types$Editor)(initInput)(initCssInput)(_elm_lang$core$Maybe$Nothing)(_elm_lang$core$Maybe$Nothing)(pdata)(pCssData)(initPath)(initPage)(
+			A2(_user$project$EditorView$renderer, pdata, pCssData))(nextId)(true)(_elm_lang$core$Maybe$Nothing);
+	});
 var _user$project$Editor$urlUpdate = F2(
 	function (res, model) {
-		var _p21 = res;
-		if (_p21.ctor === 'Err') {
+		var _p22 = res;
+		if (_p22.ctor === 'Err') {
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
 					model,
-					{rawString: _p21._0}),
+					{rawString: _p22._0}),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
@@ -361,7 +414,7 @@ var _user$project$Editor$urlUpdate = F2(
 				_elm_lang$core$Platform_Cmd_ops['!'],
 				_elm_lang$core$Native_Utils.update(
 					model,
-					{position: _p21._0}),
+					{position: _p22._0}),
 				_elm_lang$core$Native_List.fromArray(
 					[]));
 		}
@@ -376,25 +429,25 @@ var _user$project$Editor$urlParser = _elm_lang$navigation$Navigation$makeParser(
 					{ctor: '_Tuple2', _0: '#fileIO', _1: _user$project$Types$FileIO},
 					{ctor: '_Tuple2', _0: '#renderer', _1: _user$project$Types$Renderer}
 				]));
-		var _p22 = A2(
+		var _p23 = A2(
 			_elm_lang$core$Dict$get,
 			function (_) {
 				return _.hash;
 			}(s),
 			validUrlMap);
-		if (_p22.ctor === 'Nothing') {
+		if (_p23.ctor === 'Nothing') {
 			return _elm_lang$core$Result$Err(
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					'invalid url: ',
 					_elm_lang$core$Basics$toString(s)));
 		} else {
-			return _elm_lang$core$Result$Ok(_p22._0);
+			return _elm_lang$core$Result$Ok(_p23._0);
 		}
 	});
 var _user$project$Editor$initWinSize = A3(
 	_elm_lang$core$Task$perform,
-	function (_p23) {
+	function (_p24) {
 		return _user$project$Types$Failure;
 	},
 	function (s) {
@@ -402,12 +455,12 @@ var _user$project$Editor$initWinSize = A3(
 	},
 	_elm_lang$window$Window$size);
 var _user$project$Editor$init$ = function (result) {
-	var _p24 = A2(
+	var _p25 = A2(
 		_user$project$Editor$urlUpdate,
 		result,
-		_user$project$Editor$init(_user$project$Pad$testinput));
-	var m = _p24._0;
-	var cmd = _p24._1;
+		A2(_user$project$Editor$init, _user$project$Pad$testinput, _user$project$Pad$initCss));
+	var m = _p25._0;
+	var cmd = _p25._1;
 	return {
 		ctor: '_Tuple2',
 		_0: m,
@@ -420,10 +473,10 @@ var _user$project$Editor$init$ = function (result) {
 				]))
 	};
 };
-var _user$project$Editor$_p25 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace('editor');
-var _user$project$Editor$id = _user$project$Editor$_p25.id;
-var _user$project$Editor$class = _user$project$Editor$_p25.$class;
-var _user$project$Editor$classList = _user$project$Editor$_p25.classList;
+var _user$project$Editor$_p26 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace('editor');
+var _user$project$Editor$id = _user$project$Editor$_p26.id;
+var _user$project$Editor$class = _user$project$Editor$_p26.$class;
+var _user$project$Editor$classList = _user$project$Editor$_p26.classList;
 var _user$project$Editor$renderRenderer = function (model) {
 	return _elm_lang$core$Native_List.fromArray(
 		[
@@ -567,10 +620,10 @@ var _user$project$Editor$view = function (model) {
 					_user$project$Editor$renderMenu(model)
 				]),
 			function () {
-				var _p26 = function (_) {
+				var _p27 = function (_) {
 					return _.position;
 				}(model);
-				switch (_p26.ctor) {
+				switch (_p27.ctor) {
 					case 'MainMenu':
 						return _user$project$Editor$renderMainMenu(model);
 					case 'Editor':

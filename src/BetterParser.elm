@@ -22,6 +22,7 @@ return v = Parser (\ts -> Ok (v,ts))
     Parser (\ts ->
              case (parse p) ts of
                 Err s -> Err s
+                --Err s -> Err (s ++ " " ++ toString ts)
                 Ok (v,out) -> parse (f v) out            
             )
 

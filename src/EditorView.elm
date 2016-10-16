@@ -5,6 +5,8 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Html.CssHelpers
 import EditorCss exposing (..)
+import TagAttr exposing (..)
+import Data.Integer exposing (Integer)
 import HtmlZipper exposing ( HTML
                            , HtmlZipper
                            , Path
@@ -16,6 +18,7 @@ import Types exposing (..)
 import String exposing (words)
 import TagAttr exposing (TagName)
 import Markdown exposing (..)
+import CssParser exposing (IndexedCss, toCssString)
 
 { id, class, classList } =
     Html.CssHelpers.withNamespace "editor"
@@ -49,6 +52,26 @@ renderEditor model =
         [ explorer model
         ]
   , renderConsole model
+  , div [ class [ Pane ]
+        , id LeftPaneCss
+        ]
+        [ Html.form 
+                  []
+                  [ textarea [ onInput StoreCss
+                             , rows 15
+                             , cols 45
+                             , id PromptCss
+                             , spellcheck False
+                             ]
+                             [ case (.procCssString model) of 
+                                Nothing -> text (.rawCssString model)
+                                Just s  -> text s
+                             ]
+                  , br [] []
+                  , button [onClick ParseCss, type' "reset"] [ text "Parse Css"]
+                  ]
+          ]
+  , renderCssConsole model       
   , div [classList [("DebugClass",.debug model)]]
         [ toHtmlWith 
               { githubFlavored =
@@ -159,3 +182,35 @@ renderConsole model =
                  Ok r  -> text "parsing complete" 
             ]
       ]
+
+renderCssConsole : Model -> Html msg
+renderCssConsole model = 
+  div [ id Console 
+      ]
+      [ div [ class [Mono] ]
+            [ case (.parsedCssData model) of 
+                 Err s -> span [class [Error]] [text s]
+                 Ok r  -> text "parsing complete" 
+            ]
+      ]
+
+-- Elm String to HTML
+renderer : Result String (HTML,Integer) -> Result String IndexedCss -> Html msg
+renderer res cssRes = 
+  let renderer' (Node  tag xs) = 
+        toTag (.tagname tag)
+              (List.map toAttr (.attr tag))
+              (List.map renderer' xs)
+      
+      css = case cssRes of 
+             Err _ -> ""
+             Ok indCss -> toCssString indCss
+  in 
+  case res of 
+    Err s -> div [] [text "Oh no!", br [] [], text s]
+    Ok (t,n)  -> renderer' (addStyle css t) 
+
+
+addStyle : String -> HTML -> HTML
+addStyle css (Node tag xs) =
+  Node tag (xs ++ [(Node (Tag (CssTag css) [] []) [])])

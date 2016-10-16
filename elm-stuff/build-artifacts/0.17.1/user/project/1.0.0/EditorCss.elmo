@@ -20,12 +20,14 @@ var _user$project$EditorCss$rendererCss = A2(
 			A3(_rtfeldman$elm_css$Css$rgb, 255, 255, 255))
 		]));
 var _user$project$EditorCss$Console = {ctor: 'Console'};
+var _user$project$EditorCss$PromptCss = {ctor: 'PromptCss'};
 var _user$project$EditorCss$Menu = {ctor: 'Menu'};
 var _user$project$EditorCss$PathStr = {ctor: 'PathStr'};
 var _user$project$EditorCss$Path = {ctor: 'Path'};
 var _user$project$EditorCss$Prompt = {ctor: 'Prompt'};
 var _user$project$EditorCss$ExplWindow = {ctor: 'ExplWindow'};
 var _user$project$EditorCss$Container = {ctor: 'Container'};
+var _user$project$EditorCss$LeftPaneCss = {ctor: 'LeftPaneCss'};
 var _user$project$EditorCss$RightPane = {ctor: 'RightPane'};
 var _user$project$EditorCss$LeftPane = {ctor: 'LeftPane'};
 var _user$project$EditorCss$Explorer = {ctor: 'Explorer'};
@@ -236,6 +238,17 @@ var _user$project$EditorCss$css = function (_p0) {
 				function (x, y) {
 					return A2(_rtfeldman$elm_css$Css_ops['#'], x, y);
 				}),
+			_user$project$EditorCss$LeftPaneCss,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$width(
+					_rtfeldman$elm_css$Css$pct(70))
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['#'], x, y);
+				}),
 			_user$project$EditorCss$RightPane,
 			_elm_lang$core$Native_List.fromArray(
 				[
@@ -273,6 +286,18 @@ var _user$project$EditorCss$css = function (_p0) {
 					return A2(_rtfeldman$elm_css$Css_ops['#'], x, y);
 				}),
 			_user$project$EditorCss$Prompt,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$fontFamilies(_user$project$EditorCss$mono),
+					_rtfeldman$elm_css$Css$width(
+					_rtfeldman$elm_css$Css$pct(95))
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['#'], x, y);
+				}),
+			_user$project$EditorCss$PromptCss,
 			_elm_lang$core$Native_List.fromArray(
 				[
 					_rtfeldman$elm_css$Css$fontFamilies(_user$project$EditorCss$mono),

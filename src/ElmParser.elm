@@ -12,21 +12,6 @@ import Dict exposing (get)
 import Data.Integer exposing (add, fromInt, Integer)
 
 
--- Elm String to HTML
-
-
-
-renderer : Result String (HTML,Integer) -> Html msg
-renderer res = 
-  let renderer' (Node  tag xs) = 
-        toTag (.tagname tag)
-              (List.map toAttr (.attr tag))
-              (List.map renderer' xs)
-  in 
-  case res of 
-    Err s -> div [] [text "Oh no!", br [] [], text s]
-    Ok (t,n)  -> renderer' t 
-
 
 
 interpret : String -> Integer -> Result String (HTML,Integer)
@@ -35,7 +20,11 @@ interpret input n =
     Err s -> Err ("Tokenizer error: " ++ s)
     Ok ts -> case parse (parseTag [] n) ts of 
                Err s  -> Err ("Parser error: " ++ s) 
-               Ok (res,_) -> Ok res
+               Ok (res,rest) -> 
+                if rest == []
+                then Ok res
+                else Err ("Parser error: unprocessed input") 
+
 
 
 zero =  fromInt 0

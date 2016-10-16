@@ -17,13 +17,101 @@ var _user$project$CssParser$addIndexes = function (xs) {
 		});
 	return A2(helper, 0, xs);
 };
+var _user$project$CssParser$parserTester = F2(
+	function (p, input) {
+		var _p1 = _user$project$Tokenizer$tokenizer(input);
+		if (_p1.ctor === 'Err') {
+			return _elm_lang$core$Result$Err(
+				A2(_elm_lang$core$Basics_ops['++'], 'Tokenizer error: ', _p1._0));
+		} else {
+			var _p2 = A2(_user$project$BetterParser$parse, p, _p1._0);
+			if (_p2.ctor === 'Err') {
+				return _elm_lang$core$Result$Err(
+					A2(_elm_lang$core$Basics_ops['++'], 'Parser error: ', _p2._0));
+			} else {
+				return _elm_lang$core$Result$Ok(_p2._0._0);
+			}
+		}
+	});
+var _user$project$CssParser$toCssString = function (indexedCss) {
+	var declarationToString = function (d) {
+		return A2(
+			_elm_lang$core$String$join,
+			'',
+			A2(
+				_elm_lang$core$List$map,
+				function (_p3) {
+					var _p4 = _p3;
+					return A2(
+						_elm_lang$core$Basics_ops['++'],
+						'  ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_p4._0,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								': ',
+								A2(_elm_lang$core$Basics_ops['++'], _p4._1, ';'))));
+				},
+				d));
+	};
+	var selectorToString = function (s) {
+		var _p5 = s;
+		switch (_p5.ctor) {
+			case 'Class':
+				return A2(_elm_lang$core$Basics_ops['++'], _p5._0, ' ');
+			case 'Id':
+				return A2(_elm_lang$core$Basics_ops['++'], _p5._0, ' ');
+			case 'Pseudo':
+				return A2(_elm_lang$core$Basics_ops['++'], _p5._0, ' ');
+			case 'Tag':
+				return A2(_elm_lang$core$Basics_ops['++'], _p5._0, ' ');
+			default:
+				return ', ';
+		}
+	};
+	var selectorsToString = function (xs) {
+		return A2(
+			_elm_lang$core$String$join,
+			'',
+			A2(_elm_lang$core$List$map, selectorToString, xs));
+	};
+	var nodeToString = F2(
+		function (_p7, _p6) {
+			var _p8 = _p6;
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				selectorsToString(_p8.selectors),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'{\n',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						declarationToString(_p8.declaration),
+						'\n}')));
+		});
+	var nodes = function (_) {
+		return _.cssDict;
+	}(indexedCss);
+	return A3(
+		_elm_lang$core$Dict$foldl,
+		F3(
+			function (k, v, acc) {
+				return A2(
+					_elm_lang$core$Basics_ops['++'],
+					acc,
+					A2(_elm_lang$core$Basics_ops['++'], v, '\n\n'));
+			}),
+		'',
+		A2(_elm_lang$core$Dict$map, nodeToString, nodes));
+};
 var _user$project$CssParser$consumerLS = function (xs) {
-	var _p1 = xs;
-	if (_p1.ctor === '[]') {
+	var _p9 = xs;
+	if (_p9.ctor === '[]') {
 		return _elm_lang$core$Result$Err('no more tokens');
 	} else {
 		return _elm_lang$core$Result$Ok(
-			{ctor: '_Tuple2', _0: _p1._0, _1: _p1._1});
+			{ctor: '_Tuple2', _0: _p9._0, _1: _p9._1});
 	}
 };
 var _user$project$CssParser$token = function (s) {
@@ -38,9 +126,22 @@ var _user$project$CssParser$token = function (s) {
 				s);
 		});
 };
+var _user$project$CssParser$isDelim = function (c) {
+	return _elm_lang$core$Native_Utils.eq(c, '(') || (_elm_lang$core$Native_Utils.eq(c, ')') || (_elm_lang$core$Native_Utils.eq(c, '{') || (_elm_lang$core$Native_Utils.eq(c, '}') || (_elm_lang$core$Native_Utils.eq(c, '+') || (_elm_lang$core$Native_Utils.eq(c, '-') || (_elm_lang$core$Native_Utils.eq(c, '/') || (_elm_lang$core$Native_Utils.eq(c, '*') || (_elm_lang$core$Native_Utils.eq(c, ';') || (_elm_lang$core$Native_Utils.eq(c, ':') || (_elm_lang$core$Native_Utils.eq(c, ',') || (_elm_lang$core$Native_Utils.eq(c, '.') || (_elm_lang$core$Native_Utils.eq(c, '[') || (_elm_lang$core$Native_Utils.eq(c, ']') || (_elm_lang$core$Native_Utils.eq(c, '&') || (_elm_lang$core$Native_Utils.eq(c, '|') || (_elm_lang$core$Native_Utils.eq(c, '>') || (_elm_lang$core$Native_Utils.eq(c, '<') || (_elm_lang$core$Native_Utils.eq(c, '=') || _elm_lang$core$Native_Utils.eq(c, '~')))))))))))))))))));
+};
+var _user$project$CssParser$safeItem = A2(
+	_user$project$BetterParser$sat,
+	_user$project$CssParser$consumerLS,
+	function (v) {
+		return _elm_lang$core$Basics$not(
+			_user$project$CssParser$isDelim(
+				function (_) {
+					return _.val;
+				}(v)));
+	});
 var _user$project$CssParser$parseProperty = A2(
 	_user$project$BetterParser_ops['>>='],
-	_user$project$BetterParser$item(_user$project$CssParser$consumerLS),
+	_user$project$CssParser$safeItem,
 	function (v1) {
 		return A2(
 			_user$project$BetterParser_ops['>>='],
@@ -51,7 +152,7 @@ var _user$project$CssParser$parseProperty = A2(
 					A2(
 						_user$project$BetterParser_ops['>>*'],
 						_user$project$CssParser$token('-'),
-						_user$project$BetterParser$item(_user$project$CssParser$consumerLS)),
+						_user$project$CssParser$safeItem),
 					function (v) {
 						return _user$project$BetterParser$return(
 							A2(
@@ -81,7 +182,7 @@ var _user$project$CssParser$parseValue = A2(
 	_user$project$BetterParser_ops['>>='],
 	A3(
 		_user$project$BetterParser$many1,
-		_user$project$BetterParser$item(_user$project$CssParser$consumerLS),
+		_user$project$CssParser$safeItem,
 		_elm_lang$core$Native_List.fromArray(
 			[]),
 		F2(
@@ -140,98 +241,99 @@ var _user$project$CssParser$IndexedCss = F5(
 var _user$project$CssParser$toIndexedCss = function (xs) {
 	var cons$ = F2(
 		function (x, mv) {
-			var _p2 = mv;
-			if (_p2.ctor === 'Nothing') {
+			var _p10 = mv;
+			if (_p10.ctor === 'Nothing') {
 				return _elm_lang$core$Maybe$Just(
 					_elm_lang$core$Native_List.fromArray(
 						[x]));
 			} else {
 				return _elm_lang$core$Maybe$Just(
-					A2(_elm_lang$core$List_ops['::'], x, _p2._0));
+					A2(_elm_lang$core$List_ops['::'], x, _p10._0));
 			}
 		});
 	var populate = F2(
-		function (_p4, _p3) {
-			var _p5 = _p4;
-			var _p12 = _p5._0;
-			var _p6 = _p3;
-			var _p11 = _p6._3;
-			var _p10 = _p6._2;
-			var _p9 = _p6._1;
-			var _p8 = _p6._0;
+		function (_p12, _p11) {
+			var _p13 = _p12;
+			var _p22 = _p13._0;
+			var _p14 = _p11;
 			return A3(
 				_elm_lang$core$List$foldl,
 				F2(
-					function (v, acc) {
-						var _p7 = v;
-						switch (_p7.ctor) {
+					function (v, _p15) {
+						var _p16 = _p15;
+						var _p21 = _p16._3;
+						var _p20 = _p16._2;
+						var _p19 = _p16._1;
+						var _p18 = _p16._0;
+						var _p17 = v;
+						switch (_p17.ctor) {
 							case 'Class':
 								return {
 									ctor: '_Tuple4',
 									_0: A3(
 										_elm_lang$core$Dict$update,
-										_p7._0,
-										cons$(_p12),
-										_p8),
-									_1: _p9,
-									_2: _p10,
-									_3: _p11
+										_p17._0,
+										cons$(_p22),
+										_p18),
+									_1: _p19,
+									_2: _p20,
+									_3: _p21
 								};
 							case 'Id':
 								return {
 									ctor: '_Tuple4',
-									_0: _p8,
+									_0: _p18,
 									_1: A3(
 										_elm_lang$core$Dict$update,
-										_p7._0,
-										cons$(_p12),
-										_p9),
-									_2: _p10,
-									_3: _p11
+										_p17._0,
+										cons$(_p22),
+										_p19),
+									_2: _p20,
+									_3: _p21
 								};
 							case 'Pseudo':
 								return {
 									ctor: '_Tuple4',
-									_0: _p8,
-									_1: _p9,
+									_0: _p18,
+									_1: _p19,
 									_2: A3(
 										_elm_lang$core$Dict$update,
-										_p7._0,
-										cons$(_p12),
-										_p10),
-									_3: _p11
+										_p17._0,
+										cons$(_p22),
+										_p20),
+									_3: _p21
 								};
 							case 'Tag':
 								return {
 									ctor: '_Tuple4',
-									_0: _p8,
-									_1: _p9,
-									_2: _p10,
+									_0: _p18,
+									_1: _p19,
+									_2: _p20,
 									_3: A3(
 										_elm_lang$core$Dict$update,
-										_p7._0,
-										cons$(_p12),
-										_p11)
+										_p17._0,
+										cons$(_p22),
+										_p21)
 								};
 							default:
-								return acc;
+								return {ctor: '_Tuple4', _0: _p18, _1: _p19, _2: _p20, _3: _p21};
 						}
 					}),
-				{ctor: '_Tuple4', _0: _p8, _1: _p9, _2: _p10, _3: _p11},
+				{ctor: '_Tuple4', _0: _p14._0, _1: _p14._1, _2: _p14._2, _3: _p14._3},
 				function (_) {
 					return _.selectors;
-				}(_p5._1));
+				}(_p13._1));
 		});
 	var indexedNodes = _user$project$CssParser$addIndexes(xs);
-	var _p13 = A3(
+	var _p23 = A3(
 		_elm_lang$core$List$foldl,
 		populate,
 		{ctor: '_Tuple4', _0: _elm_lang$core$Dict$empty, _1: _elm_lang$core$Dict$empty, _2: _elm_lang$core$Dict$empty, _3: _elm_lang$core$Dict$empty},
 		indexedNodes);
-	var classDict = _p13._0;
-	var idDict = _p13._1;
-	var pseudoDict = _p13._2;
-	var tagDict = _p13._3;
+	var classDict = _p23._0;
+	var idDict = _p23._1;
+	var pseudoDict = _p23._2;
+	var tagDict = _p23._3;
 	return A5(
 		_user$project$CssParser$IndexedCss,
 		_elm_lang$core$Dict$fromList(indexedNodes),
@@ -250,7 +352,7 @@ var _user$project$CssParser$Tag = function (a) {
 };
 var _user$project$CssParser$parseTagSelector = A2(
 	_user$project$BetterParser_ops['>>='],
-	_user$project$BetterParser$item(_user$project$CssParser$consumerLS),
+	_user$project$CssParser$safeItem,
 	function (res) {
 		return _user$project$BetterParser$return(
 			_user$project$CssParser$Tag(
@@ -266,7 +368,7 @@ var _user$project$CssParser$parsePseudoSelector = A2(
 	A2(
 		_user$project$BetterParser_ops['>>*'],
 		_user$project$CssParser$token(':'),
-		_user$project$BetterParser$item(_user$project$CssParser$consumerLS)),
+		_user$project$CssParser$safeItem),
 	function (res) {
 		return _user$project$BetterParser$return(
 			_user$project$CssParser$Pseudo(
@@ -285,7 +387,7 @@ var _user$project$CssParser$parseIdSelector = A2(
 	A2(
 		_user$project$BetterParser_ops['>>*'],
 		_user$project$CssParser$token('#'),
-		_user$project$BetterParser$item(_user$project$CssParser$consumerLS)),
+		_user$project$CssParser$safeItem),
 	function (res) {
 		return _user$project$BetterParser$return(
 			_user$project$CssParser$Id(
@@ -304,7 +406,7 @@ var _user$project$CssParser$parseClassSelector = A2(
 	A2(
 		_user$project$BetterParser_ops['>>*'],
 		_user$project$CssParser$token('.'),
-		_user$project$BetterParser$item(_user$project$CssParser$consumerLS)),
+		_user$project$CssParser$safeItem),
 	function (res) {
 		return _user$project$BetterParser$return(
 			_user$project$CssParser$Class(
@@ -378,3 +480,21 @@ var _user$project$CssParser$parseCss = A2(
 		return _user$project$BetterParser$return(
 			_user$project$CssParser$toIndexedCss(res));
 	});
+var _user$project$CssParser$interpretCss = function (input) {
+	var _p24 = _user$project$Tokenizer$tokenizer(input);
+	if (_p24.ctor === 'Err') {
+		return _elm_lang$core$Result$Err(
+			A2(_elm_lang$core$Basics_ops['++'], 'Tokenizer error: ', _p24._0));
+	} else {
+		var _p25 = A2(_user$project$BetterParser$parse, _user$project$CssParser$parseCss, _p24._0);
+		if (_p25.ctor === 'Err') {
+			return _elm_lang$core$Result$Err(
+				A2(_elm_lang$core$Basics_ops['++'], 'Parser error: ', _p25._0));
+		} else {
+			return _elm_lang$core$Native_Utils.eq(
+				_p25._0._1,
+				_elm_lang$core$Native_List.fromArray(
+					[])) ? _elm_lang$core$Result$Ok(_p25._0._0) : _elm_lang$core$Result$Err('Parser error: unprocessed input');
+		}
+	}
+};

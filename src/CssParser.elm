@@ -34,11 +34,36 @@ type alias IndexedCss =
   }
 
 
+isDelim : String -> Bool
+isDelim c = 
+  c == "(" ||
+  c == ")" ||
+  c == "{" ||
+  c == "}" ||
+  c == "+" ||
+  c == "-" ||
+  c == "/" ||
+  c == "*" ||
+  c == ";" ||
+  c == ":" ||
+  c == "," ||
+  c == "." ||
+  c == "[" ||
+  c == "]" ||
+  c == "&" ||
+  c == "|" ||
+  c == ">" ||
+  c == "<" ||
+  c == "=" ||
+  c == "~" 
+
 consumerLS : List Token -> Result String (Token, List Token)
 consumerLS xs =
   case xs of
     [] -> Err "no more tokens"
     (x :: xs') -> Ok (x,xs')
+
+safeItem = sat consumerLS (\v -> not (isDelim <| .val v))
 
 token : String -> Parser (List Token) Token
 token s = sat consumerLS (\t -> (.val t) == s)
@@ -46,24 +71,24 @@ token s = sat consumerLS (\t -> (.val t) == s)
 parsePseudoSelector : Parser (List Token) Selector
 parsePseudoSelector = 
   token ":"
-  >>* (item consumerLS)
+  >>* safeItem
   >>= (\res -> return <| Pseudo  (":" ++ .val res))
 
 parseClassSelector : Parser (List Token) Selector
 parseClassSelector = 
   token "."
-  >>* (item consumerLS)
+  >>* safeItem
   >>= (\res -> return <| Class  ("." ++ .val res))
 
 parseIdSelector : Parser (List Token) Selector
 parseIdSelector = 
   token "#"
-  >>* (item consumerLS)
+  >>* safeItem
   >>= (\res -> return <| Id  ("#" ++ .val res))
 
 parseTagSelector : Parser (List Token) Selector
 parseTagSelector =
-  item consumerLS
+  safeItem
   >>= (\res -> return <| Tag  (.val res)) 
 
 parseComa : Parser (List Token) Selector
@@ -93,16 +118,16 @@ parseSelectors =
 
 parseProperty : Parser (List Token) Property
 parseProperty = 
-  item consumerLS 
+  safeItem 
   >>= \v1 -> many ( token "-" 
-                    >>* item consumerLS 
+                    >>* safeItem 
                     >>= \v -> return ( "-" ++ .val v)
                   ) [] (::)
   >>= \res -> return (.val v1 ++ (String.concat res))  
 
 parseValue : Parser (List Token) Value
 parseValue = 
-  many1 (item consumerLS) [] (::)
+  many1 safeItem [] (::)
   >>= \res -> token ";"
   >>* return (String.join " " <| List.map .val res)
 
@@ -139,7 +164,7 @@ toIndexedCss xs =
 
       populate (id,node) (classDict, idDict, pseudoDict, tagDict) = 
         List.foldl 
-        (\v acc -> 
+        (\v (classDict, idDict, pseudoDict, tagDict) -> 
           case v of 
             Class s  -> ( update s (cons' id) classDict
                         , idDict, pseudoDict, tagDict)
@@ -149,7 +174,7 @@ toIndexedCss xs =
                         , update s (cons' id) pseudoDict, tagDict)
             Tag s    -> (classDict, idDict, pseudoDict
                         , update s (cons' id) tagDict)
-            _        -> acc
+            _        -> (classDict, idDict, pseudoDict, tagDict)
         ) (classDict, idDict, pseudoDict, tagDict) (.selectors node)
 
       (classDict, idDict, pseudoDict, tagDict) = 
@@ -163,7 +188,52 @@ toIndexedCss xs =
                 pseudoDict
                 tagDict                      
 
+toCssString : IndexedCss -> String
+toCssString indexedCss = 
+  let nodes = .cssDict indexedCss
+      
+      selectorToString s = 
+        case s of 
+          Class s -> s ++ " "
+          Id s -> s ++ " "
+          Pseudo s -> s ++ " "
+          Tag s -> s ++ " "
+          Coma -> ", "
+      
+      selectorsToString xs = 
+        String.join "" (List.map selectorToString xs)
 
+      declarationToString d =
+        String.join "" <| 
+          List.map (\(p,v) -> "  " ++ p ++ ": " ++ v ++ ";") d 
+
+
+      nodeToString _ {selectors, declaration} = 
+        selectorsToString selectors ++ "{\n" ++
+        declarationToString declaration ++ "\n}"
+  
+  in Dict.foldl (\k v acc -> acc ++ v ++ "\n\n")
+                ""
+                (Dict.map nodeToString nodes)
+
+
+interpretCss : String -> Result String IndexedCss
+interpretCss input = 
+  case tokenizer input of 
+    Err s -> Err ("Tokenizer error: " ++ s)
+    Ok ts -> case parse parseCss ts of 
+               Err s  -> Err ("Parser error: " ++ s) 
+               Ok (res,rest) -> 
+                if rest == []
+                then Ok res
+                else Err ("Parser error: unprocessed input")
+
+parserTester p input =
+  case tokenizer input of 
+    Err s -> Err ("Tokenizer error: " ++ s)
+    Ok ts -> case parse p ts of 
+               Err s  -> Err ("Parser error: " ++ s) 
+               Ok (res,_) -> Ok res 
 
 -------------------------------------------------------------------------------
 addIndexes : List a -> List (Int , a)
