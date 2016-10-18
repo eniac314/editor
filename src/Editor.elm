@@ -62,7 +62,7 @@ main =
 
 
 init' result = 
-  let (m,cmd) = urlUpdate result (init testinput initCss)
+  let (m,cmd) = urlUpdate result (init testinput5 initCss2)
   in (m, Cmd.batch [ cmd
                    , initWinSize
                    , modifyUrl "#editor"])
@@ -247,7 +247,6 @@ parseCss model =
                                         pCssData 
           }
     InDict (ce,nodeIndexes) ->
-      --model 
       let resTmpPCssData = 
             interpretCss (.rawCssString model)
           resPCssData = (.parsedCssData model)
@@ -299,7 +298,7 @@ parseCss model =
                 List.foldl 
                       (\(ind,node) acc ->
                         let (left,right) = splitAt ind [] acc
-                        in left ++ ((ind,node) :: right)
+                        in (left ++ [(ind,node)] ++ right)
                         ) xs toInsert
 
           in { model | parsedCssData = newPCssData

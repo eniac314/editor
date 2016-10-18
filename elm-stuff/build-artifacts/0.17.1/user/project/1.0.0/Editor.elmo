@@ -216,8 +216,11 @@ var _user$project$Editor$parseCss = function (model) {
 										_elm_lang$core$Basics_ops['++'],
 										left,
 										A2(
-											_elm_lang$core$List_ops['::'],
-											{ctor: '_Tuple2', _0: _p16, _1: _p14._1},
+											_elm_lang$core$Basics_ops['++'],
+											_elm_lang$core$Native_List.fromArray(
+												[
+													{ctor: '_Tuple2', _0: _p16, _1: _p14._1}
+												]),
 											right));
 								}),
 							xs,
@@ -728,7 +731,7 @@ var _user$project$Editor$init$ = function (result) {
 	var _p47 = A2(
 		_user$project$Editor$urlUpdate,
 		result,
-		A2(_user$project$Editor$init, _user$project$Pad$testinput, _user$project$Pad$initCss));
+		A2(_user$project$Editor$init, _user$project$Pad$testinput5, _user$project$Pad$initCss2));
 	var m = _p47._0;
 	var cmd = _p47._1;
 	return {

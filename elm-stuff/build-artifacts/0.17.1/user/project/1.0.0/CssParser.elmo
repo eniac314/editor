@@ -67,7 +67,7 @@ var _user$project$CssParser$nodesToCssString = function (maybeNodes) {
 	var declarationToString = function (d) {
 		return A2(
 			_elm_lang$core$String$join,
-			'',
+			'\n',
 			A2(
 				_elm_lang$core$List$map,
 				function (_p7) {
@@ -160,7 +160,7 @@ var _user$project$CssParser$toCssString = function (indexedCss) {
 	var declarationToString = function (d) {
 		return A2(
 			_elm_lang$core$String$join,
-			'',
+			'\n',
 			A2(
 				_elm_lang$core$List$map,
 				function (_p13) {
@@ -238,6 +238,17 @@ var _user$project$CssParser$consumerLS = function (xs) {
 			{ctor: '_Tuple2', _0: _p19._0, _1: _p19._1});
 	}
 };
+var _user$project$CssParser$safeValueItem = A2(
+	_user$project$BetterParser$sat,
+	_user$project$CssParser$consumerLS,
+	function (v) {
+		return _elm_lang$core$Basics$not(
+			_elm_lang$core$Native_Utils.eq(
+				function (_) {
+					return _.val;
+				}(v),
+				';'));
+	});
 var _user$project$CssParser$token = function (s) {
 	return A2(
 		_user$project$BetterParser$sat,
@@ -250,6 +261,99 @@ var _user$project$CssParser$token = function (s) {
 				s);
 		});
 };
+var _user$project$CssParser$parseValue = function () {
+	var joinValList = F2(
+		function (acc, xs) {
+			joinValList:
+			while (true) {
+				var _p20 = xs;
+				_v13_5:
+				do {
+					if (_p20.ctor === '[]') {
+						return acc;
+					} else {
+						switch (_p20._0) {
+							case '.':
+								if (_p20._1.ctor === '::') {
+									var _v14 = A2(
+										_elm_lang$core$Basics_ops['++'],
+										acc,
+										A2(_elm_lang$core$Basics_ops['++'], '.', _p20._1._0)),
+										_v15 = _p20._1._1;
+									acc = _v14;
+									xs = _v15;
+									continue joinValList;
+								} else {
+									break _v13_5;
+								}
+							case '(':
+								if (_p20._1.ctor === '::') {
+									var _v16 = A2(
+										_elm_lang$core$Basics_ops['++'],
+										acc,
+										A2(_elm_lang$core$Basics_ops['++'], '(', _p20._1._0)),
+										_v17 = _p20._1._1;
+									acc = _v16;
+									xs = _v17;
+									continue joinValList;
+								} else {
+									break _v13_5;
+								}
+							case ')':
+								var _v18 = A2(_elm_lang$core$Basics_ops['++'], acc, ')'),
+									_v19 = _p20._1;
+								acc = _v18;
+								xs = _v19;
+								continue joinValList;
+							case ',':
+								var _v20 = A2(_elm_lang$core$Basics_ops['++'], acc, ','),
+									_v21 = _p20._1;
+								acc = _v20;
+								xs = _v21;
+								continue joinValList;
+							default:
+								break _v13_5;
+						}
+					}
+				} while(false);
+				var _v22 = A2(
+					_elm_lang$core$Basics_ops['++'],
+					acc,
+					A2(_elm_lang$core$Basics_ops['++'], ' ', _p20._0)),
+					_v23 = _p20._1;
+				acc = _v22;
+				xs = _v23;
+				continue joinValList;
+			}
+		});
+	return A2(
+		_user$project$BetterParser_ops['>>='],
+		A3(
+			_user$project$BetterParser$many1,
+			_user$project$CssParser$safeValueItem,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			F2(
+				function (x, y) {
+					return A2(_elm_lang$core$List_ops['::'], x, y);
+				})),
+		function (res) {
+			return A2(
+				_user$project$BetterParser_ops['>>*'],
+				_user$project$CssParser$token(';'),
+				_user$project$BetterParser$return(
+					_elm_lang$core$String$trimLeft(
+						A2(
+							joinValList,
+							'',
+							A2(
+								_elm_lang$core$List$map,
+								function (_) {
+									return _.val;
+								},
+								res)))));
+		});
+}();
 var _user$project$CssParser$isDelim = function (c) {
 	return _elm_lang$core$Native_Utils.eq(c, '(') || (_elm_lang$core$Native_Utils.eq(c, ')') || (_elm_lang$core$Native_Utils.eq(c, '{') || (_elm_lang$core$Native_Utils.eq(c, '}') || (_elm_lang$core$Native_Utils.eq(c, '+') || (_elm_lang$core$Native_Utils.eq(c, '-') || (_elm_lang$core$Native_Utils.eq(c, '/') || (_elm_lang$core$Native_Utils.eq(c, '*') || (_elm_lang$core$Native_Utils.eq(c, ';') || (_elm_lang$core$Native_Utils.eq(c, ':') || (_elm_lang$core$Native_Utils.eq(c, ',') || (_elm_lang$core$Native_Utils.eq(c, '.') || (_elm_lang$core$Native_Utils.eq(c, '[') || (_elm_lang$core$Native_Utils.eq(c, ']') || (_elm_lang$core$Native_Utils.eq(c, '&') || (_elm_lang$core$Native_Utils.eq(c, '|') || (_elm_lang$core$Native_Utils.eq(c, '>') || (_elm_lang$core$Native_Utils.eq(c, '<') || (_elm_lang$core$Native_Utils.eq(c, '=') || _elm_lang$core$Native_Utils.eq(c, '~')))))))))))))))))));
 };
@@ -302,32 +406,6 @@ var _user$project$CssParser$parseProperty = A2(
 						_elm_lang$core$String$concat(res)));
 			});
 	});
-var _user$project$CssParser$parseValue = A2(
-	_user$project$BetterParser_ops['>>='],
-	A3(
-		_user$project$BetterParser$many1,
-		_user$project$CssParser$safeItem,
-		_elm_lang$core$Native_List.fromArray(
-			[]),
-		F2(
-			function (x, y) {
-				return A2(_elm_lang$core$List_ops['::'], x, y);
-			})),
-	function (res) {
-		return A2(
-			_user$project$BetterParser_ops['>>*'],
-			_user$project$CssParser$token(';'),
-			_user$project$BetterParser$return(
-				A2(
-					_elm_lang$core$String$join,
-					' ',
-					A2(
-						_elm_lang$core$List$map,
-						function (_) {
-							return _.val;
-						},
-						res))));
-	});
 var _user$project$CssParser$parseDeclaration = A2(
 	_user$project$BetterParser_ops['>>='],
 	A3(
@@ -365,99 +443,99 @@ var _user$project$CssParser$IndexedCss = F5(
 var _user$project$CssParser$toIndexedCss = function (xs) {
 	var cons$ = F2(
 		function (x, mv) {
-			var _p20 = mv;
-			if (_p20.ctor === 'Nothing') {
+			var _p21 = mv;
+			if (_p21.ctor === 'Nothing') {
 				return _elm_lang$core$Maybe$Just(
 					_elm_lang$core$Native_List.fromArray(
 						[x]));
 			} else {
 				return _elm_lang$core$Maybe$Just(
-					A2(_elm_lang$core$List_ops['::'], x, _p20._0));
+					A2(_elm_lang$core$List_ops['::'], x, _p21._0));
 			}
 		});
 	var populate = F2(
-		function (_p22, _p21) {
-			var _p23 = _p22;
-			var _p32 = _p23._0;
-			var _p24 = _p21;
+		function (_p23, _p22) {
+			var _p24 = _p23;
+			var _p33 = _p24._0;
+			var _p25 = _p22;
 			return A3(
 				_elm_lang$core$List$foldl,
 				F2(
-					function (v, _p25) {
-						var _p26 = _p25;
-						var _p31 = _p26._3;
-						var _p30 = _p26._2;
-						var _p29 = _p26._1;
-						var _p28 = _p26._0;
-						var _p27 = v;
-						switch (_p27.ctor) {
+					function (v, _p26) {
+						var _p27 = _p26;
+						var _p32 = _p27._3;
+						var _p31 = _p27._2;
+						var _p30 = _p27._1;
+						var _p29 = _p27._0;
+						var _p28 = v;
+						switch (_p28.ctor) {
 							case 'Class':
 								return {
 									ctor: '_Tuple4',
 									_0: A3(
 										_elm_lang$core$Dict$update,
-										_p27._0,
-										cons$(_p32),
-										_p28),
-									_1: _p29,
-									_2: _p30,
-									_3: _p31
+										_p28._0,
+										cons$(_p33),
+										_p29),
+									_1: _p30,
+									_2: _p31,
+									_3: _p32
 								};
 							case 'Id':
 								return {
 									ctor: '_Tuple4',
-									_0: _p28,
+									_0: _p29,
 									_1: A3(
 										_elm_lang$core$Dict$update,
-										_p27._0,
-										cons$(_p32),
-										_p29),
-									_2: _p30,
-									_3: _p31
+										_p28._0,
+										cons$(_p33),
+										_p30),
+									_2: _p31,
+									_3: _p32
 								};
 							case 'Pseudo':
 								return {
 									ctor: '_Tuple4',
-									_0: _p28,
-									_1: _p29,
+									_0: _p29,
+									_1: _p30,
 									_2: A3(
 										_elm_lang$core$Dict$update,
-										_p27._0,
-										cons$(_p32),
-										_p30),
-									_3: _p31
+										_p28._0,
+										cons$(_p33),
+										_p31),
+									_3: _p32
 								};
 							case 'Tag':
 								return {
 									ctor: '_Tuple4',
-									_0: _p28,
-									_1: _p29,
-									_2: _p30,
+									_0: _p29,
+									_1: _p30,
+									_2: _p31,
 									_3: A3(
 										_elm_lang$core$Dict$update,
-										_p27._0,
-										cons$(_p32),
-										_p31)
+										_p28._0,
+										cons$(_p33),
+										_p32)
 								};
 							default:
-								return {ctor: '_Tuple4', _0: _p28, _1: _p29, _2: _p30, _3: _p31};
+								return {ctor: '_Tuple4', _0: _p29, _1: _p30, _2: _p31, _3: _p32};
 						}
 					}),
-				{ctor: '_Tuple4', _0: _p24._0, _1: _p24._1, _2: _p24._2, _3: _p24._3},
+				{ctor: '_Tuple4', _0: _p25._0, _1: _p25._1, _2: _p25._2, _3: _p25._3},
 				function (_) {
 					return _.selectors;
-				}(_p23._1));
+				}(_p24._1));
 		});
 	var indexedNodes = _user$project$CssParser$addIndexes(xs);
-	var _p33 = A3(
+	var _p34 = A3(
 		_elm_lang$core$List$foldl,
 		populate,
 		{ctor: '_Tuple4', _0: _elm_lang$core$Dict$empty, _1: _elm_lang$core$Dict$empty, _2: _elm_lang$core$Dict$empty, _3: _elm_lang$core$Dict$empty},
 		indexedNodes);
-	var classDict = _p33._0;
-	var idDict = _p33._1;
-	var pseudoDict = _p33._2;
-	var tagDict = _p33._3;
+	var classDict = _p34._0;
+	var idDict = _p34._1;
+	var pseudoDict = _p34._2;
+	var tagDict = _p34._3;
 	return A5(
 		_user$project$CssParser$IndexedCss,
 		_elm_lang$core$Dict$fromList(indexedNodes),
@@ -605,20 +683,28 @@ var _user$project$CssParser$parseCss = A2(
 			_user$project$CssParser$toIndexedCss(res));
 	});
 var _user$project$CssParser$interpretCss = function (input) {
-	var _p34 = _user$project$Tokenizer$tokenizer(input);
-	if (_p34.ctor === 'Err') {
+	var _p35 = _user$project$Tokenizer$tokenizer(input);
+	if (_p35.ctor === 'Err') {
 		return _elm_lang$core$Result$Err(
-			A2(_elm_lang$core$Basics_ops['++'], 'Tokenizer error: ', _p34._0));
+			A2(_elm_lang$core$Basics_ops['++'], 'Tokenizer error: ', _p35._0));
 	} else {
-		var _p35 = A2(_user$project$BetterParser$parse, _user$project$CssParser$parseCss, _p34._0);
-		if (_p35.ctor === 'Err') {
+		var _p36 = A2(_user$project$BetterParser$parse, _user$project$CssParser$parseCss, _p35._0);
+		if (_p36.ctor === 'Err') {
 			return _elm_lang$core$Result$Err(
-				A2(_elm_lang$core$Basics_ops['++'], 'Parser error: ', _p35._0));
+				A2(_elm_lang$core$Basics_ops['++'], 'Parser error: ', _p36._0));
 		} else {
+			var _p37 = _p36._0._1;
 			return _elm_lang$core$Native_Utils.eq(
-				_p35._0._1,
+				_p37,
 				_elm_lang$core$Native_List.fromArray(
-					[])) ? _elm_lang$core$Result$Ok(_p35._0._0) : _elm_lang$core$Result$Err('Parser error: unprocessed input');
+					[])) ? _elm_lang$core$Result$Ok(_p36._0._0) : _elm_lang$core$Result$Err(
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					'Parser error: Failure at: ',
+					A2(
+						_elm_lang$core$String$left,
+						50,
+						_elm_lang$core$Basics$toString(_p37))));
 		}
 	}
 };

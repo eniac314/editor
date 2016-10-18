@@ -159,7 +159,7 @@ toTag tn  =
           , sanitize = True
           , defaultHighlighting = Nothing
           , smartypants = False
-          } [style [("white-space", "pre")]] s)
+          } [] s)
     CssTag css -> 
       (\ _ _ -> Html.node "style"
                    [ property "textContent" <| string css
@@ -216,6 +216,7 @@ type Attr =
  | DownloadAs String
  | Hreflang String
  | Media String
+ | Src String
 
 
 attrnames =
@@ -223,6 +224,7 @@ attrnames =
            [("class",Class)
            ,("id",Id)
            ,("href",Href)
+           ,("src",Src)
            ,("title", Title)
            ,("hidden", Hidden)
            ,("type",Type)
@@ -318,6 +320,7 @@ toAttr a =
     DownloadAs s -> downloadAs s
     Hreflang s -> hreflang s
     Media s -> media s
+    Src s -> src s
 
 toBool s = 
   if (s == "True" || s == "true")

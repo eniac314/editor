@@ -159,8 +159,10 @@ var _user$project$TagAttr$toAttr = function (a) {
 			return _elm_lang$html$Html_Attributes$downloadAs(_p4._0);
 		case 'Hreflang':
 			return _elm_lang$html$Html_Attributes$hreflang(_p4._0);
-		default:
+		case 'Media':
 			return _elm_lang$html$Html_Attributes$media(_p4._0);
+		default:
+			return _elm_lang$html$Html_Attributes$src(_p4._0);
 	}
 };
 var _user$project$TagAttr$capitalize = function (s) {
@@ -325,13 +327,7 @@ var _user$project$TagAttr$toTag = function (tn) {
 							smartypants: false
 						},
 						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$style(
-								_elm_lang$core$Native_List.fromArray(
-									[
-										{ctor: '_Tuple2', _0: 'white-space', _1: 'pre'}
-									]))
-							]),
+							[]),
 						_p6._0);
 				});
 		default:
@@ -490,6 +486,9 @@ var _user$project$TagAttr$tagnames = _elm_lang$core$Dict$fromList(
 			{ctor: '_Tuple2', _0: 'td', _1: _user$project$TagAttr$Td},
 			{ctor: '_Tuple2', _0: 'th', _1: _user$project$TagAttr$Th}
 		]));
+var _user$project$TagAttr$Src = function (a) {
+	return {ctor: 'Src', _0: a};
+};
 var _user$project$TagAttr$Media = function (a) {
 	return {ctor: 'Media', _0: a};
 };
@@ -631,6 +630,7 @@ var _user$project$TagAttr$attrnames = _elm_lang$core$Dict$fromList(
 			{ctor: '_Tuple2', _0: 'class', _1: _user$project$TagAttr$Class},
 			{ctor: '_Tuple2', _0: 'id', _1: _user$project$TagAttr$Id},
 			{ctor: '_Tuple2', _0: 'href', _1: _user$project$TagAttr$Href},
+			{ctor: '_Tuple2', _0: 'src', _1: _user$project$TagAttr$Src},
 			{ctor: '_Tuple2', _0: 'title', _1: _user$project$TagAttr$Title},
 			{ctor: '_Tuple2', _0: 'hidden', _1: _user$project$TagAttr$Hidden},
 			{ctor: '_Tuple2', _0: 'type', _1: _user$project$TagAttr$Type},

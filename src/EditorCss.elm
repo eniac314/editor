@@ -146,11 +146,14 @@ css =
         [ width (pct 100)
         , height (px 287)
         , overflow scroll
+        , overflowX hidden
+        , paddingBottom (em 0)
         ]
     , (#) CssExplWindow
         [ width (pct 100)
         , height (px 287)
         , overflow scroll
+        , overflowX hidden
         , backgroundColor (rgb 155 155 155)
         ]
     , (#) Explorer

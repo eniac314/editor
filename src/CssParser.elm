@@ -3,7 +3,7 @@ module CssParser exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import List exposing (member, foldr, reverse)
-import String exposing (cons, words, endsWith, startsWith, dropLeft, dropRight, uncons, isEmpty, fromChar, trimRight)
+import String exposing (trimLeft, left, cons, words, endsWith, startsWith, dropLeft, dropRight, uncons, isEmpty, fromChar, trimRight, join)
 import BetterParser exposing (..)
 import Tokenizer exposing (tokenizer, Token, tokError)
 import Dict exposing (..)
@@ -64,6 +64,8 @@ consumerLS xs =
     (x :: xs') -> Ok (x,xs')
 
 safeItem = sat consumerLS (\v -> not (isDelim <| .val v))
+
+safeValueItem = sat consumerLS (\v -> not (.val v == ";"))
 
 token : String -> Parser (List Token) Token
 token s = sat consumerLS (\t -> (.val t) == s)
@@ -127,9 +129,23 @@ parseProperty =
 
 parseValue : Parser (List Token) Value
 parseValue = 
-  many1 safeItem [] (::)
+  let joinValList acc xs = 
+       case xs of 
+        [] -> acc
+        ("."::v1::xs) -> 
+          joinValList (acc ++ "." ++ v1) xs
+        ("("::v1::xs) -> 
+          joinValList (acc ++ "(" ++ v1) xs
+        (")"::xs) -> 
+          joinValList (acc ++ ")") xs
+        (","::xs) -> 
+          joinValList (acc ++ "," ) xs 
+        (x :: xs) -> joinValList (acc ++ " " ++ x) xs       
+ in
+  many1 safeValueItem [] (::)
   >>= \res -> token ";"
-  >>* return (String.join " " <| List.map .val res)
+  >>* (return <| trimLeft (joinValList "" (List.map .val res)))
+
 
 parseDeclaration : Parser (List Token) Declaration
 parseDeclaration = 
@@ -204,7 +220,7 @@ toCssString indexedCss =
         String.join "" (fixPseudos (List.map selectorToString xs))
 
       declarationToString d =
-        String.join "" <| 
+        String.join "\n" <| 
           List.map (\(p,v) -> "  " ++ p ++ ": " ++ v ++ ";") d 
 
 
@@ -236,7 +252,7 @@ nodesToCssString maybeNodes =
         String.join "" (fixPseudos (List.map selectorToString xs))
 
       declarationToString d =
-        String.join "" <| 
+        String.join "\n" <| 
           List.map (\(p,v) -> "  " ++ p ++ ": " ++ v ++ ";") d 
 
 
@@ -266,7 +282,9 @@ interpretCss input =
                Ok (res,rest) -> 
                 if rest == []
                 then Ok res
-                else Err ("Parser error: unprocessed input")
+                else Err ("Parser error: Failure at: "
+                         ++ (left 50 <| toString rest) 
+                         )
 
 parserTester p input =
   case tokenizer input of 

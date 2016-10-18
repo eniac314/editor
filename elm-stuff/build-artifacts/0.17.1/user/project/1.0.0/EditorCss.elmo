@@ -382,7 +382,10 @@ var _user$project$EditorCss$css = function (_p0) {
 					_rtfeldman$elm_css$Css$pct(100)),
 					_rtfeldman$elm_css$Css$height(
 					_rtfeldman$elm_css$Css$px(287)),
-					_rtfeldman$elm_css$Css$overflow(_rtfeldman$elm_css$Css$scroll)
+					_rtfeldman$elm_css$Css$overflow(_rtfeldman$elm_css$Css$scroll),
+					_rtfeldman$elm_css$Css$overflowX(_rtfeldman$elm_css$Css$hidden),
+					_rtfeldman$elm_css$Css$paddingBottom(
+					_rtfeldman$elm_css$Css$em(0))
 				])),
 			A2(
 			F2(
@@ -397,6 +400,7 @@ var _user$project$EditorCss$css = function (_p0) {
 					_rtfeldman$elm_css$Css$height(
 					_rtfeldman$elm_css$Css$px(287)),
 					_rtfeldman$elm_css$Css$overflow(_rtfeldman$elm_css$Css$scroll),
+					_rtfeldman$elm_css$Css$overflowX(_rtfeldman$elm_css$Css$hidden),
 					_rtfeldman$elm_css$Css$backgroundColor(
 					A3(_rtfeldman$elm_css$Css$rgb, 155, 155, 155))
 				])),
