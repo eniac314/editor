@@ -3,7 +3,7 @@ module CssParser exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import List exposing (member, foldr, reverse)
-import String exposing (cons, words, endsWith, startsWith, dropLeft, dropRight, uncons, isEmpty, fromChar)
+import String exposing (cons, words, endsWith, startsWith, dropLeft, dropRight, uncons, isEmpty, fromChar, trimRight)
 import BetterParser exposing (..)
 import Tokenizer exposing (tokenizer, Token, tokError)
 import Dict exposing (..)
@@ -201,7 +201,7 @@ toCssString indexedCss =
           Coma -> ", "
       
       selectorsToString xs = 
-        String.join "" (List.map selectorToString xs)
+        String.join "" (fixPseudos (List.map selectorToString xs))
 
       declarationToString d =
         String.join "" <| 
@@ -216,6 +216,46 @@ toCssString indexedCss =
                 ""
                 (Dict.map nodeToString nodes)
 
+nodesToCssString : List (Maybe CssNode) -> String
+nodesToCssString maybeNodes = 
+  let unMaybe xs = 
+       case xs of 
+        [] -> []
+        (Nothing::xs) -> unMaybe xs
+        (Just n ::xs) -> n :: (unMaybe xs)
+      
+      selectorToString s = 
+        case s of 
+          Class s -> s ++ " "
+          Id s -> s ++ " "
+          Pseudo s -> s ++ " "
+          Tag s -> s ++ " "
+          Coma -> ", "
+      
+      selectorsToString xs = 
+        String.join "" (fixPseudos (List.map selectorToString xs))
+
+      declarationToString d =
+        String.join "" <| 
+          List.map (\(p,v) -> "  " ++ p ++ ": " ++ v ++ ";") d 
+
+
+      nodeToString {selectors, declaration} = 
+        selectorsToString selectors ++ "{\n" ++
+        declarationToString declaration ++ "\n}"
+  
+  in List.foldl (\v acc -> acc ++ v ++ "\n\n")
+                ""
+                (List.map nodeToString (unMaybe maybeNodes))
+
+fixPseudos xs = 
+  case xs of 
+    [] -> []
+    (s1::s2::ss) -> 
+      if String.startsWith ":" s2
+      then ((trimRight s1)::[s2]) ++ fixPseudos ss
+      else s1 :: fixPseudos (s2 :: ss)
+    (s :: ss) -> s :: fixPseudos ss
 
 interpretCss : String -> Result String IndexedCss
 interpretCss input = 

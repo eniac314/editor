@@ -1,3 +1,7 @@
+var _user$project$Types$CssExplorer = F2(
+	function (a, b) {
+		return {currentPos: a, currentDict: b};
+	});
 var _user$project$Types$Model = function (a) {
 	return function (b) {
 		return function (c) {
@@ -11,7 +15,9 @@ var _user$project$Types$Model = function (a) {
 										return function (k) {
 											return function (l) {
 												return function (m) {
-													return {position: a, rawString: b, rawCssString: c, procString: d, procCssString: e, parsedData: f, parsedCssData: g, currPath: h, page: i, toRender: j, nextId: k, debug: l, winSize: m};
+													return function (n) {
+														return {position: a, rawString: b, rawCssString: c, procString: d, procCssString: e, parsedData: f, parsedCssData: g, currPath: h, cssExplorer: i, page: j, toRender: k, nextId: l, debug: m, winSize: n};
+													};
 												};
 											};
 										};
@@ -29,7 +35,22 @@ var _user$project$Types$Renderer = {ctor: 'Renderer'};
 var _user$project$Types$FileIO = {ctor: 'FileIO'};
 var _user$project$Types$Editor = {ctor: 'Editor'};
 var _user$project$Types$MainMenu = {ctor: 'MainMenu'};
+var _user$project$Types$CssTags = {ctor: 'CssTags'};
+var _user$project$Types$CssPseudos = {ctor: 'CssPseudos'};
+var _user$project$Types$CssIds = {ctor: 'CssIds'};
+var _user$project$Types$CssClass = {ctor: 'CssClass'};
+var _user$project$Types$InDict = function (a) {
+	return {ctor: 'InDict', _0: a};
+};
+var _user$project$Types$Top = {ctor: 'Top'};
 var _user$project$Types$Failure = {ctor: 'Failure'};
+var _user$project$Types$GoToCssTop = {ctor: 'GoToCssTop'};
+var _user$project$Types$FilterCss = function (a) {
+	return {ctor: 'FilterCss', _0: a};
+};
+var _user$project$Types$ChangeDict = function (a) {
+	return {ctor: 'ChangeDict', _0: a};
+};
 var _user$project$Types$SwapEditorRender = {ctor: 'SwapEditorRender'};
 var _user$project$Types$ChangeUrl = function (a) {
 	return {ctor: 'ChangeUrl', _0: a};

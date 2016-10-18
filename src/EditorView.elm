@@ -19,6 +19,7 @@ import String exposing (words)
 import TagAttr exposing (TagName)
 import Markdown exposing (..)
 import CssParser exposing (IndexedCss, toCssString)
+import Dict exposing (..)
 
 { id, class, classList } =
     Html.CssHelpers.withNamespace "editor"
@@ -26,62 +27,64 @@ import CssParser exposing (IndexedCss, toCssString)
 renderEditor : Model -> List (Html Msg)
 renderEditor model = 
   [ renderPath (.currPath model)
-  , div [ class [ Pane ]
-        , id LeftPane
-        ] 
-        [ Html.form 
+  
+  , Html.form 
             []
-            [ textarea [ onInput Store
-                       , rows 15
-                       , cols 45
-                       , id Prompt
-                       , spellcheck False
-                       ]
-                       [ case (.procString model) of 
-                          Nothing -> text (.rawString model)
-                          Just s  -> text s
-                       ]
-            , br [] []
-            , button [onClick Parse, type' "reset"] [ text "Parse"]
-            , button [onClick Debug, type' "button"] [ text "Debug"]
-            ]
-        ]
-  , div [ id RightPane
-        , class [Pane]
-        ]
-        [ explorer model
-        ]
-  , renderConsole model
-  , div [ class [ Pane ]
-        , id LeftPaneCss
-        ]
-        [ Html.form 
-                  []
-                  [ textarea [ onInput StoreCss
+            [ div [ class [ Pane ]
+                  , id LeftPane
+                  ]
+                  [ textarea [ onInput Store
                              , rows 15
                              , cols 45
-                             , id PromptCss
+                             , id Prompt
                              , spellcheck False
                              ]
-                             [ case (.procCssString model) of 
-                                Nothing -> text (.rawCssString model)
+                             [ case (.procString model) of 
+                                Nothing -> text (.rawString model)
                                 Just s  -> text s
                              ]
                   , br [] []
-                  , button [onClick ParseCss, type' "reset"] [ text "Parse Css"]
+                  , button [onClick Parse, type' "reset"] [ text "Parse"]
+                  , button [onClick Debug, type' "button"] [ text "Debug"]
+                  ] 
+            , div [ id RightPane
+                  , class [Pane]
                   ]
+                  [ explorer model
+                  ]
+            ]
+  , renderConsole model
+  
+  , Html.form 
+          []
+          [ div [ class [ Pane ]
+                , id LeftPaneCss
+                ]
+                [ textarea [ onInput StoreCss
+                           , rows 15
+                           , cols 45
+                           , id PromptCss
+                           , spellcheck False
+                           ]
+                           [ case (.procCssString model) of 
+                              Nothing -> text (.rawCssString model)
+                              Just s  -> text s
+                           ]
+                  , br [] []
+                  , button [onClick ParseCss, type' "reset"] 
+                           [ text "Parse Css"]
+                  ]
+          , div [ id RightPaneCss
+                , class [Pane]
+                ]
+                [ cssExplorer model
+                ]
           ]
+
   , renderCssConsole model       
   , div [classList [("DebugClass",.debug model)]]
-        [ toHtmlWith 
-              { githubFlavored =
-                Just { tables = True, breaks = False }
-              , sanitize = True
-              , defaultHighlighting = Nothing
-              , smartypants = False
-              } [style [("white-space", "pre")]] (.rawString model)
-        , div [style [("white-space", "pre")]]
-            [text <| toString (.parsedData model)]
+        [ text <| toString (.parsedCssData model)
+        , text <| toString (.procCssString model)
         ]
   ]
 
@@ -133,13 +136,15 @@ explorer model =
           
       in p [ class []
            , style [("margin","0.1em")]
-           , onClick (GoTo pth)
+           
            ]
            ([ text (spacer n)
-            , span [class [ExplTag]
-            , style [  ("background-color",c) ]
-            ] 
-            [text tn]
+            , button [ class [ExplTag]
+                   , style [("background-color",c)]
+                   , onClick (GoTo pth)
+                   , type' "reset"
+                   ] 
+                   [text tn]
             ] 
             ++ [span [classList [("DebugClass",dbug)]] [text (toString pth)]] ++ 
             (List.map (render' (n+3) cs') xs))
@@ -157,6 +162,89 @@ explorer model =
          , button [onClick Right, type' "reset"] [ text "Down"]
          ]
 
+
+cssExplorer : Model -> Html Msg
+cssExplorer model = 
+  div [ id CssExplorerId 
+      ]
+      [ div [id CssButtons]
+            
+            [ div [id CssExplWindow]
+                  [ renderCssPos model
+                  , renderDictContent model
+                  ] 
+            , div [id CssExplButtons]
+                  [ button [onClick <| ChangeDict CssClass, type' "reset"]
+                           [ span [] [text "Class"]]
+                  , button [onClick <| ChangeDict CssIds, type' "reset"]
+                           [ span [] [text "Ids"]]
+                  , button [onClick <| ChangeDict CssPseudos, type' "reset"]
+                           [ span [] [text "Pseudos"]]
+                  , button [onClick <| ChangeDict CssTags, type' "reset"]
+                           [ span [] [text "Tags"]]
+                  , button [onClick GoToCssTop, type' "reset"]
+                           [ span [] [text "Top"]]
+                  ]
+            ]
+      ]
+
+renderDictContent : Model -> Html Msg
+renderDictContent model =
+  case .parsedCssData model of 
+      Err s -> span [] []
+      Ok pCssData -> 
+       let dict = 
+             case (.currentDict <| .cssExplorer model) of
+               CssClass -> .classDict pCssData
+               CssIds   -> .idDict pCssData
+               CssPseudos -> .pseudoDict pCssData
+               CssTags  -> .tagDict pCssData
+
+           entries = 
+            case (.currentPos <| .cssExplorer model) of
+              Top -> 
+                Dict.map 
+                 (\e xs -> 
+                   div [ class [CssDictEntry]
+                       , onClick (FilterCss (e,xs))
+                       ]
+                       [ text e ]
+                 ) dict
+              InDict (ce,_) ->
+                Dict.map 
+                 (\e xs -> 
+                   if e == ce
+                   then button [ class [CssDictEntry]
+                               , id CurrentCssDictEntry
+                               , onClick (FilterCss (e,xs))
+                               , type' "reset"
+                               ]
+                               [ text e ]
+                   else button [ class [CssDictEntry]
+                               , onClick (FilterCss (e,xs))
+                               , type' "reset"
+                               ]
+                               [ text e ]
+                 ) dict
+       
+       in 
+       div [ id CssDictContent]
+           (Dict.values entries)
+           
+
+renderCssPos : Model -> Html msg
+renderCssPos model = 
+  let pos = 
+       span [ class [Mono]
+            , id CssPosStr
+            ]
+            [ case (.currentPos <| .cssExplorer model) of
+                Top -> text "Top of file"
+                InDict (s,xs) -> text ("Category " ++ s)
+            ]
+  in div [id CssPos]
+         [ p [] [text "Currently viewing: ", pos]
+         ]
 
 renderPath : Path -> Html msg
 renderPath path = 

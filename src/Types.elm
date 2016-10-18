@@ -14,7 +14,14 @@ import HtmlZipper exposing ( HTML
 
 type AppPos = MainMenu | Editor | FileIO | Renderer
 
+type CssDict = CssClass | CssIds | CssPseudos | CssTags
 
+type CssExplorerPos = Top | InDict (String, List Int)
+
+type alias CssExplorer = 
+    { currentPos : CssExplorerPos
+    , currentDict : CssDict
+    }
 
 type alias Model = 
   { position : AppPos
@@ -24,7 +31,8 @@ type alias Model =
   , procCssString : Maybe String
   , parsedData : Result String (HTML,Integer)
   , parsedCssData : Result String IndexedCss
-  , currPath : Path 
+  , currPath : Path
+  , cssExplorer : CssExplorer 
   , page : Maybe HtmlZipper
   , toRender : Html Msg
   , nextId : Integer
@@ -45,4 +53,7 @@ type Msg = Store String
          | WinSize Win.Size
          | ChangeUrl String
          | SwapEditorRender
+         | ChangeDict CssDict
+         | FilterCss (String, (List Int))
+         | GoToCssTop
          | Failure

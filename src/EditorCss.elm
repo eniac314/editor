@@ -1,29 +1,38 @@
 module EditorCss exposing (..)
 
 import Css exposing (..)
-import Css.Elements exposing (body, li, span,p,a, div)
+import Css.Elements exposing (..)
 import Css.Namespace exposing (namespace)
 import Html.CssHelpers
 import Html.Attributes
 
 type CssClasses
     = Pane | DebugClass | ExplTag | TgName |
-      Mono | Error | CurrentPos
+      Mono | Error | CurrentPos | CssDictEntry
 
 
 type CssIds
     = Explorer | LeftPane | RightPane |
-      LeftPaneCss |
+      LeftPaneCss | RightPaneCss |
       Container | ExplWindow | Prompt |
       Path | PathStr | Menu | PromptCss |
-      Console | RendererId
+      Console | RendererId | CssExplorerId |
+      CssButtons | CssExplWindow | CssDictContent |
+      CurrentCssDictEntry | CssExplButtons | 
+      CssPosStr | CssPos
       
 
 
 
 css =
     (stylesheet << namespace "editor")
-    [ (.) Pane
+    [ button 
+        [ cursor pointer
+        , hover 
+           [ color (rgb 70 130 180)
+           ]
+        ]
+    , (.) Pane
         [ backgroundColor (rgb 155 155 155)
         , display inlineBlock
         ]
@@ -37,11 +46,12 @@ css =
         , borderColor (rgb 0 0 0)
         , borderTopWidth (em 0.1)
         , borderLeftWidth (em 0.1)
+        , borderRightWidth (em 0.2)
+        , borderBottomWidth (em 0.2)
         , cursor pointer
         , minWidth (px 50)
-        ]
-    , (.) ExplTag  
-        [ hover
+        , color (rgb 0 0 0)
+        , hover
            [ important (backgroundColor (rgb 255 255 255))
            ]
         ]
@@ -53,7 +63,24 @@ css =
         [ important <| color (rgb 255 255 255)
         , important <| backgroundColor (rgb 70 130 180) 
         ]
-
+    , (.) CssDictEntry
+        [ display inlineBlock
+        , padding (em 0.2)
+        , margin (em 0.1)
+        , borderStyle solid
+        , borderColor (rgb 0 0 0)
+        , borderTopWidth (em 0.1)
+        , borderLeftWidth (em 0.1)
+        , cursor pointer
+        , minWidth (px 50)
+        , backgroundColor (rgb 70 150 180)
+        ]
+    , (.) CssDictEntry  
+        [ hover
+           [ important (backgroundColor (rgb 255 255 255))
+           ]
+        , color (rgb 0 0 0)
+        ]
     , (#) Container
         [ backgroundColor (rgb 70 130 180)
         ]
@@ -88,20 +115,43 @@ css =
         ]
     , (#) PathStr
         [ color (rgb 70 130 180)]
+    , (#) CssPos
+        [ backgroundColor (rgb 155 155 155)
+        , padding (em 0.2)
+        , paddingLeft (em 0)
+        , paddingTop (em 0)
+        , children
+           [ p 
+             [ backgroundColor (rgb 255 255 255) 
+             , margin (em 0.2)
+             , paddingLeft (em 0.2)
+             ]
+           ]
+        ]
+    , (#) CssPosStr
+        [ color (rgb 70 130 180)]
     , (#) LeftPane
-        [ width (pct 70)
+        [ width (pct 65)
         ]          
     , (#) LeftPaneCss
-        [ width (pct 70)
+        [ width (pct 65)
         ]
     , (#) RightPane
-        [ width (pct 30)
+        [ width (pct 35)
         ]
- 
+    , (#) RightPaneCss
+        [ width (pct 35)
+        ]
     , (#) ExplWindow
         [ width (pct 100)
         , height (px 287)
         , overflow scroll
+        ]
+    , (#) CssExplWindow
+        [ width (pct 100)
+        , height (px 287)
+        , overflow scroll
+        , backgroundColor (rgb 155 155 155)
         ]
     , (#) Explorer
         [ width (pct 95)
@@ -113,6 +163,29 @@ css =
     , (#) PromptCss 
         [ fontFamilies mono
         , width (pct 95)
+        ]
+    , (#) CurrentCssDictEntry
+        [ backgroundColor (rgb 200 150 150)
+        ]
+    , (#) CssExplButtons
+        [ width (pct 100)
+        , children 
+           [ button 
+              [ width (pct 20)
+              , margin (px 0)
+              , padding (px 0)
+              , children 
+                 [ span
+                    [ display inlineBlock
+                    , margin (px 0)
+                    , padding (px 0)
+                    , width (pct 110)
+                    ] 
+                 ]
+              --, fontSize (em 0.8)
+              --, important (padding (em 0.1))
+              ]
+           ]
         ]
     , (#) Console
         [ backgroundColor (rgb 155 155 155)

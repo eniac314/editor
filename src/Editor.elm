@@ -117,6 +117,7 @@ init initInput initCssInput =
         pdata
         pCssData
         initPath
+        (CssExplorer Top CssClass)
         initPage        
         (renderer pdata pCssData)
         nextId
@@ -143,8 +144,51 @@ update msg model =
     Failure -> model ! []
     WinSize s -> {model | winSize = Just s} ! []
     ChangeUrl s -> model ! [newUrl s]
+    ChangeDict d -> (changeDict model d) ! []
     SwapEditorRender -> model ! [swapEditorRender model]
+    GoToCssTop -> (goToCssTop model) ! []
+    FilterCss (n,xs) -> (filterCss model (n,xs)) ! []
 
+goToCssTop model = 
+  case .parsedCssData model of 
+      Err s -> model
+      Ok pCssData -> 
+       let dict = .cssDict pCssData
+           newProcCssString =  Just (toCssString pCssData)
+           explorer =  (.cssExplorer model)
+           newExplorer = { explorer | currentPos = Top }
+
+       in { model | cssExplorer = newExplorer
+                  , procCssString = newProcCssString 
+                  , toRender = renderer (.parsedData model) 
+                                        (Ok pCssData) 
+          }            
+
+
+filterCss model (node, xs) = 
+  case .parsedCssData model of 
+      Err s -> model
+      Ok pCssData -> 
+       let dict = .cssDict pCssData
+           
+           values = 
+            List.map (\id -> Dict.get id dict) xs
+           
+           newProcString = nodesToCssString (List.reverse values)
+          
+           explorer =  (.cssExplorer model)
+           newExplorer = { explorer | currentPos = InDict (node,xs) }
+
+       in { model | procCssString = Just newProcString 
+                  , cssExplorer = newExplorer
+          }
+           
+
+
+changeDict model d = 
+  let explorer =  (.cssExplorer model)
+      newExplorer = { explorer | currentDict = d }
+  in { model | cssExplorer = newExplorer }
 
 swapEditorRender model = 
   case .position model of
@@ -189,17 +233,80 @@ parse model =
      } 
 
 parseCss model =
-  let pCssData = interpretCss (.rawCssString model)
-      newProcCssString = 
-        case pCssData of 
-          Err s -> Nothing
-          Ok indCss -> Just (toCssString indCss)   
+  case (.currentPos <| .cssExplorer model) of
+    Top -> 
+      let pCssData = interpretCss (.rawCssString model)
+          newProcCssString = 
+            case pCssData of 
+              Err s -> Nothing
+              Ok indCss -> Just (toCssString indCss)   
 
-  in  { model | parsedCssData = pCssData
-              , procCssString = newProcCssString 
-              , toRender = renderer (.parsedData model) 
-                                    pCssData 
-      }
+      in  { model | parsedCssData = pCssData
+                  , procCssString = newProcCssString 
+                  , toRender = renderer (.parsedData model) 
+                                        pCssData 
+          }
+    InDict (ce,nodeIndexes) ->
+      --model 
+      let resTmpPCssData = 
+            interpretCss (.rawCssString model)
+          resPCssData = (.parsedCssData model)
+      in 
+      case resPCssData of 
+        Err s -> model
+        Ok pCssData -> 
+      case resTmpPCssData of 
+        Err s -> model
+        Ok tmpPCssData -> 
+          let newProcCssString = 
+                Just (toCssString tmpPCssData)
+
+              tmpPCssDataList =
+                (.cssDict tmpPCssData)
+                |> Dict.toList
+                |> (reNumber (List.reverse nodeIndexes) nextInd) 
+                
+              newPCssDataList = 
+                (.cssDict pCssData) 
+                |> (\d -> List.foldl (\k acc -> Dict.remove k acc) d nodeIndexes)
+                |> Dict.toList
+                |> (\xs -> insertAt xs tmpPCssDataList)
+                |> (List.map (\(ind,node) -> Just node))
+
+              newPCssData = 
+                (nodesToCssString newPCssDataList)
+                |> interpretCss
+
+              nextInd = Maybe.withDefault 0 (List.head nodeIndexes)
+
+              reNumber prevPos next xs = 
+                case xs of 
+                  [] -> []
+                  ((id,node)::xs) -> 
+                    case prevPos of 
+                      [] -> (next,node) :: (reNumber [] (next + 1) xs)
+                      (n::ns) -> (n,node) :: (reNumber ns next xs)
+
+              splitAt n acc xs =
+                if n == 0
+                then (List.reverse acc,xs) 
+                else 
+                  case xs of
+                    [] -> (List.reverse acc,[])
+                    (x::xs) -> splitAt (n-1) (x::acc) xs 
+              
+              insertAt xs toInsert = 
+                List.foldl 
+                      (\(ind,node) acc ->
+                        let (left,right) = splitAt ind [] acc
+                        in left ++ ((ind,node) :: right)
+                        ) xs toInsert
+
+          in { model | parsedCssData = newPCssData
+                     , procCssString = newProcCssString 
+                     , toRender = renderer (.parsedData model) 
+                                           newPCssData 
+              } 
 
 move : (HtmlZipper -> Maybe HtmlZipper) -> Model -> Model
 move f model = 

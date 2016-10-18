@@ -1,12 +1,20 @@
 module Pad exposing (..)
 
 initCss = 
- """.main body{
- background-color: lightgrey;
+ """.main body {
+  background-color: lightgrey;
 }
 
-.main h1 {
- border-style: solid;
+.main h1:hover {
+  border-style: solid;
+}
+
+.other h1  {
+  padding: 2em;
+}
+
+#AGreatDiv div {
+  width: 20px;
 }
 
  """

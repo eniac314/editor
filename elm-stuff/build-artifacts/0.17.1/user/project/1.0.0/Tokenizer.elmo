@@ -130,9 +130,11 @@ var _user$project$Tokenizer$isTokenChar = function (c) {
 		c,
 		_elm_lang$core$Native_Utils.chr('<')) || (_elm_lang$core$Native_Utils.eq(
 		c,
-		_elm_lang$core$Native_Utils.chr('=')) || _elm_lang$core$Native_Utils.eq(
+		_elm_lang$core$Native_Utils.chr('=')) || (_elm_lang$core$Native_Utils.eq(
 		c,
-		_elm_lang$core$Native_Utils.chr('~'))))))))))))))))))));
+		_elm_lang$core$Native_Utils.chr('~')) || _elm_lang$core$Native_Utils.eq(
+		c,
+		_elm_lang$core$Native_Utils.chr('#')))))))))))))))))))));
 };
 var _user$project$Tokenizer$isSpace = function (c) {
 	return _elm_lang$core$Native_Utils.eq(
