@@ -4,12 +4,300 @@
 		"selected_items":
 		[
 			[
+				"test",
+				"testinput5"
+			],
+			[
+				"mar",
+				"margin-bottom"
+			],
+			[
+				"margin",
+				"margin-top"
+			],
+			[
+				"join",
+				"joinValList"
+			],
+			[
+				"pro",
+				"procCssString"
+			],
+			[
+				"to",
+				"toString"
+			],
+			[
+				"pa",
+				"paddingLeft"
+			],
+			[
+				"p",
+				"paddingLeft"
+			],
+			[
+				"ren",
+				"renderCssPos"
+			],
+			[
+				"ne",
+				"newProcString"
+			],
+			[
+				"node",
+				"nodeIndexes"
+			],
+			[
+				"new",
+				"newPcssData"
+			],
+			[
+				"re",
+				"reverse"
+			],
+			[
+				"pre",
+				"prevPos"
+			],
+			[
+				"f",
+				"fixPseudos"
+			],
+			[
+				"Ex",
+				"CssExplButtons"
+			],
+			[
+				"pr",
+				"procCssString"
+			],
+			[
+				"ma",
+				"maybeNodes"
+			],
+			[
+				"un",
+				"unMaybe"
+			],
+			[
+				"no",
+				"nodesToCssString"
+			],
+			[
+				"fil",
+				"filterCss"
+			],
+			[
+				"Css",
+				"CssDictEntry"
+			],
+			[
 				"e",
-				"editor"
+				"explorer"
+			],
+			[
+				"css",
+				"CssExplorer"
+			],
+			[
+				"Curre",
+				"CurrentCssDictEntry"
+			],
+			[
+				"parsed",
+				"parsedCssData"
+			],
+			[
+				"render",
+				"renderDictContent"
+			],
+			[
+				"CssE",
+				"CssExplorerPos"
+			],
+			[
+				"Expl",
+				"ExplWindow"
+			],
+			[
+				"parse",
+				"parsedCssData"
+			],
+			[
+				"in",
+				"indCss"
+			],
+			[
+				"se",
+				"selectorsToString"
+			],
+			[
+				"sele",
+				"selectorToString"
+			],
+			[
+				"de",
+				"declaration"
+			],
+			[
+				"s",
+				"selectors"
+			],
+			[
+				"Add",
+				"addStyle"
+			],
+			[
+				"toke",
+				"tokenizer"
+			],
+			[
+				"raw",
+				"rawCssString"
+			],
+			[
+				"inter",
+				"interpretCss"
+			],
+			[
+				"ini",
+				"initCssInput"
+			],
+			[
+				"Re",
+				"Result"
+			],
+			[
+				"S",
+				"String"
+			],
+			[
+				"iin",
+				"initInput"
+			],
+			[
+				"In",
+				"IndexedCss"
+			],
+			[
+				"Ta",
+				"tagDict"
+			],
+			[
+				"id",
+				"idDict"
+			],
+			[
+				"MANY",
+				"many1"
+			],
+			[
+				"par",
+				"parseCssNode"
+			],
+			[
+				"pars",
+				"parseComa"
+			],
+			[
+				"cons",
+				"consumerLS"
+			],
+			[
+				"F",
+				"Failure"
+			],
+			[
+				"E",
+				"Editor"
+			],
+			[
+				"from",
+				"fromList"
+			],
+			[
+				"Ke",
+				"KeybEvent"
+			],
+			[
+				"Debu",
+				"DebugClass"
+			],
+			[
+				"Cha",
+				"Char"
 			],
 			[
 				"Ma",
+				"Markdown"
+			],
+			[
+				"r",
+				"rgb"
+			],
+			[
+				"Ren",
+				"Renderer"
+			],
+			[
+				"url",
+				"urlUpdate"
+			],
+			[
+				"C",
+				"ChangeUrl"
+			],
+			[
+				"rend",
+				"renderConsole"
+			],
+			[
+				"M",
 				"MainMenu"
+			],
+			[
+				"cla",
+				"classList"
+			],
+			[
+				"he",
+				"height"
+			],
+			[
+				"Pa",
+				"Path"
+			],
+			[
+				"renderS",
+				"renderSvgTag"
+			],
+			[
+				"colo",
+				"colorPicker"
+			],
+			[
+				"x",
+				"xPos"
+			],
+			[
+				"y",
+				"yPos"
+			],
+			[
+				"Inden",
+				"indentX"
+			],
+			[
+				"si",
+				"sizeExplorer"
+			],
+			[
+				"win",
+				"winSize"
+			],
+			[
+				"Win",
+				"WinSize"
 			],
 			[
 				"URL",
@@ -22,10 +310,6 @@
 			[
 				"attr",
 				"attrname"
-			],
-			[
-				"s",
-				"spacer"
 			],
 			[
 				"h",
@@ -68,24 +352,12 @@
 				"ctxs"
 			],
 			[
-				"C",
-				"ctxs"
-			],
-			[
 				"ta",
 				"tagnames"
 			],
 			[
 				"T",
 				"TextNode"
-			],
-			[
-				"pa",
-				"path"
-			],
-			[
-				"par",
-				"parseText"
 			],
 			[
 				"tok",
@@ -120,36 +392,16 @@
 				"Token"
 			],
 			[
-				"In",
-				"Invalid"
-			],
-			[
-				"to",
-				"tokenizer'"
-			],
-			[
 				"Char",
 				"CharMeta"
-			],
-			[
-				"re",
-				"removeIndexes"
 			],
 			[
 				"P",
 				"Parse"
 			],
 			[
-				"parse",
-				"parseTag"
-			],
-			[
 				"tes",
 				"testinput3"
-			],
-			[
-				"pars",
-				"parseAttrName"
 			],
 			[
 				"con",
@@ -184,10 +436,6 @@
 				"parseTagName"
 			],
 			[
-				"test",
-				"testinput"
-			],
-			[
 				"tokeni",
 				"tokenizerLS"
 			],
@@ -208,24 +456,12 @@
 				"result"
 			],
 			[
-				"p",
-				"plist"
-			],
-			[
 				"gif",
 				"gifUrl"
 			],
 			[
-				"F",
-				"FetchSucceed"
-			],
-			[
 				"pas",
 				"passwordAgain"
-			],
-			[
-				"S",
-				"Submit"
 			],
 			[
 				"PAs",
@@ -234,10 +470,6 @@
 			[
 				"Pas",
 				"Password"
-			],
-			[
-				"M",
-				"Msg"
 			],
 			[
 				"Pass",
@@ -282,238 +514,6 @@
 			[
 				"Up",
 				"updateM"
-			],
-			[
-				"Ga",
-				"Gallery"
-			],
-			[
-				"vie",
-				"viewM"
-			],
-			[
-				"pi",
-				"picList2"
-			],
-			[
-				"pic",
-				"picStream"
-			],
-			[
-				"isn",
-				"isNotRef"
-			],
-			[
-				"ini",
-				"initMiniGallery"
-			],
-			[
-				"in",
-				"indexList"
-			],
-			[
-				"ind",
-				"indexesGen"
-			],
-			[
-				"map",
-				"mapM"
-			],
-			[
-				"pu",
-				"hPutStrLn"
-			],
-			[
-				"pr",
-				"prettyUrl"
-			],
-			[
-				"Beaune",
-				"Beaune-le-Froid"
-			],
-			[
-				"su",
-				"Submenu"
-			],
-			[
-				"main",
-				"mainMenu"
-			],
-			[
-				"renderMain",
-				"renderMainMenu'"
-			],
-			[
-				"peri",
-				"periscolaire"
-			],
-			[
-				"conse",
-				"conseilMunicipal"
-			],
-			[
-				"Dépa",
-				"départemental"
-			],
-			[
-				"ga",
-				"galleriesHtml"
-			],
-			[
-				"les",
-				"lesSeniors"
-			],
-			[
-				"cont",
-				"contact"
-			],
-			[
-				"_",
-				"_blank"
-			],
-			[
-				"ba",
-				"background-color"
-			],
-			[
-				"d",
-				"div"
-			],
-			[
-				"Ju",
-				"Just"
-			],
-			[
-				"ref",
-				"refOt"
-			],
-			[
-				"Murol",
-				"MUROL"
-			],
-			[
-				"N",
-				"Nothing"
-			],
-			[
-				"des",
-				"descr"
-			],
-			[
-				"Fa",
-				"FamillePlus"
-			],
-			[
-				"la",
-				"label"
-			],
-			[
-				"mar",
-				"margin"
-			],
-			[
-				"backgroundc",
-				"background-color"
-			],
-			[
-				"u",
-				"urlParams"
-			],
-			[
-				"V",
-				"VENDREDI"
-			],
-			[
-				"J",
-				"JEUDI"
-			],
-			[
-				"Me",
-				"MERCREDI"
-			],
-			[
-				"Lu",
-				"LUNDI"
-			],
-			[
-				"el",
-				"elementaire"
-			],
-			[
-				"al",
-				"altCurrent"
-			],
-			[
-				"ma",
-				"maybeElem"
-			],
-			[
-				"de",
-				"descr"
-			],
-			[
-				"mini",
-				"miniLightbox"
-			],
-			[
-				"max",
-				"max-width"
-			],
-			[
-				"font-sy",
-				"font-style"
-			],
-			[
-				"f",
-				"float"
-			],
-			[
-				"font",
-				"font-size"
-			],
-			[
-				"left",
-				"margin-left"
-			],
-			[
-				"petit",
-				"petitPat"
-			],
-			[
-				"découvre",
-				"découvrez"
-			],
-			[
-				"init",
-				"init'"
-			],
-			[
-				"loc",
-				"locationSearch"
-			],
-			[
-				"margin",
-				"margin-right"
-			],
-			[
-				"min",
-				"min-width"
-			],
-			[
-				"cl",
-				"clear"
-			],
-			[
-				"le",
-				"margin-left"
-			],
-			[
-				"back",
-				"background-image"
-			],
-			[
-				"mu",
-				"musee"
 			]
 		]
 	},
@@ -523,16 +523,35 @@
 			"file": "Editor.elm",
 			"settings":
 			{
-				"buffer_size": 10245,
+				"buffer_size": 12416,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "Test.elm",
+			"file": "Types.elm",
 			"settings":
 			{
-				"buffer_size": 5377,
+				"buffer_size": 1471,
+				"encoding": "UTF-8",
+				"line_ending": "Unix",
+				"name": "module Types exposing (..)"
+			}
+		},
+		{
+			"file": "Pad.elm",
+			"settings":
+			{
+				"buffer_size": 8857,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "EditorView.elm",
+			"settings":
+			{
+				"buffer_size": 9286,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -541,7 +560,17 @@
 			"file": "EditorCss.elm",
 			"settings":
 			{
-				"buffer_size": 1134,
+				"buffer_size": 5458,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/eniac314/prog/elm/mairieMurol/styles/style.css",
+			"settings":
+			{
+				"buffer_size": 48324,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -549,7 +578,8 @@
 			"file": "BetterParser.elm",
 			"settings":
 			{
-				"buffer_size": 2940,
+				"buffer_size": 2311,
+				"encoding": "UTF-8",
 				"line_ending": "Unix",
 				"name": "module BetterParser exposing (..)"
 			}
@@ -558,7 +588,8 @@
 			"file": "Tokenizer.elm",
 			"settings":
 			{
-				"buffer_size": 4965,
+				"buffer_size": 4637,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -566,7 +597,26 @@
 			"file": "ElmParser.elm",
 			"settings":
 			{
-				"buffer_size": 4310,
+				"buffer_size": 4111,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "CssParser.elm",
+			"settings":
+			{
+				"buffer_size": 8619,
+				"encoding": "UTF-8",
+				"line_ending": "Unix",
+				"name": "CssParser.elm"
+			}
+		},
+		{
+			"file": "/home/eniac314/prog/elm/mairieMurol/src/DecouvrirMurol.elm",
+			"settings":
+			{
+				"buffer_size": 30532,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -575,7 +625,7 @@
 			"file": "HtmlZipper.elm",
 			"settings":
 			{
-				"buffer_size": 5863,
+				"buffer_size": 5874,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -584,10 +634,19 @@
 			"file": "TagAttr.elm",
 			"settings":
 			{
-				"buffer_size": 8099,
+				"buffer_size": 8795,
 				"encoding": "UTF-8",
 				"line_ending": "Unix",
 				"name": "module TagAttr exposing (..)"
+			}
+		},
+		{
+			"file": "/home/eniac314/prog/elm/elmGol/ElmGol.elm",
+			"settings":
+			{
+				"buffer_size": 10005,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -656,6 +715,9 @@
 	},
 	"file_history":
 	[
+		"/home/eniac314/prog/elm/mairieMurol/styles/style.css",
+		"/home/eniac314/prog/elm/elmGol/ElmGol.elm",
+		"/home/eniac314/prog/elm/editor/src/Test.elm",
 		"/home/eniac314/prog/elm/editor/src/ElmParser.elm",
 		"/home/fayong/prog/Haskell/parser.hs",
 		"/home/fayong/prog/elm/elmArchi0.17/ReverseText.elm",
@@ -780,10 +842,7 @@
 		"/home/fayong/prog/elm/mairieMurol/src/QuinzaineCom.elm",
 		"/home/fayong/prog/elm/mairieMurol/Agriculture.html",
 		"/home/fayong/prog/elm/mairieMurol/ArtEtMusique.html",
-		"/home/fayong/prog/elm/mairieMurol/Artisanat.html",
-		"/home/fayong/prog/elm/mairieMurol/ArtisanatD'art.html",
-		"/home/fayong/prog/elm/mairieMurol/CCAS.html",
-		"/home/fayong/prog/elm/mairieMurol/Cinema.html"
+		"/home/fayong/prog/elm/mairieMurol/Artisanat.html"
 	],
 	"find":
 	{
@@ -802,6 +861,20 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"h4",
+			"Src",
+			"span",
+			"0",
+			"CssExplorerI",
+			"item consumerLS",
+			"(item consumerLS)",
+			"tokenString",
+			"perfo",
+			"lines",
+			"getStr",
+			"isS",
+			"white",
+			"Renderer",
 			"get",
 			"Tagname",
 			"Token",
@@ -915,21 +988,7 @@
 			"office",
 			"Tarta",
 			"photo",
-			"ocobre",
-			"h2",
-			"toUrl",
-			"capital",
-			"loader",
-			"load",
-			"img",
-			"tour",
-			"publi",
-			"bigLeaf",
-			"murol",
-			"decouvrir",
-			"initAt",
-			"init",
-			"touri"
+			"ocobre"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -937,6 +996,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"safeItem",
 			"TagName",
 			"jpg",
 			"murolInfo",
@@ -973,7 +1033,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 9,
 			"sheets":
 			[
 				{
@@ -982,15 +1042,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10245,
+						"buffer_size": 12416,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3471,
-								3471
+								2088,
+								2088
 							]
 						],
 						"settings":
@@ -1000,57 +1060,115 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1812.0,
+						"translation.y": 594.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "Test.elm",
+					"file": "Types.elm",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5377,
+						"buffer_size": 1471,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								734,
-								734
+								1452,
+								1452
+							]
+						],
+						"settings":
+						{
+							"auto_name": "module Types exposing (..)",
+							"syntax": "Packages/Elm Language Support/Syntaxes/Elm.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "Pad.elm",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8857,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								8519,
+								8519
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/Elm Language Support/Syntaxes/Elm.tmLanguage",
 							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"word_wrap": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 228.0,
+						"translation.y": 5013.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "EditorCss.elm",
+					"buffer": 3,
+					"file": "EditorView.elm",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1134,
+						"buffer_size": 9286,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								4261,
+								4261
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Elm Language Support/Syntaxes/Elm.tmLanguage",
+							"tab_size": 2
+						},
+						"translation.x": 0.0,
+						"translation.y": 2116.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "EditorCss.elm",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5458,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3821,
+								3821
 							]
 						],
 						"settings":
@@ -1059,28 +1177,58 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": -0.0,
-						"translation.y": 114.0,
+						"translation.x": 0.0,
+						"translation.y": 969.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "BetterParser.elm",
+					"buffer": 5,
+					"file": "/home/eniac314/prog/elm/mairieMurol/styles/style.css",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2940,
+						"buffer_size": 48324,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								9345,
+								9345
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/CSS/CSS.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 8327.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "BetterParser.elm",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2311,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								708,
+								708
 							]
 						],
 						"settings":
@@ -1091,27 +1239,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 912.0,
+						"translation.y": 456.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 7,
 					"file": "Tokenizer.elm",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4965,
+						"buffer_size": 4637,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								1432,
+								1432
 							]
 						],
 						"settings":
@@ -1121,27 +1269,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2788.0,
+						"translation.y": 513.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 8,
 					"file": "ElmParser.elm",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4310,
+						"buffer_size": 4111,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								505,
+								505
 							]
 						],
 						"settings":
@@ -1151,27 +1299,87 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1824.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "CssParser.elm",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8619,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3429,
+								3429
+							]
+						],
+						"settings":
+						{
+							"auto_name": "CssParser.elm",
+							"syntax": "Packages/Elm Language Support/Syntaxes/Elm.tmLanguage",
+							"tab_size": 2
+						},
+						"translation.x": 0.0,
+						"translation.y": 1525.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "/home/eniac314/prog/elm/mairieMurol/src/DecouvrirMurol.elm",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 30532,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2301,
+								2301
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Elm Language Support/Syntaxes/Elm.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 513.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 11,
 					"file": "HtmlZipper.elm",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5863,
+						"buffer_size": 5874,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								5417,
+								5417
 							]
 						],
 						"settings":
@@ -1181,27 +1389,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 969.0,
+						"translation.y": 2736.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 12,
 					"file": "TagAttr.elm",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8099,
+						"buffer_size": 8795,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								136,
-								136
+								4095,
+								4095
 							]
 						],
 						"settings":
@@ -1212,10 +1420,40 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
+						"translation.y": 2570.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 13,
+					"file": "/home/eniac314/prog/elm/elmGol/ElmGol.elm",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10005,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								588,
+								588
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Elm Language Support/Syntaxes/Elm.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 12,
 					"type": "text"
 				}
 			]

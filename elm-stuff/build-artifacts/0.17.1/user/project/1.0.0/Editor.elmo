@@ -677,10 +677,16 @@ var _user$project$Editor$urlUpdate = F2(
 		if (_p44.ctor === 'Err') {
 			return {
 				ctor: '_Tuple2',
-				_0: _elm_lang$core$Native_Utils.update(
-					model,
-					{rawString: _p44._0}),
-				_1: _elm_lang$core$Platform_Cmd$none
+				_0: model,
+				_1: A3(
+					_elm_lang$core$Task$perform,
+					function (_p45) {
+						return _user$project$Types$Failure;
+					},
+					function (url) {
+						return _user$project$Types$ChangeUrl(url);
+					},
+					_elm_lang$core$Task$succeed('#editor'))
 			};
 		} else {
 			return A2(
@@ -702,25 +708,25 @@ var _user$project$Editor$urlParser = _elm_lang$navigation$Navigation$makeParser(
 					{ctor: '_Tuple2', _0: '#fileIO', _1: _user$project$Types$FileIO},
 					{ctor: '_Tuple2', _0: '#renderer', _1: _user$project$Types$Renderer}
 				]));
-		var _p45 = A2(
+		var _p46 = A2(
 			_elm_lang$core$Dict$get,
 			function (_) {
 				return _.hash;
 			}(s),
 			validUrlMap);
-		if (_p45.ctor === 'Nothing') {
+		if (_p46.ctor === 'Nothing') {
 			return _elm_lang$core$Result$Err(
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					'invalid url: ',
 					_elm_lang$core$Basics$toString(s)));
 		} else {
-			return _elm_lang$core$Result$Ok(_p45._0);
+			return _elm_lang$core$Result$Ok(_p46._0);
 		}
 	});
 var _user$project$Editor$initWinSize = A3(
 	_elm_lang$core$Task$perform,
-	function (_p46) {
+	function (_p47) {
 		return _user$project$Types$Failure;
 	},
 	function (s) {
@@ -728,12 +734,12 @@ var _user$project$Editor$initWinSize = A3(
 	},
 	_elm_lang$window$Window$size);
 var _user$project$Editor$init$ = function (result) {
-	var _p47 = A2(
+	var _p48 = A2(
 		_user$project$Editor$urlUpdate,
 		result,
 		A2(_user$project$Editor$init, _user$project$Pad$testinput5, _user$project$Pad$initCss2));
-	var m = _p47._0;
-	var cmd = _p47._1;
+	var m = _p48._0;
+	var cmd = _p48._1;
 	return {
 		ctor: '_Tuple2',
 		_0: m,
@@ -746,10 +752,10 @@ var _user$project$Editor$init$ = function (result) {
 				]))
 	};
 };
-var _user$project$Editor$_p48 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace('editor');
-var _user$project$Editor$id = _user$project$Editor$_p48.id;
-var _user$project$Editor$class = _user$project$Editor$_p48.$class;
-var _user$project$Editor$classList = _user$project$Editor$_p48.classList;
+var _user$project$Editor$_p49 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace('editor');
+var _user$project$Editor$id = _user$project$Editor$_p49.id;
+var _user$project$Editor$class = _user$project$Editor$_p49.$class;
+var _user$project$Editor$classList = _user$project$Editor$_p49.classList;
 var _user$project$Editor$renderRenderer = function (model) {
 	return _elm_lang$core$Native_List.fromArray(
 		[
@@ -893,10 +899,10 @@ var _user$project$Editor$view = function (model) {
 					_user$project$Editor$renderMenu(model)
 				]),
 			function () {
-				var _p49 = function (_) {
+				var _p50 = function (_) {
 					return _.position;
 				}(model);
-				switch (_p49.ctor) {
+				switch (_p50.ctor) {
 					case 'MainMenu':
 						return _user$project$Editor$renderMainMenu(model);
 					case 'Editor':

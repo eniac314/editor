@@ -247,7 +247,19 @@ var _user$project$CssParser$safeValueItem = A2(
 				function (_) {
 					return _.val;
 				}(v),
-				';'));
+				';') || (_elm_lang$core$Native_Utils.eq(
+				function (_) {
+					return _.val;
+				}(v),
+				':') || (_elm_lang$core$Native_Utils.eq(
+				function (_) {
+					return _.val;
+				}(v),
+				'{') || _elm_lang$core$Native_Utils.eq(
+				function (_) {
+					return _.val;
+				}(v),
+				'}'))));
 	});
 var _user$project$CssParser$token = function (s) {
 	return A2(
@@ -267,7 +279,7 @@ var _user$project$CssParser$parseValue = function () {
 			joinValList:
 			while (true) {
 				var _p20 = xs;
-				_v13_5:
+				_v13_6:
 				do {
 					if (_p20.ctor === '[]') {
 						return acc;
@@ -284,45 +296,58 @@ var _user$project$CssParser$parseValue = function () {
 									xs = _v15;
 									continue joinValList;
 								} else {
-									break _v13_5;
+									break _v13_6;
 								}
-							case '(':
+							case '-':
 								if (_p20._1.ctor === '::') {
 									var _v16 = A2(
 										_elm_lang$core$Basics_ops['++'],
 										acc,
-										A2(_elm_lang$core$Basics_ops['++'], '(', _p20._1._0)),
+										A2(_elm_lang$core$Basics_ops['++'], '-', _p20._1._0)),
 										_v17 = _p20._1._1;
 									acc = _v16;
 									xs = _v17;
 									continue joinValList;
 								} else {
-									break _v13_5;
+									break _v13_6;
+								}
+							case '(':
+								if (_p20._1.ctor === '::') {
+									var _v18 = A2(
+										_elm_lang$core$Basics_ops['++'],
+										acc,
+										A2(_elm_lang$core$Basics_ops['++'], '(', _p20._1._0)),
+										_v19 = _p20._1._1;
+									acc = _v18;
+									xs = _v19;
+									continue joinValList;
+								} else {
+									break _v13_6;
 								}
 							case ')':
-								var _v18 = A2(_elm_lang$core$Basics_ops['++'], acc, ')'),
-									_v19 = _p20._1;
-								acc = _v18;
-								xs = _v19;
-								continue joinValList;
-							case ',':
-								var _v20 = A2(_elm_lang$core$Basics_ops['++'], acc, ','),
+								var _v20 = A2(_elm_lang$core$Basics_ops['++'], acc, ')'),
 									_v21 = _p20._1;
 								acc = _v20;
 								xs = _v21;
 								continue joinValList;
+							case ',':
+								var _v22 = A2(_elm_lang$core$Basics_ops['++'], acc, ','),
+									_v23 = _p20._1;
+								acc = _v22;
+								xs = _v23;
+								continue joinValList;
 							default:
-								break _v13_5;
+								break _v13_6;
 						}
 					}
 				} while(false);
-				var _v22 = A2(
+				var _v24 = A2(
 					_elm_lang$core$Basics_ops['++'],
 					acc,
 					A2(_elm_lang$core$Basics_ops['++'], ' ', _p20._0)),
-					_v23 = _p20._1;
-				acc = _v22;
-				xs = _v23;
+					_v25 = _p20._1;
+				acc = _v24;
+				xs = _v25;
 				continue joinValList;
 			}
 		});
@@ -449,93 +474,94 @@ var _user$project$CssParser$toIndexedCss = function (xs) {
 					_elm_lang$core$Native_List.fromArray(
 						[x]));
 			} else {
-				return _elm_lang$core$Maybe$Just(
-					A2(_elm_lang$core$List_ops['::'], x, _p21._0));
+				var _p22 = _p21._0;
+				return A2(_elm_lang$core$List$member, x, _p22) ? _elm_lang$core$Maybe$Just(_p22) : _elm_lang$core$Maybe$Just(
+					A2(_elm_lang$core$List_ops['::'], x, _p22));
 			}
 		});
 	var populate = F2(
-		function (_p23, _p22) {
-			var _p24 = _p23;
-			var _p33 = _p24._0;
-			var _p25 = _p22;
+		function (_p24, _p23) {
+			var _p25 = _p24;
+			var _p34 = _p25._0;
+			var _p26 = _p23;
 			return A3(
 				_elm_lang$core$List$foldl,
 				F2(
-					function (v, _p26) {
-						var _p27 = _p26;
-						var _p32 = _p27._3;
-						var _p31 = _p27._2;
-						var _p30 = _p27._1;
-						var _p29 = _p27._0;
-						var _p28 = v;
-						switch (_p28.ctor) {
+					function (v, _p27) {
+						var _p28 = _p27;
+						var _p33 = _p28._3;
+						var _p32 = _p28._2;
+						var _p31 = _p28._1;
+						var _p30 = _p28._0;
+						var _p29 = v;
+						switch (_p29.ctor) {
 							case 'Class':
 								return {
 									ctor: '_Tuple4',
 									_0: A3(
 										_elm_lang$core$Dict$update,
-										_p28._0,
-										cons$(_p33),
-										_p29),
-									_1: _p30,
-									_2: _p31,
-									_3: _p32
+										_p29._0,
+										cons$(_p34),
+										_p30),
+									_1: _p31,
+									_2: _p32,
+									_3: _p33
 								};
 							case 'Id':
 								return {
 									ctor: '_Tuple4',
-									_0: _p29,
+									_0: _p30,
 									_1: A3(
 										_elm_lang$core$Dict$update,
-										_p28._0,
-										cons$(_p33),
-										_p30),
-									_2: _p31,
-									_3: _p32
+										_p29._0,
+										cons$(_p34),
+										_p31),
+									_2: _p32,
+									_3: _p33
 								};
 							case 'Pseudo':
 								return {
 									ctor: '_Tuple4',
-									_0: _p29,
-									_1: _p30,
+									_0: _p30,
+									_1: _p31,
 									_2: A3(
 										_elm_lang$core$Dict$update,
-										_p28._0,
-										cons$(_p33),
-										_p31),
-									_3: _p32
+										_p29._0,
+										cons$(_p34),
+										_p32),
+									_3: _p33
 								};
 							case 'Tag':
 								return {
 									ctor: '_Tuple4',
-									_0: _p29,
-									_1: _p30,
-									_2: _p31,
+									_0: _p30,
+									_1: _p31,
+									_2: _p32,
 									_3: A3(
 										_elm_lang$core$Dict$update,
-										_p28._0,
-										cons$(_p33),
-										_p32)
+										_p29._0,
+										cons$(_p34),
+										_p33)
 								};
 							default:
-								return {ctor: '_Tuple4', _0: _p29, _1: _p30, _2: _p31, _3: _p32};
+								return {ctor: '_Tuple4', _0: _p30, _1: _p31, _2: _p32, _3: _p33};
 						}
 					}),
-				{ctor: '_Tuple4', _0: _p25._0, _1: _p25._1, _2: _p25._2, _3: _p25._3},
+				{ctor: '_Tuple4', _0: _p26._0, _1: _p26._1, _2: _p26._2, _3: _p26._3},
 				function (_) {
 					return _.selectors;
-				}(_p24._1));
+				}(_p25._1));
 		});
 	var indexedNodes = _user$project$CssParser$addIndexes(xs);
-	var _p34 = A3(
+	var _p35 = A3(
 		_elm_lang$core$List$foldl,
 		populate,
 		{ctor: '_Tuple4', _0: _elm_lang$core$Dict$empty, _1: _elm_lang$core$Dict$empty, _2: _elm_lang$core$Dict$empty, _3: _elm_lang$core$Dict$empty},
 		indexedNodes);
-	var classDict = _p34._0;
-	var idDict = _p34._1;
-	var pseudoDict = _p34._2;
-	var tagDict = _p34._3;
+	var classDict = _p35._0;
+	var idDict = _p35._1;
+	var pseudoDict = _p35._2;
+	var tagDict = _p35._3;
 	return A5(
 		_user$project$CssParser$IndexedCss,
 		_elm_lang$core$Dict$fromList(indexedNodes),
@@ -683,28 +709,28 @@ var _user$project$CssParser$parseCss = A2(
 			_user$project$CssParser$toIndexedCss(res));
 	});
 var _user$project$CssParser$interpretCss = function (input) {
-	var _p35 = _user$project$Tokenizer$tokenizer(input);
-	if (_p35.ctor === 'Err') {
+	var _p36 = _user$project$Tokenizer$tokenizer(input);
+	if (_p36.ctor === 'Err') {
 		return _elm_lang$core$Result$Err(
-			A2(_elm_lang$core$Basics_ops['++'], 'Tokenizer error: ', _p35._0));
+			A2(_elm_lang$core$Basics_ops['++'], 'Tokenizer error: ', _p36._0));
 	} else {
-		var _p36 = A2(_user$project$BetterParser$parse, _user$project$CssParser$parseCss, _p35._0);
-		if (_p36.ctor === 'Err') {
+		var _p37 = A2(_user$project$BetterParser$parse, _user$project$CssParser$parseCss, _p36._0);
+		if (_p37.ctor === 'Err') {
 			return _elm_lang$core$Result$Err(
-				A2(_elm_lang$core$Basics_ops['++'], 'Parser error: ', _p36._0));
+				A2(_elm_lang$core$Basics_ops['++'], 'Parser error: ', _p37._0));
 		} else {
-			var _p37 = _p36._0._1;
+			var _p38 = _p37._0._1;
 			return _elm_lang$core$Native_Utils.eq(
-				_p37,
+				_p38,
 				_elm_lang$core$Native_List.fromArray(
-					[])) ? _elm_lang$core$Result$Ok(_p36._0._0) : _elm_lang$core$Result$Err(
+					[])) ? _elm_lang$core$Result$Ok(_p37._0._0) : _elm_lang$core$Result$Err(
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					'Parser error: Failure at: ',
 					A2(
 						_elm_lang$core$String$left,
 						50,
-						_elm_lang$core$Basics$toString(_p37))));
+						_elm_lang$core$Basics$toString(_p38))));
 		}
 	}
 };

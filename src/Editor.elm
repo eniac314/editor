@@ -88,7 +88,11 @@ urlParser = Navigation.makeParser
 urlUpdate : Result String AppPos -> Model -> (Model, Cmd Msg)
 urlUpdate res model = 
   case res of 
-    Err s -> ({model | rawString = s}, Cmd.none)
+    Err s -> ( model
+             , perform (\_ -> Failure)
+                       (\url -> ChangeUrl url)
+                       (succeed "#editor") 
+             )
     Ok ap -> { model | position = ap } ! []
 
 

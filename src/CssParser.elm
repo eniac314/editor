@@ -7,6 +7,7 @@ import String exposing (trimLeft, left, cons, words, endsWith, startsWith, dropL
 import BetterParser exposing (..)
 import Tokenizer exposing (tokenizer, Token, tokError)
 import Dict exposing (..)
+import Set exposing (..)
 
 type alias CssData = Dict Int CssNode
 type alias Property = String
@@ -65,7 +66,16 @@ consumerLS xs =
 
 safeItem = sat consumerLS (\v -> not (isDelim <| .val v))
 
-safeValueItem = sat consumerLS (\v -> not (.val v == ";"))
+safeValueItem = 
+  sat 
+   consumerLS 
+   (\v -> 
+      not ((.val v == ";") ||
+           (.val v == ":") ||
+           (.val v == "{") ||
+           (.val v == "}")  
+          )
+   )
 
 token : String -> Parser (List Token) Token
 token s = sat consumerLS (\t -> (.val t) == s)
@@ -134,6 +144,8 @@ parseValue =
         [] -> acc
         ("."::v1::xs) -> 
           joinValList (acc ++ "." ++ v1) xs
+        ("-"::v1::xs) -> 
+          joinValList (acc ++ "-" ++ v1) xs
         ("("::v1::xs) -> 
           joinValList (acc ++ "(" ++ v1) xs
         (")"::xs) -> 
@@ -176,7 +188,10 @@ toIndexedCss xs =
       cons' x mv =
         case mv of 
           Nothing -> Just [x]
-          Just xs -> Just (x::xs) 
+          Just xs -> 
+            if List.member x xs
+            then Just xs
+            else Just (x::xs)
 
       populate (id,node) (classDict, idDict, pseudoDict, tagDict) = 
         List.foldl 
