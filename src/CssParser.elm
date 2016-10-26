@@ -80,6 +80,11 @@ safeValueItem =
 token : String -> Parser (List Token) Token
 token s = sat consumerLS (\t -> (.val t) == s)
 
+parseComment : Parser (List Token) CssNode
+parseComment = 
+  sat consumerLS (\v -> startsWith "/*" (.val v))
+  >>= \v -> return (CssNode [] [])
+
 parsePseudoSelector : Parser (List Token) Selector
 parsePseudoSelector = 
   token ":"
@@ -183,8 +188,8 @@ parseCss =
 
 toIndexedCss : List CssNode -> IndexedCss
 toIndexedCss xs = 
-  let indexedNodes =  addIndexes xs
-      
+  let indexedNodes = addIndexes xs
+
       cons' x mv =
         case mv of 
           Nothing -> Just [x]

@@ -492,6 +492,22 @@ var _user$project$EditorView$cssExplorer = function (model) {
 								_elm_lang$html$Html$button,
 								_elm_lang$core$Native_List.fromArray(
 									[
+										_user$project$EditorView$classList(
+										_elm_lang$core$Native_List.fromArray(
+											[
+												{
+												ctor: '_Tuple2',
+												_0: 'CurrentDict',
+												_1: _elm_lang$core$Native_Utils.eq(
+													function (_) {
+														return _.currentDict;
+													}(
+														function (_) {
+															return _.cssExplorer;
+														}(model)),
+													_user$project$Types$CssClass)
+											}
+											])),
 										_elm_lang$html$Html_Events$onClick(
 										_user$project$Types$ChangeDict(_user$project$Types$CssClass)),
 										_elm_lang$html$Html_Attributes$type$('reset')
@@ -511,6 +527,22 @@ var _user$project$EditorView$cssExplorer = function (model) {
 								_elm_lang$html$Html$button,
 								_elm_lang$core$Native_List.fromArray(
 									[
+										_user$project$EditorView$classList(
+										_elm_lang$core$Native_List.fromArray(
+											[
+												{
+												ctor: '_Tuple2',
+												_0: 'CurrentDict',
+												_1: _elm_lang$core$Native_Utils.eq(
+													function (_) {
+														return _.currentDict;
+													}(
+														function (_) {
+															return _.cssExplorer;
+														}(model)),
+													_user$project$Types$CssIds)
+											}
+											])),
 										_elm_lang$html$Html_Events$onClick(
 										_user$project$Types$ChangeDict(_user$project$Types$CssIds)),
 										_elm_lang$html$Html_Attributes$type$('reset')
@@ -530,6 +562,22 @@ var _user$project$EditorView$cssExplorer = function (model) {
 								_elm_lang$html$Html$button,
 								_elm_lang$core$Native_List.fromArray(
 									[
+										_user$project$EditorView$classList(
+										_elm_lang$core$Native_List.fromArray(
+											[
+												{
+												ctor: '_Tuple2',
+												_0: 'CurrentDict',
+												_1: _elm_lang$core$Native_Utils.eq(
+													function (_) {
+														return _.currentDict;
+													}(
+														function (_) {
+															return _.cssExplorer;
+														}(model)),
+													_user$project$Types$CssPseudos)
+											}
+											])),
 										_elm_lang$html$Html_Events$onClick(
 										_user$project$Types$ChangeDict(_user$project$Types$CssPseudos)),
 										_elm_lang$html$Html_Attributes$type$('reset')
@@ -549,6 +597,22 @@ var _user$project$EditorView$cssExplorer = function (model) {
 								_elm_lang$html$Html$button,
 								_elm_lang$core$Native_List.fromArray(
 									[
+										_user$project$EditorView$classList(
+										_elm_lang$core$Native_List.fromArray(
+											[
+												{
+												ctor: '_Tuple2',
+												_0: 'CurrentDict',
+												_1: _elm_lang$core$Native_Utils.eq(
+													function (_) {
+														return _.currentDict;
+													}(
+														function (_) {
+															return _.cssExplorer;
+														}(model)),
+													_user$project$Types$CssTags)
+											}
+											])),
 										_elm_lang$html$Html_Events$onClick(
 										_user$project$Types$ChangeDict(_user$project$Types$CssTags)),
 										_elm_lang$html$Html_Attributes$type$('reset')

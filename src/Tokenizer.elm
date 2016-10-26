@@ -107,8 +107,8 @@ getStringLit xs =
 
 
 tokenString : Result String (CharMeta, CharMeta) -> Result String (Token,CharMeta)
-tokenString xs = 
-  case xs of 
+tokenString res = 
+  case res of 
     Err s -> Err s
     Ok ([],_) -> Err "tokenString: Invalid String literal" 
     Ok ((c::cs),rest) ->
@@ -117,6 +117,31 @@ tokenString xs =
           val = foldr (\c s -> cons (.ch c) s) "" (c::cs)
       in Ok ((Token ("\"" ++ val ++ "\"") ch ln),rest)
 
+getCssComment :  CharMeta -> Result String (CharMeta,CharMeta)
+getCssComment xs =
+  case xs of 
+    [] -> Err "getCssComment: Invalid comment"
+    (c1 :: c2 :: xs) -> 
+      if (.ch c1 == '*' && .ch c2 == '/')
+      then Ok ([],xs)
+      else case getCssComment (c2::xs) of
+            Err s -> Err s
+            Ok (l,r) -> Ok (c1::c2::l, r) 
+    (c::xs) -> 
+      case getCssComment xs of
+        Err s -> Err s
+        Ok (l,r) -> Ok (c::l, r)
+
+tokenCssComment : Result String (CharMeta, CharMeta) -> Result String (Token,CharMeta)
+tokenCssComment res = 
+  case res of 
+    Err s -> Err s
+    Ok ([],_) -> Err "tokenCssComment: Invalid css comment"
+    Ok ((c::cs),rest) -> 
+      let ch = .chp c
+          ln = .lnp c
+          val = foldr (\c s -> cons (.ch c) s) "" (c::cs)
+      in Ok ((Token ("/*" ++ val ++ "*/") ch ln),rest)
 
 getTokens : CharMeta -> (List Token,CharMeta)
 getTokens xs = 
@@ -152,28 +177,49 @@ getTokens xs =
 
 tokenizer' : CharMeta -> Result String (List Token)
 tokenizer' cs = 
-  case cs of 
+  let hasCommentStart s = 
+        case s of 
+          (x1::x2::xs) -> 
+            if (.ch x1 == '/' && .ch x2 == '*')
+            then True
+            else False
+          _ -> False
+
+      hasStringLitStart s = 
+        case s of 
+          (x::xs) ->
+            if (.ch x == '\"')
+            then True 
+            else False
+          _ -> False
+  
+  in case cs of 
     [] -> Ok []
     (x::xs) -> 
-      if (.ch x == '\"')
-      then 
-        case tokenString (getStringLit xs) of
-          Err s -> Err s 
-          Ok (t,rest) -> 
-            case tokenizer' rest of
-              Err s  -> Err s
-              Ok ts' -> Ok (t :: ts')
-      
-      else 
-        if isSpace (.ch x)
-        then tokenizer' xs
-        
-        else 
-          let (ts,rest) = getTokens (x::xs)
-          in case tokenizer' rest of
-              Err s  -> Err s
-              Ok ts' -> Ok (ts ++ ts')   
-          
+      if hasCommentStart cs
+      then case tokenCssComment (getCssComment <| List.drop 2 cs) of 
+            Err s -> Err s
+            Ok (t,rest) -> 
+             case tokenizer' rest of
+               Err s  -> Err s
+               Ok ts' -> Ok ( ts')
+      else if hasStringLitStart cs
+           then 
+           case tokenString (getStringLit xs) of
+             Err s -> Err s 
+             Ok (t,rest) -> 
+               case tokenizer' rest of
+                 Err s  -> Err s
+                 Ok ts' -> Ok (t :: ts')
+            else 
+              if isSpace (.ch x)
+              then tokenizer' xs
+              
+              else 
+                let (ts,rest) = getTokens (x::xs)
+                in case tokenizer' rest of
+                    Err s  -> Err s
+                    Ok ts' -> Ok (ts ++ ts')
           
 
 -------------------------------------------------------------------------------

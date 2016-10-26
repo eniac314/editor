@@ -8,7 +8,8 @@ import Html.Attributes
 
 type CssClasses
     = Pane | DebugClass | ExplTag | TgName |
-      Mono | Error | CurrentPos | CssDictEntry
+      Mono | Error | CurrentPos | CssDictEntry |
+      CurrentDict
 
 
 type CssIds
@@ -62,6 +63,9 @@ css =
     , (.) CurrentPos
         [ important <| color (rgb 255 255 255)
         , important <| backgroundColor (rgb 70 130 180) 
+        ]
+    , (.) CurrentDict
+        [ important <| color (rgb 70 130 180) 
         ]
     , (.) CssDictEntry
         [ display inlineBlock

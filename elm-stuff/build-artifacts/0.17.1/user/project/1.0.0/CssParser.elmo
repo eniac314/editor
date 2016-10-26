@@ -461,6 +461,28 @@ var _user$project$CssParser$CssNode = F2(
 	function (a, b) {
 		return {selectors: a, declaration: b};
 	});
+var _user$project$CssParser$parseComment = A2(
+	_user$project$BetterParser_ops['>>='],
+	A2(
+		_user$project$BetterParser$sat,
+		_user$project$CssParser$consumerLS,
+		function (v) {
+			return A2(
+				_elm_lang$core$String$startsWith,
+				'/*',
+				function (_) {
+					return _.val;
+				}(v));
+		}),
+	function (v) {
+		return _user$project$BetterParser$return(
+			A2(
+				_user$project$CssParser$CssNode,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[])));
+	});
 var _user$project$CssParser$IndexedCss = F5(
 	function (a, b, c, d, e) {
 		return {cssDict: a, classDict: b, idDict: c, pseudoDict: d, tagDict: e};

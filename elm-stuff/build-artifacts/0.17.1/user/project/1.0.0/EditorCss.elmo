@@ -1,5 +1,6 @@
 var _user$project$EditorCss$mono = _elm_lang$core$Native_List.fromArray(
 	['Consolas', 'Monaco', 'Lucida Console', 'Liberation Mono', 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Courier New', ' monospace']);
+var _user$project$EditorCss$CurrentDict = {ctor: 'CurrentDict'};
 var _user$project$EditorCss$CssDictEntry = {ctor: 'CssDictEntry'};
 var _user$project$EditorCss$CurrentPos = {ctor: 'CurrentPos'};
 var _user$project$EditorCss$Error = {ctor: 'Error'};
@@ -151,6 +152,18 @@ var _user$project$EditorCss$css = function (_p0) {
 						A3(_rtfeldman$elm_css$Css$rgb, 255, 255, 255))),
 					_rtfeldman$elm_css$Css$important(
 					_rtfeldman$elm_css$Css$backgroundColor(
+						A3(_rtfeldman$elm_css$Css$rgb, 70, 130, 180)))
+				])),
+			A2(
+			F2(
+				function (x, y) {
+					return A2(_rtfeldman$elm_css$Css_ops['.'], x, y);
+				}),
+			_user$project$EditorCss$CurrentDict,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_rtfeldman$elm_css$Css$important(
+					_rtfeldman$elm_css$Css$color(
 						A3(_rtfeldman$elm_css$Css$rgb, 70, 130, 180)))
 				])),
 			A2(

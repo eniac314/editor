@@ -174,13 +174,33 @@ cssExplorer model =
                   , renderDictContent model
                   ] 
             , div [id CssExplButtons]
-                  [ button [onClick <| ChangeDict CssClass, type' "reset"]
+                  [ button [ classList 
+                              [( "CurrentDict"
+                               , (.currentDict <| .cssExplorer model) == CssClass
+                               )
+                              ]
+                           , onClick <| ChangeDict CssClass, type' "reset"]
                            [ span [] [text "Class"]]
-                  , button [onClick <| ChangeDict CssIds, type' "reset"]
+                  , button [ classList 
+                              [( "CurrentDict"
+                               , (.currentDict <| .cssExplorer model) == CssIds
+                               )
+                              ]
+                           , onClick <| ChangeDict CssIds, type' "reset"]
                            [ span [] [text "Ids"]]
-                  , button [onClick <| ChangeDict CssPseudos, type' "reset"]
+                  , button [ classList 
+                              [( "CurrentDict"
+                               , (.currentDict <| .cssExplorer model) == CssPseudos
+                               )
+                              ]
+                           , onClick <| ChangeDict CssPseudos, type' "reset"]
                            [ span [] [text "Pseudos"]]
-                  , button [onClick <| ChangeDict CssTags, type' "reset"]
+                  , button [ classList 
+                              [( "CurrentDict"
+                               , (.currentDict <| .cssExplorer model) == CssTags
+                               )
+                              ]
+                           , onClick <| ChangeDict CssTags, type' "reset"]
                            [ span [] [text "Tags"]]
                   , button [onClick GoToCssTop, type' "reset"]
                            [ span [] [text "Top"]]
