@@ -1,0 +1,928 @@
+var _user$project$Editor$setHeight = function (winSize) {
+	var _p0 = winSize;
+	if (_p0.ctor === 'Nothing') {
+		return _elm_lang$html$Html_Attributes$style(
+			{ctor: '[]'});
+	} else {
+		return _elm_lang$html$Html_Attributes$style(
+			{
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'height',
+					_1: A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(_p0._0.height),
+						'px')
+				},
+				_1: {ctor: '[]'}
+			});
+	}
+};
+var _user$project$Editor$keyToMsg = function (k) {
+	var keys = _elm_lang$core$Dict$fromList(
+		{
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 112, _1: _user$project$Types$Parse},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 113, _1: _user$project$Types$SwapEditorRender},
+				_1: {ctor: '[]'}
+			}
+		});
+	var _p1 = A2(_elm_lang$core$Dict$get, k, keys);
+	if (_p1.ctor === 'Nothing') {
+		return _user$project$Types$Failure;
+	} else {
+		return _p1._0;
+	}
+};
+var _user$project$Editor$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$batch(
+		{
+			ctor: '::',
+			_0: _elm_lang$window$Window$resizes(_user$project$Types$WinSize),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$keyboard$Keyboard$presses(_user$project$Editor$keyToMsg),
+				_1: {ctor: '[]'}
+			}
+		});
+};
+var _user$project$Editor$renderFileIO = function (model) {
+	return {ctor: '[]'};
+};
+var _user$project$Editor$renderMainMenu = function (model) {
+	return {ctor: '[]'};
+};
+var _user$project$Editor$move = F2(
+	function (f, model) {
+		var newPage = function () {
+			var _p2 = function (_) {
+				return _.page;
+			}(model);
+			if (_p2.ctor === 'Nothing') {
+				return _elm_lang$core$Maybe$Nothing;
+			} else {
+				var _p4 = _p2._0;
+				var _p3 = f(_p4);
+				if (_p3.ctor === 'Nothing') {
+					return _elm_lang$core$Maybe$Just(_p4);
+				} else {
+					return _elm_lang$core$Maybe$Just(_p3._0);
+				}
+			}
+		}();
+		var newRstring = function () {
+			var _p5 = newPage;
+			if (_p5.ctor === 'Nothing') {
+				return function (_) {
+					return _.rawString;
+				}(model);
+			} else {
+				return _user$project$HtmlZipper$htmlToString(
+					_user$project$HtmlZipper$extractTree(_p5._0));
+			}
+		}();
+		var newProcString = _elm_lang$core$Maybe$Just(newRstring);
+		var newParsedData = function () {
+			var _p6 = newPage;
+			if (_p6.ctor === 'Nothing') {
+				return _elm_lang$core$Result$Err('wrong Html tree');
+			} else {
+				return _elm_lang$core$Result$Ok(
+					{
+						ctor: '_Tuple2',
+						_0: _user$project$HtmlZipper$extractTree(_p6._0),
+						_1: function (_) {
+							return _.nextId;
+						}(model)
+					});
+			}
+		}();
+		var newRender = A2(
+			_user$project$EditorView$renderer,
+			newParsedData,
+			function (_) {
+				return _.parsedCssData;
+			}(model));
+		var newPath = function () {
+			var _p7 = newPage;
+			if (_p7.ctor === 'Nothing') {
+				return function (_) {
+					return _.currPath;
+				}(model);
+			} else {
+				return _user$project$HtmlZipper$extractPath(_p7._0);
+			}
+		}();
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{rawString: newRstring, procString: newProcString, parsedData: newParsedData, currPath: newPath, page: newPage, toRender: newRender});
+	});
+var _user$project$Editor$parseCss = function (model) {
+	var _p8 = function (_) {
+		return _.currentPos;
+	}(
+		function (_) {
+			return _.cssExplorer;
+		}(model));
+	if (_p8.ctor === 'Top') {
+		var pCssData = _user$project$CssParser$interpretCss(
+			function (_) {
+				return _.rawCssString;
+			}(model));
+		var newProcCssString = function () {
+			var _p9 = pCssData;
+			if (_p9.ctor === 'Err') {
+				return _elm_lang$core$Maybe$Nothing;
+			} else {
+				return _elm_lang$core$Maybe$Just(
+					_user$project$CssParser$toCssString(_p9._0));
+			}
+		}();
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				parsedCssData: pCssData,
+				procCssString: newProcCssString,
+				toRender: A2(
+					_user$project$EditorView$renderer,
+					function (_) {
+						return _.parsedData;
+					}(model),
+					pCssData)
+			});
+	} else {
+		var _p24 = _p8._0._1;
+		var resPCssData = function (_) {
+			return _.parsedCssData;
+		}(model);
+		var resTmpPCssData = _user$project$CssParser$interpretCss(
+			function (_) {
+				return _.rawCssString;
+			}(model));
+		var _p10 = resPCssData;
+		if (_p10.ctor === 'Err') {
+			return model;
+		} else {
+			var _p11 = resTmpPCssData;
+			if (_p11.ctor === 'Err') {
+				return model;
+			} else {
+				var _p23 = _p11._0;
+				var splitAt = F3(
+					function (n, acc, xs) {
+						splitAt:
+						while (true) {
+							if (_elm_lang$core$Native_Utils.eq(n, 0)) {
+								return {
+									ctor: '_Tuple2',
+									_0: _elm_lang$core$List$reverse(acc),
+									_1: xs
+								};
+							} else {
+								var _p12 = xs;
+								if (_p12.ctor === '[]') {
+									return {
+										ctor: '_Tuple2',
+										_0: _elm_lang$core$List$reverse(acc),
+										_1: {ctor: '[]'}
+									};
+								} else {
+									var _v12 = n - 1,
+										_v13 = {ctor: '::', _0: _p12._0, _1: acc},
+										_v14 = _p12._1;
+									n = _v12;
+									acc = _v13;
+									xs = _v14;
+									continue splitAt;
+								}
+							}
+						}
+					});
+				var insertAt = F2(
+					function (xs, toInsert) {
+						return A3(
+							_elm_lang$core$List$foldl,
+							F2(
+								function (_p13, acc) {
+									var _p14 = _p13;
+									var _p16 = _p14._0;
+									var _p15 = A3(
+										splitAt,
+										_p16,
+										{ctor: '[]'},
+										acc);
+									var left = _p15._0;
+									var right = _p15._1;
+									return A2(
+										_elm_lang$core$Basics_ops['++'],
+										left,
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											{
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: _p16, _1: _p14._1},
+												_1: {ctor: '[]'}
+											},
+											right));
+								}),
+							xs,
+							toInsert);
+					});
+				var reNumber = F3(
+					function (prevPos, next, xs) {
+						var _p17 = xs;
+						if (_p17.ctor === '[]') {
+							return {ctor: '[]'};
+						} else {
+							var _p20 = _p17._1;
+							var _p19 = _p17._0._1;
+							var _p18 = prevPos;
+							if (_p18.ctor === '[]') {
+								return {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: next, _1: _p19},
+									_1: A3(
+										reNumber,
+										{ctor: '[]'},
+										next + 1,
+										_p20)
+								};
+							} else {
+								return {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: _p18._0, _1: _p19},
+									_1: A3(reNumber, _p18._1, next, _p20)
+								};
+							}
+						}
+					});
+				var nextInd = A2(
+					_elm_lang$core$Maybe$withDefault,
+					0,
+					_elm_lang$core$List$head(_p24));
+				var tmpPCssDataList = A3(
+					reNumber,
+					_elm_lang$core$List$reverse(_p24),
+					nextInd,
+					_elm_lang$core$Dict$toList(
+						function (_) {
+							return _.cssDict;
+						}(_p23)));
+				var newPCssDataList = A2(
+					_elm_lang$core$List$map,
+					function (_p21) {
+						var _p22 = _p21;
+						return _elm_lang$core$Maybe$Just(_p22._1);
+					},
+					function (xs) {
+						return A2(insertAt, xs, tmpPCssDataList);
+					}(
+						_elm_lang$core$Dict$toList(
+							function (d) {
+								return A3(
+									_elm_lang$core$List$foldl,
+									F2(
+										function (k, acc) {
+											return A2(_elm_lang$core$Dict$remove, k, acc);
+										}),
+									d,
+									_p24);
+							}(
+								function (_) {
+									return _.cssDict;
+								}(_p10._0)))));
+				var newPCssData = _user$project$CssParser$interpretCss(
+					_user$project$CssParser$nodesToCssString(newPCssDataList));
+				var newProcCssString = _elm_lang$core$Maybe$Just(
+					_user$project$CssParser$toCssString(_p23));
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						parsedCssData: newPCssData,
+						procCssString: newProcCssString,
+						toRender: A2(
+							_user$project$EditorView$renderer,
+							function (_) {
+								return _.parsedData;
+							}(model),
+							newPCssData)
+					});
+			}
+		}
+	}
+};
+var _user$project$Editor$parse = function (model) {
+	var pdata = A2(
+		_user$project$ElmParser$interpret,
+		function (_) {
+			return _.rawString;
+		}(model),
+		function (_) {
+			return _.nextId;
+		}(model));
+	var prString = function () {
+		var _p25 = pdata;
+		if (_p25.ctor === 'Err') {
+			return _elm_lang$core$Maybe$Nothing;
+		} else {
+			return _elm_lang$core$Maybe$Just(
+				_user$project$HtmlZipper$htmlToString(_p25._0._0));
+		}
+	}();
+	var newPage = function () {
+		var _p26 = pdata;
+		if (_p26.ctor === 'Err') {
+			return function (_) {
+				return _.page;
+			}(model);
+		} else {
+			var _p28 = _p26._0._0;
+			var _p27 = function (_) {
+				return _.page;
+			}(model);
+			if (_p27.ctor === 'Nothing') {
+				return _elm_lang$core$Maybe$Just(
+					_user$project$HtmlZipper$initZip(_p28));
+			} else {
+				return _elm_lang$core$Maybe$Just(
+					A2(_user$project$HtmlZipper$updateTag, _p28, _p27._0));
+			}
+		}
+	}();
+	var currPath = function () {
+		var _p29 = newPage;
+		if (_p29.ctor === 'Nothing') {
+			return function (_) {
+				return _.currPath;
+			}(model);
+		} else {
+			return _user$project$HtmlZipper$extractPath(_p29._0);
+		}
+	}();
+	var nextId = function () {
+		var _p30 = pdata;
+		if (_p30.ctor === 'Err') {
+			return function (_) {
+				return _.nextId;
+			}(model);
+		} else {
+			return _p30._0._1 + 1;
+		}
+	}();
+	return _elm_lang$core$Native_Utils.update(
+		model,
+		{
+			procString: prString,
+			parsedData: pdata,
+			page: newPage,
+			nextId: nextId,
+			currPath: currPath,
+			toRender: A2(
+				_user$project$EditorView$renderer,
+				pdata,
+				function (_) {
+					return _.parsedCssData;
+				}(model))
+		});
+};
+var _user$project$Editor$swapEditorRender = function (model) {
+	var _p31 = function (_) {
+		return _.position;
+	}(model);
+	switch (_p31.ctor) {
+		case 'Editor':
+			return _elm_lang$navigation$Navigation$newUrl('#renderer');
+		case 'Renderer':
+			return _elm_lang$navigation$Navigation$newUrl('#editor');
+		default:
+			return _elm_lang$core$Platform_Cmd$none;
+	}
+};
+var _user$project$Editor$changeDict = F2(
+	function (model, d) {
+		var explorer = function (_) {
+			return _.cssExplorer;
+		}(model);
+		var newExplorer = _elm_lang$core$Native_Utils.update(
+			explorer,
+			{currentDict: d});
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{cssExplorer: newExplorer});
+	});
+var _user$project$Editor$filterCss = F2(
+	function (model, _p32) {
+		var _p33 = _p32;
+		var _p35 = _p33._1;
+		var _p34 = function (_) {
+			return _.parsedCssData;
+		}(model);
+		if (_p34.ctor === 'Err') {
+			return model;
+		} else {
+			var explorer = function (_) {
+				return _.cssExplorer;
+			}(model);
+			var newExplorer = _elm_lang$core$Native_Utils.update(
+				explorer,
+				{
+					currentPos: _user$project$Types$InDict(
+						{ctor: '_Tuple2', _0: _p33._0, _1: _p35})
+				});
+			var dict = function (_) {
+				return _.cssDict;
+			}(_p34._0);
+			var values = A2(
+				_elm_lang$core$List$map,
+				function (id) {
+					return A2(_elm_lang$core$Dict$get, id, dict);
+				},
+				_p35);
+			var newProcString = _user$project$CssParser$nodesToCssString(
+				_elm_lang$core$List$reverse(values));
+			return _elm_lang$core$Native_Utils.update(
+				model,
+				{
+					procCssString: _elm_lang$core$Maybe$Just(newProcString),
+					cssExplorer: newExplorer
+				});
+		}
+	});
+var _user$project$Editor$goToCssTop = function (model) {
+	var _p36 = function (_) {
+		return _.parsedCssData;
+	}(model);
+	if (_p36.ctor === 'Err') {
+		return model;
+	} else {
+		var _p37 = _p36._0;
+		var explorer = function (_) {
+			return _.cssExplorer;
+		}(model);
+		var newExplorer = _elm_lang$core$Native_Utils.update(
+			explorer,
+			{currentPos: _user$project$Types$Top});
+		var newProcCssString = _elm_lang$core$Maybe$Just(
+			_user$project$CssParser$toCssString(_p37));
+		var dict = function (_) {
+			return _.cssDict;
+		}(_p37);
+		return _elm_lang$core$Native_Utils.update(
+			model,
+			{
+				cssExplorer: newExplorer,
+				procCssString: newProcCssString,
+				toRender: A2(
+					_user$project$EditorView$renderer,
+					function (_) {
+						return _.parsedData;
+					}(model),
+					_elm_lang$core$Result$Ok(_p37))
+			});
+	}
+};
+var _user$project$Editor$update = F2(
+	function (msg, model) {
+		var _p38 = msg;
+		switch (_p38.ctor) {
+			case 'Store':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{rawString: _p38._0}),
+					{ctor: '[]'});
+			case 'StoreCss':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{rawCssString: _p38._0}),
+					{ctor: '[]'});
+			case 'Parse':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_user$project$Editor$parse(model),
+					{ctor: '[]'});
+			case 'ParseCss':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_user$project$Editor$parseCss(model),
+					{ctor: '[]'});
+			case 'Up':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					A2(_user$project$Editor$move, _user$project$HtmlZipper$zipUp, model),
+					{ctor: '[]'});
+			case 'Down':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					A2(_user$project$Editor$move, _user$project$HtmlZipper$zipDownFirst, model),
+					{ctor: '[]'});
+			case 'Left':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					A2(_user$project$Editor$move, _user$project$HtmlZipper$zipLeft, model),
+					{ctor: '[]'});
+			case 'Right':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					A2(_user$project$Editor$move, _user$project$HtmlZipper$zipRight, model),
+					{ctor: '[]'});
+			case 'GoTo':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					A2(
+						_user$project$Editor$move,
+						_user$project$HtmlZipper$cd_(_p38._0),
+						model),
+					{ctor: '[]'});
+			case 'Debug':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							debug: !function (_) {
+								return _.debug;
+							}(model)
+						}),
+					{ctor: '[]'});
+			case 'Failure':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{ctor: '[]'});
+			case 'WinSize':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{
+							winSize: _elm_lang$core$Maybe$Just(_p38._0)
+						}),
+					{ctor: '[]'});
+			case 'NewUrl':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{
+						ctor: '::',
+						_0: _elm_lang$navigation$Navigation$newUrl(_p38._0),
+						_1: {ctor: '[]'}
+					});
+			case 'ChangeUrl':
+				var _p39 = _p38._0;
+				var newPos = _elm_lang$core$Native_Utils.eq(_p39, '#mainmenu') ? _user$project$Types$MainMenu : (_elm_lang$core$Native_Utils.eq(_p39, '#fileIO') ? _user$project$Types$FileIO : (_elm_lang$core$Native_Utils.eq(_p39, '#renderer') ? _user$project$Types$Renderer : _user$project$Types$Editor));
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_elm_lang$core$Native_Utils.update(
+						model,
+						{position: newPos}),
+					{ctor: '[]'});
+			case 'ChangeDict':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					A2(_user$project$Editor$changeDict, model, _p38._0),
+					{ctor: '[]'});
+			case 'SwapEditorRender':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					model,
+					{
+						ctor: '::',
+						_0: _user$project$Editor$swapEditorRender(model),
+						_1: {ctor: '[]'}
+					});
+			case 'GoToCssTop':
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					_user$project$Editor$goToCssTop(model),
+					{ctor: '[]'});
+			default:
+				return A2(
+					_elm_lang$core$Platform_Cmd_ops['!'],
+					A2(
+						_user$project$Editor$filterCss,
+						model,
+						{ctor: '_Tuple2', _0: _p38._0._0, _1: _p38._0._1}),
+					{ctor: '[]'});
+		}
+	});
+var _user$project$Editor$init = F2(
+	function (initInput, initCssInput) {
+		var pCssData = _user$project$CssParser$interpretCss(initCssInput);
+		var pdata = A2(_user$project$ElmParser$interpret, initInput, 0);
+		var initPage = function () {
+			var _p40 = pdata;
+			if (_p40.ctor === 'Err') {
+				return _elm_lang$core$Maybe$Nothing;
+			} else {
+				return _elm_lang$core$Maybe$Just(
+					_user$project$HtmlZipper$initZip(_p40._0._0));
+			}
+		}();
+		var initPath = function () {
+			var _p41 = initPage;
+			if (_p41.ctor === 'Nothing') {
+				return {ctor: '[]'};
+			} else {
+				return _user$project$HtmlZipper$extractPath(_p41._0);
+			}
+		}();
+		var nextId = function () {
+			var _p42 = pdata;
+			if (_p42.ctor === 'Err') {
+				return 0;
+			} else {
+				return _p42._0._1 + 1;
+			}
+		}();
+		return _user$project$Types$Model(_user$project$Types$Editor)(initInput)(initCssInput)(_elm_lang$core$Maybe$Nothing)(_elm_lang$core$Maybe$Nothing)(pdata)(pCssData)(initPath)(
+			A2(_user$project$Types$CssExplorer, _user$project$Types$Top, _user$project$Types$CssClass))(initPage)(
+			A2(_user$project$EditorView$renderer, pdata, pCssData))(nextId)(true)(_elm_lang$core$Maybe$Nothing);
+	});
+var _user$project$Editor$urlParser = function (s) {
+	var validUrlList = {
+		ctor: '::',
+		_0: '#mainmenu',
+		_1: {
+			ctor: '::',
+			_0: '#editor',
+			_1: {
+				ctor: '::',
+				_0: '#fileIO',
+				_1: {
+					ctor: '::',
+					_0: '#renderer',
+					_1: {ctor: '[]'}
+				}
+			}
+		}
+	};
+	return A2(
+		_elm_lang$core$List$member,
+		function (_) {
+			return _.hash;
+		}(s),
+		validUrlList) ? _user$project$Types$ChangeUrl(
+		function (_) {
+			return _.hash;
+		}(s)) : _user$project$Types$NewUrl('#editor');
+};
+var _user$project$Editor$initWinSize = A2(
+	_elm_lang$core$Task$attempt,
+	function (res) {
+		var _p43 = res;
+		if (_p43.ctor === 'Ok') {
+			return _user$project$Types$WinSize(_p43._0);
+		} else {
+			return _user$project$Types$Failure;
+		}
+	},
+	_elm_lang$window$Window$size);
+var _user$project$Editor$init_ = function (location) {
+	var _p44 = {
+		ctor: '_Tuple2',
+		_0: A2(_user$project$Editor$init, _user$project$Pad$testinput5, _user$project$Pad$initCss2),
+		_1: _elm_lang$navigation$Navigation$modifyUrl(
+			function (_) {
+				return _.hash;
+			}(location))
+	};
+	var m = _p44._0;
+	var cmd = _p44._1;
+	return {
+		ctor: '_Tuple2',
+		_0: m,
+		_1: _elm_lang$core$Platform_Cmd$batch(
+			{
+				ctor: '::',
+				_0: cmd,
+				_1: {
+					ctor: '::',
+					_0: _user$project$Editor$initWinSize,
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$navigation$Navigation$modifyUrl('#editor'),
+						_1: {ctor: '[]'}
+					}
+				}
+			})
+	};
+};
+var _user$project$Editor$_p45 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace('editor');
+var _user$project$Editor$id = _user$project$Editor$_p45.id;
+var _user$project$Editor$class = _user$project$Editor$_p45.$class;
+var _user$project$Editor$classList = _user$project$Editor$_p45.classList;
+var _user$project$Editor$renderRenderer = function (model) {
+	return {
+		ctor: '::',
+		_0: A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _user$project$Editor$id(_user$project$EditorCss$RendererId),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: function (_) {
+					return _.toRender;
+				}(model),
+				_1: {ctor: '[]'}
+			}),
+		_1: {ctor: '[]'}
+	};
+};
+var _user$project$Editor$renderMenu = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$Editor$id(_user$project$EditorCss$Menu),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$a,
+				{
+					ctor: '::',
+					_0: _user$project$Editor$classList(
+						{
+							ctor: '::',
+							_0: {
+								ctor: '_Tuple2',
+								_0: 'CurrentPos',
+								_1: _elm_lang$core$Native_Utils.eq(
+									function (_) {
+										return _.position;
+									}(model),
+									_user$project$Types$MainMenu)
+							},
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(
+							_user$project$Types$NewUrl('#mainmenu')),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Main Menu'),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$a,
+					{
+						ctor: '::',
+						_0: _user$project$Editor$classList(
+							{
+								ctor: '::',
+								_0: {
+									ctor: '_Tuple2',
+									_0: 'CurrentPos',
+									_1: _elm_lang$core$Native_Utils.eq(
+										function (_) {
+											return _.position;
+										}(model),
+										_user$project$Types$Editor)
+								},
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(
+								_user$project$Types$NewUrl('#editor')),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Editor'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$a,
+						{
+							ctor: '::',
+							_0: _user$project$Editor$classList(
+								{
+									ctor: '::',
+									_0: {
+										ctor: '_Tuple2',
+										_0: 'CurrentPos',
+										_1: _elm_lang$core$Native_Utils.eq(
+											function (_) {
+												return _.position;
+											}(model),
+											_user$project$Types$FileIO)
+									},
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(
+									_user$project$Types$NewUrl('#fileIO')),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Save/Load'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$a,
+							{
+								ctor: '::',
+								_0: _user$project$Editor$classList(
+									{
+										ctor: '::',
+										_0: {
+											ctor: '_Tuple2',
+											_0: 'CurrentPos',
+											_1: _elm_lang$core$Native_Utils.eq(
+												function (_) {
+													return _.position;
+												}(model),
+												_user$project$Types$Renderer)
+										},
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(
+										_user$project$Types$NewUrl('#renderer')),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Html Preview'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		});
+};
+var _user$project$Editor$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$Editor$id(_user$project$EditorCss$Container),
+			_1: {
+				ctor: '::',
+				_0: _user$project$Editor$setHeight(
+					function (_) {
+						return _.winSize;
+					}(model)),
+				_1: {ctor: '[]'}
+			}
+		},
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			{
+				ctor: '::',
+				_0: _user$project$EditorCss$editorStyle,
+				_1: {
+					ctor: '::',
+					_0: _user$project$Editor$renderMenu(model),
+					_1: {ctor: '[]'}
+				}
+			},
+			function () {
+				var _p46 = function (_) {
+					return _.position;
+				}(model);
+				switch (_p46.ctor) {
+					case 'MainMenu':
+						return _user$project$Editor$renderMainMenu(model);
+					case 'Editor':
+						return _user$project$EditorView$renderEditor(model);
+					case 'FileIO':
+						return _user$project$Editor$renderFileIO(model);
+					default:
+						return _user$project$Editor$renderRenderer(model);
+				}
+			}()));
+};
+var _user$project$Editor$main = A2(
+	_elm_lang$navigation$Navigation$program,
+	_user$project$Editor$urlParser,
+	{init: _user$project$Editor$init_, update: _user$project$Editor$update, view: _user$project$Editor$view, subscriptions: _user$project$Editor$subscriptions})();

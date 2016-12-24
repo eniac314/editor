@@ -1,0 +1,1354 @@
+var _user$project$EditorView$addStyle = F2(
+	function (css, _p0) {
+		var _p1 = _p0;
+		return A2(
+			_user$project$HtmlZipper$Node,
+			_p1._0,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_p1._1,
+				{
+					ctor: '::',
+					_0: A2(
+						_user$project$HtmlZipper$Node,
+						A3(
+							_user$project$HtmlZipper$Tag,
+							_user$project$TagAttr$CssTag(css),
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}));
+	});
+var _user$project$EditorView$renderer = F2(
+	function (res, cssRes) {
+		var css = function () {
+			var _p2 = cssRes;
+			if (_p2.ctor === 'Err') {
+				return '';
+			} else {
+				return _user$project$CssParser$toCssString(_p2._0);
+			}
+		}();
+		var renderer_ = function (_p3) {
+			var _p4 = _p3;
+			var _p5 = _p4._0;
+			return A3(
+				_user$project$TagAttr$toTag,
+				function (_) {
+					return _.tagname;
+				}(_p5),
+				A2(
+					_elm_lang$core$List$map,
+					_user$project$TagAttr$toAttr,
+					function (_) {
+						return _.attr;
+					}(_p5)),
+				A2(_elm_lang$core$List$map, renderer_, _p4._1));
+		};
+		var _p6 = res;
+		if (_p6.ctor === 'Err') {
+			return A2(
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Oh no!'),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$br,
+							{ctor: '[]'},
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(_p6._0),
+							_1: {ctor: '[]'}
+						}
+					}
+				});
+		} else {
+			return renderer_(
+				A2(_user$project$EditorView$addStyle, css, _p6._0._0));
+		}
+	});
+var _user$project$EditorView$_p7 = _rtfeldman$elm_css_helpers$Html_CssHelpers$withNamespace('editor');
+var _user$project$EditorView$id = _user$project$EditorView$_p7.id;
+var _user$project$EditorView$class = _user$project$EditorView$_p7.$class;
+var _user$project$EditorView$classList = _user$project$EditorView$_p7.classList;
+var _user$project$EditorView$explorer = function (model) {
+	var explWindow = function (tags) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _user$project$EditorView$id(_user$project$EditorCss$ExplWindow),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: tags,
+				_1: {ctor: '[]'}
+			});
+	};
+	var sizeExplorer = function () {
+		var _p8 = function (_) {
+			return _.winSize;
+		}(model);
+		if (_p8.ctor === 'Nothing') {
+			return {ctor: '_Tuple2', _0: 560, _1: 300};
+		} else {
+			return {ctor: '_Tuple2', _0: (_p8._0.width / 2) | 0, _1: 300};
+		}
+	}();
+	var dbug = function (_) {
+		return _.debug;
+	}(model);
+	var render = function (_p9) {
+		var _p10 = _p9;
+		var colors = _elm_lang$core$List$reverse(
+			{
+				ctor: '::',
+				_0: 'ivory',
+				_1: {
+					ctor: '::',
+					_0: 'khaki',
+					_1: {
+						ctor: '::',
+						_0: 'lavender',
+						_1: {
+							ctor: '::',
+							_0: 'lavenderblush',
+							_1: {
+								ctor: '::',
+								_0: 'lightcoral',
+								_1: {
+									ctor: '::',
+									_0: 'lightgreen',
+									_1: {
+										ctor: '::',
+										_0: 'lemonchiffon',
+										_1: {
+											ctor: '::',
+											_0: 'thistle',
+											_1: {
+												ctor: '::',
+												_0: 'mediumspringgreen',
+												_1: {
+													ctor: '::',
+													_0: 'lightskyblue',
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			});
+		var colorPicker = function (xs) {
+			colorPicker:
+			while (true) {
+				var _p11 = xs;
+				if (_p11.ctor === '[]') {
+					var _v7 = colors;
+					xs = _v7;
+					continue colorPicker;
+				} else {
+					return {ctor: '_Tuple2', _0: _p11._0, _1: _p11._1};
+				}
+			}
+		};
+		var spacer = function (indent) {
+			return _elm_lang$core$Native_Utils.eq(indent, 0) ? '' : A2(
+				_elm_lang$core$Basics_ops['++'],
+				' ',
+				spacer(indent - 1));
+		};
+		var render_ = F3(
+			function (n, cs, _p12) {
+				var _p13 = _p12;
+				var _p16 = _p13._0;
+				var _p14 = colorPicker(cs);
+				var c = _p14._0;
+				var cs_ = _p14._1;
+				var pth = function (_) {
+					return _.path;
+				}(_p16);
+				var tn = function () {
+					var _p15 = function (_) {
+						return _.tagname;
+					}(_p16);
+					switch (_p15.ctor) {
+						case 'Text':
+							return 'Text';
+						case 'Markdown':
+							return 'Markdown';
+						default:
+							return _elm_lang$core$Basics$toString(_p15);
+					}
+				}();
+				return A2(
+					_elm_lang$html$Html$p,
+					{
+						ctor: '::',
+						_0: _user$project$EditorView$class(
+							{ctor: '[]'}),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$style(
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'margin', _1: '0.1em'},
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					},
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(
+								spacer(n)),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _user$project$EditorView$class(
+											{
+												ctor: '::',
+												_0: _user$project$EditorCss$ExplTag,
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$style(
+												{
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 'background-color', _1: c},
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(
+													_user$project$Types$GoTo(pth)),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$type_('reset'),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(tn),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						},
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$span,
+									{
+										ctor: '::',
+										_0: _user$project$EditorView$classList(
+											{
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'DebugClass', _1: dbug},
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(
+											_elm_lang$core$Basics$toString(pth)),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							},
+							A2(
+								_elm_lang$core$List$map,
+								A2(render_, n + 3, cs_),
+								_p13._1))));
+			});
+		return A3(render_, 0, colors, _p10._0._0);
+	};
+	var page = function (_) {
+		return _.page;
+	}(model);
+	var tags = function () {
+		var _p17 = page;
+		if (_p17.ctor === 'Nothing') {
+			return A2(
+				_elm_lang$html$Html$span,
+				{ctor: '[]'},
+				{ctor: '[]'});
+		} else {
+			return render(_p17._0);
+		}
+	}();
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$EditorView$id(_user$project$EditorCss$Explorer),
+			_1: {
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$style(
+					{
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'white-space', _1: 'pre'},
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: explWindow(tags),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$button,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Up),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$type_('reset'),
+							_1: {ctor: '[]'}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Left'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$button,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Down),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$type_('reset'),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Right'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$button,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Left),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$type_('reset'),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Up'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$button,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Right),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$type_('reset'),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Down'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		});
+};
+var _user$project$EditorView$renderDictContent = function (model) {
+	var _p18 = function (_) {
+		return _.parsedCssData;
+	}(model);
+	if (_p18.ctor === 'Err') {
+		return A2(
+			_elm_lang$html$Html$span,
+			{ctor: '[]'},
+			{ctor: '[]'});
+	} else {
+		var _p21 = _p18._0;
+		var dict = function () {
+			var _p19 = function (_) {
+				return _.currentDict;
+			}(
+				function (_) {
+					return _.cssExplorer;
+				}(model));
+			switch (_p19.ctor) {
+				case 'CssClass':
+					return function (_) {
+						return _.classDict;
+					}(_p21);
+				case 'CssIds':
+					return function (_) {
+						return _.idDict;
+					}(_p21);
+				case 'CssPseudos':
+					return function (_) {
+						return _.pseudoDict;
+					}(_p21);
+				default:
+					return function (_) {
+						return _.tagDict;
+					}(_p21);
+			}
+		}();
+		var entries = function () {
+			var _p20 = function (_) {
+				return _.currentPos;
+			}(
+				function (_) {
+					return _.cssExplorer;
+				}(model));
+			if (_p20.ctor === 'Top') {
+				return A2(
+					_elm_lang$core$Dict$map,
+					F2(
+						function (e, xs) {
+							return A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _user$project$EditorView$class(
+										{
+											ctor: '::',
+											_0: _user$project$EditorCss$CssDictEntry,
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(
+											_user$project$Types$FilterCss(
+												{ctor: '_Tuple2', _0: e, _1: xs})),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(e),
+									_1: {ctor: '[]'}
+								});
+						}),
+					dict);
+			} else {
+				return A2(
+					_elm_lang$core$Dict$map,
+					F2(
+						function (e, xs) {
+							return _elm_lang$core$Native_Utils.eq(e, _p20._0._0) ? A2(
+								_elm_lang$html$Html$button,
+								{
+									ctor: '::',
+									_0: _user$project$EditorView$class(
+										{
+											ctor: '::',
+											_0: _user$project$EditorCss$CssDictEntry,
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _user$project$EditorView$id(_user$project$EditorCss$CurrentCssDictEntry),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(
+												_user$project$Types$FilterCss(
+													{ctor: '_Tuple2', _0: e, _1: xs})),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$type_('reset'),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(e),
+									_1: {ctor: '[]'}
+								}) : A2(
+								_elm_lang$html$Html$button,
+								{
+									ctor: '::',
+									_0: _user$project$EditorView$class(
+										{
+											ctor: '::',
+											_0: _user$project$EditorCss$CssDictEntry,
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Events$onClick(
+											_user$project$Types$FilterCss(
+												{ctor: '_Tuple2', _0: e, _1: xs})),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$type_('reset'),
+											_1: {ctor: '[]'}
+										}
+									}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(e),
+									_1: {ctor: '[]'}
+								});
+						}),
+					dict);
+			}
+		}();
+		return A2(
+			_elm_lang$html$Html$div,
+			{
+				ctor: '::',
+				_0: _user$project$EditorView$id(_user$project$EditorCss$CssDictContent),
+				_1: {ctor: '[]'}
+			},
+			_elm_lang$core$Dict$values(entries));
+	}
+};
+var _user$project$EditorView$renderCssPos = function (model) {
+	var pos = A2(
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _user$project$EditorView$class(
+				{
+					ctor: '::',
+					_0: _user$project$EditorCss$Mono,
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$EditorView$id(_user$project$EditorCss$CssPosStr),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: function () {
+				var _p22 = function (_) {
+					return _.currentPos;
+				}(
+					function (_) {
+						return _.cssExplorer;
+					}(model));
+				if (_p22.ctor === 'Top') {
+					return _elm_lang$html$Html$text('Top of file');
+				} else {
+					return _elm_lang$html$Html$text(
+						A2(_elm_lang$core$Basics_ops['++'], 'Category ', _p22._0._0));
+				}
+			}(),
+			_1: {ctor: '[]'}
+		});
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$EditorView$id(_user$project$EditorCss$CssPos),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$p,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Currently viewing: '),
+					_1: {
+						ctor: '::',
+						_0: pos,
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$EditorView$cssExplorer = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$EditorView$id(_user$project$EditorCss$CssExplorerId),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _user$project$EditorView$id(_user$project$EditorCss$CssButtons),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _user$project$EditorView$id(_user$project$EditorCss$CssExplWindow),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _user$project$EditorView$renderCssPos(model),
+							_1: {
+								ctor: '::',
+								_0: _user$project$EditorView$renderDictContent(model),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _user$project$EditorView$id(_user$project$EditorCss$CssExplButtons),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$button,
+									{
+										ctor: '::',
+										_0: _user$project$EditorView$classList(
+											{
+												ctor: '::',
+												_0: {
+													ctor: '_Tuple2',
+													_0: 'CurrentDict',
+													_1: _elm_lang$core$Native_Utils.eq(
+														function (_) {
+															return _.currentDict;
+														}(
+															function (_) {
+																return _.cssExplorer;
+															}(model)),
+														_user$project$Types$CssClass)
+												},
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(
+												_user$project$Types$ChangeDict(_user$project$Types$CssClass)),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$type_('reset'),
+												_1: {ctor: '[]'}
+											}
+										}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$span,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Class'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$button,
+										{
+											ctor: '::',
+											_0: _user$project$EditorView$classList(
+												{
+													ctor: '::',
+													_0: {
+														ctor: '_Tuple2',
+														_0: 'CurrentDict',
+														_1: _elm_lang$core$Native_Utils.eq(
+															function (_) {
+																return _.currentDict;
+															}(
+																function (_) {
+																	return _.cssExplorer;
+																}(model)),
+															_user$project$Types$CssIds)
+													},
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(
+													_user$project$Types$ChangeDict(_user$project$Types$CssIds)),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$type_('reset'),
+													_1: {ctor: '[]'}
+												}
+											}
+										},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$span,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Ids'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _user$project$EditorView$classList(
+													{
+														ctor: '::',
+														_0: {
+															ctor: '_Tuple2',
+															_0: 'CurrentDict',
+															_1: _elm_lang$core$Native_Utils.eq(
+																function (_) {
+																	return _.currentDict;
+																}(
+																	function (_) {
+																		return _.cssExplorer;
+																	}(model)),
+																_user$project$Types$CssPseudos)
+														},
+														_1: {ctor: '[]'}
+													}),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(
+														_user$project$Types$ChangeDict(_user$project$Types$CssPseudos)),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$type_('reset'),
+														_1: {ctor: '[]'}
+													}
+												}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$span,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html$text('Pseudos'),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$button,
+												{
+													ctor: '::',
+													_0: _user$project$EditorView$classList(
+														{
+															ctor: '::',
+															_0: {
+																ctor: '_Tuple2',
+																_0: 'CurrentDict',
+																_1: _elm_lang$core$Native_Utils.eq(
+																	function (_) {
+																		return _.currentDict;
+																	}(
+																		function (_) {
+																			return _.cssExplorer;
+																		}(model)),
+																	_user$project$Types$CssTags)
+															},
+															_1: {ctor: '[]'}
+														}),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(
+															_user$project$Types$ChangeDict(_user$project$Types$CssTags)),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$type_('reset'),
+															_1: {ctor: '[]'}
+														}
+													}
+												},
+												{
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$span,
+														{ctor: '[]'},
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html$text('Tags'),
+															_1: {ctor: '[]'}
+														}),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$button,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$GoToCssTop),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$type_('reset'),
+															_1: {ctor: '[]'}
+														}
+													},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$span,
+															{ctor: '[]'},
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html$text('Top'),
+																_1: {ctor: '[]'}
+															}),
+														_1: {ctor: '[]'}
+													}),
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$EditorView$renderPath = function (path) {
+	var pathStr = A2(
+		_elm_lang$html$Html$span,
+		{
+			ctor: '::',
+			_0: _user$project$EditorView$class(
+				{
+					ctor: '::',
+					_0: _user$project$EditorCss$Mono,
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$EditorView$id(_user$project$EditorCss$PathStr),
+				_1: {ctor: '[]'}
+			}
+		},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text(
+				A2(
+					_elm_lang$core$String$join,
+					'/',
+					_elm_lang$core$List$reverse(
+						A2(
+							_elm_lang$core$List$map,
+							function (_p23) {
+								var _p24 = _p23;
+								return _elm_lang$core$Basics$toString(_p24._0);
+							},
+							path)))),
+			_1: {ctor: '[]'}
+		});
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$EditorView$id(_user$project$EditorCss$Path),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$p,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('Current path: '),
+					_1: {
+						ctor: '::',
+						_0: pathStr,
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$EditorView$renderConsole = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$EditorView$id(_user$project$EditorCss$Console),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _user$project$EditorView$class(
+						{
+							ctor: '::',
+							_0: _user$project$EditorCss$Mono,
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: function () {
+						var _p25 = function (_) {
+							return _.parsedData;
+						}(model);
+						if (_p25.ctor === 'Err') {
+							return A2(
+								_elm_lang$html$Html$span,
+								{
+									ctor: '::',
+									_0: _user$project$EditorView$class(
+										{
+											ctor: '::',
+											_0: _user$project$EditorCss$Error,
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(_p25._0),
+									_1: {ctor: '[]'}
+								});
+						} else {
+							return _elm_lang$html$Html$text('parsing complete');
+						}
+					}(),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$EditorView$renderCssConsole = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _user$project$EditorView$id(_user$project$EditorCss$Console),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _user$project$EditorView$class(
+						{
+							ctor: '::',
+							_0: _user$project$EditorCss$Mono,
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: function () {
+						var _p26 = function (_) {
+							return _.parsedCssData;
+						}(model);
+						if (_p26.ctor === 'Err') {
+							return A2(
+								_elm_lang$html$Html$span,
+								{
+									ctor: '::',
+									_0: _user$project$EditorView$class(
+										{
+											ctor: '::',
+											_0: _user$project$EditorCss$Error,
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(_p26._0),
+									_1: {ctor: '[]'}
+								});
+						} else {
+							return _elm_lang$html$Html$text('parsing complete');
+						}
+					}(),
+					_1: {ctor: '[]'}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
+var _user$project$EditorView$renderEditor = function (model) {
+	return {
+		ctor: '::',
+		_0: _user$project$EditorView$renderPath(
+			function (_) {
+				return _.currPath;
+			}(model)),
+		_1: {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$form,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _user$project$EditorView$class(
+								{
+									ctor: '::',
+									_0: _user$project$EditorCss$Pane,
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: _user$project$EditorView$id(_user$project$EditorCss$LeftPane),
+								_1: {ctor: '[]'}
+							}
+						},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$textarea,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Events$onInput(_user$project$Types$Store),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$rows(15),
+										_1: {
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$cols(45),
+											_1: {
+												ctor: '::',
+												_0: _user$project$EditorView$id(_user$project$EditorCss$Prompt),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$spellcheck(false),
+													_1: {ctor: '[]'}
+												}
+											}
+										}
+									}
+								},
+								{
+									ctor: '::',
+									_0: function () {
+										var _p27 = function (_) {
+											return _.procString;
+										}(model);
+										if (_p27.ctor === 'Nothing') {
+											return _elm_lang$html$Html$text(
+												function (_) {
+													return _.rawString;
+												}(model));
+										} else {
+											return _elm_lang$html$Html$text(_p27._0);
+										}
+									}(),
+									_1: {ctor: '[]'}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$br,
+									{ctor: '[]'},
+									{ctor: '[]'}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$button,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Parse),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$type_('reset'),
+												_1: {ctor: '[]'}
+											}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Parse'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$Debug),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$type_('button'),
+													_1: {ctor: '[]'}
+												}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Debug'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _user$project$EditorView$id(_user$project$EditorCss$RightPane),
+								_1: {
+									ctor: '::',
+									_0: _user$project$EditorView$class(
+										{
+											ctor: '::',
+											_0: _user$project$EditorCss$Pane,
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: _user$project$EditorView$explorer(model),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$EditorView$renderConsole(model),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$form,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _user$project$EditorView$class(
+										{
+											ctor: '::',
+											_0: _user$project$EditorCss$Pane,
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: _user$project$EditorView$id(_user$project$EditorCss$LeftPaneCss),
+										_1: {ctor: '[]'}
+									}
+								},
+								{
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$textarea,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Events$onInput(_user$project$Types$StoreCss),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$rows(15),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$cols(45),
+													_1: {
+														ctor: '::',
+														_0: _user$project$EditorView$id(_user$project$EditorCss$PromptCss),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$spellcheck(false),
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										},
+										{
+											ctor: '::',
+											_0: function () {
+												var _p28 = function (_) {
+													return _.procCssString;
+												}(model);
+												if (_p28.ctor === 'Nothing') {
+													return _elm_lang$html$Html$text(
+														function (_) {
+															return _.rawCssString;
+														}(model));
+												} else {
+													return _elm_lang$html$Html$text(_p28._0);
+												}
+											}(),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$br,
+											{ctor: '[]'},
+											{ctor: '[]'}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$button,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onClick(_user$project$Types$ParseCss),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$type_('reset'),
+														_1: {ctor: '[]'}
+													}
+												},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Parse Css'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									}
+								}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _user$project$EditorView$id(_user$project$EditorCss$RightPaneCss),
+										_1: {
+											ctor: '::',
+											_0: _user$project$EditorView$class(
+												{
+													ctor: '::',
+													_0: _user$project$EditorCss$Pane,
+													_1: {ctor: '[]'}
+												}),
+											_1: {ctor: '[]'}
+										}
+									},
+									{
+										ctor: '::',
+										_0: _user$project$EditorView$cssExplorer(model),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
+						}),
+					_1: {
+						ctor: '::',
+						_0: _user$project$EditorView$renderCssConsole(model),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _user$project$EditorView$classList(
+										{
+											ctor: '::',
+											_0: {
+												ctor: '_Tuple2',
+												_0: 'DebugClass',
+												_1: function (_) {
+													return _.debug;
+												}(model)
+											},
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(
+										_elm_lang$core$Basics$toString(
+											function (_) {
+												return _.parsedCssData;
+											}(model))),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$html$Html$text(
+											_elm_lang$core$Basics$toString(
+												function (_) {
+													return _.procCssString;
+												}(model))),
+										_1: {ctor: '[]'}
+									}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}
+		}
+	};
+};

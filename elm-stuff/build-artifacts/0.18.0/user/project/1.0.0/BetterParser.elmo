@@ -1,0 +1,151 @@
+var _user$project$BetterParser$parse = function (_p0) {
+	var _p1 = _p0;
+	return _p1._0;
+};
+var _user$project$BetterParser$Parser = function (a) {
+	return {ctor: 'Parser', _0: a};
+};
+var _user$project$BetterParser$return = function (v) {
+	return _user$project$BetterParser$Parser(
+		function (ts) {
+			return _elm_lang$core$Result$Ok(
+				{ctor: '_Tuple2', _0: v, _1: ts});
+		});
+};
+var _user$project$BetterParser_ops = _user$project$BetterParser_ops || {};
+_user$project$BetterParser_ops['>>='] = F2(
+	function (p, f) {
+		return _user$project$BetterParser$Parser(
+			function (ts) {
+				var _p2 = A2(_user$project$BetterParser$parse, p, ts);
+				if (_p2.ctor === 'Err') {
+					return _elm_lang$core$Result$Err(_p2._0);
+				} else {
+					return A2(
+						_user$project$BetterParser$parse,
+						f(_p2._0._0),
+						_p2._0._1);
+				}
+			});
+	});
+var _user$project$BetterParser_ops = _user$project$BetterParser_ops || {};
+_user$project$BetterParser_ops['>>*'] = F2(
+	function (p, q) {
+		return A2(
+			_user$project$BetterParser_ops['>>='],
+			p,
+			function (_p3) {
+				return q;
+			});
+	});
+var _user$project$BetterParser$plist = F3(
+	function (ps, f, acc) {
+		var helper = F2(
+			function (ps, rs) {
+				var _p4 = ps;
+				if (_p4.ctor === '[]') {
+					return _user$project$BetterParser$return(
+						A3(
+							_elm_lang$core$List$foldr,
+							f,
+							acc,
+							_elm_lang$core$List$reverse(rs)));
+				} else {
+					return A2(
+						_user$project$BetterParser_ops['>>='],
+						_p4._0,
+						function (r) {
+							return A2(
+								helper,
+								_p4._1,
+								{ctor: '::', _0: r, _1: rs});
+						});
+				}
+			});
+		return A2(
+			helper,
+			ps,
+			{ctor: '[]'});
+	});
+var _user$project$BetterParser$item = function (consume) {
+	return _user$project$BetterParser$Parser(consume);
+};
+var _user$project$BetterParser$failure = function (s) {
+	return _user$project$BetterParser$Parser(
+		function (_p5) {
+			return _elm_lang$core$Result$Err(
+				A2(_elm_lang$core$Basics_ops['++'], 'Failure: ', s));
+		});
+};
+var _user$project$BetterParser$sat = F2(
+	function (f, p) {
+		return A2(
+			_user$project$BetterParser_ops['>>='],
+			_user$project$BetterParser$item(f),
+			function (x) {
+				return p(x) ? _user$project$BetterParser$return(x) : _user$project$BetterParser$failure(
+					_elm_lang$core$Basics$toString(x));
+			});
+	});
+var _user$project$BetterParser_ops = _user$project$BetterParser_ops || {};
+_user$project$BetterParser_ops['+++'] = F2(
+	function (p, q) {
+		return _user$project$BetterParser$Parser(
+			function (ts) {
+				var _p6 = A2(_user$project$BetterParser$parse, p, ts);
+				if (_p6.ctor === 'Err') {
+					return A2(_user$project$BetterParser$parse, q, ts);
+				} else {
+					return _elm_lang$core$Result$Ok(_p6._0);
+				}
+			});
+	});
+var _user$project$BetterParser$many = F3(
+	function (p, acc, f) {
+		return A2(
+			_user$project$BetterParser_ops['+++'],
+			A3(_user$project$BetterParser$many1, p, acc, f),
+			_user$project$BetterParser$return(acc));
+	});
+var _user$project$BetterParser$many1 = F3(
+	function (p, acc, f) {
+		return A2(
+			_user$project$BetterParser_ops['>>='],
+			p,
+			function (v) {
+				return A2(
+					_user$project$BetterParser_ops['>>='],
+					A3(_user$project$BetterParser$many, p, acc, f),
+					function (vs) {
+						return _user$project$BetterParser$return(
+							A2(f, v, vs));
+					});
+			});
+	});
+var _user$project$BetterParser$many_ = F4(
+	function (p, acc, f, ie) {
+		return A2(
+			_user$project$BetterParser_ops['+++'],
+			A4(_user$project$BetterParser$many1_, p, acc, f, ie),
+			_user$project$BetterParser$return(
+				{
+					ctor: '_Tuple2',
+					_0: ie,
+					_1: _elm_lang$core$Tuple$second(acc)
+				}));
+	});
+var _user$project$BetterParser$many1_ = F4(
+	function (p, acc, f, ie) {
+		return A2(
+			_user$project$BetterParser_ops['>>='],
+			p(acc),
+			function (v) {
+				return A2(
+					_user$project$BetterParser_ops['>>='],
+					A4(_user$project$BetterParser$many_, p, v, f, ie),
+					function (vs) {
+						return _user$project$BetterParser$return(
+							A2(f, v, vs));
+					});
+			});
+	});

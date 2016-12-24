@@ -1,7 +1,8 @@
 module Pad exposing (..)
 
-initCss = 
- """.main body {
+
+initCss =
+    """.main body {
   background-color: lightgrey;
 }
 
@@ -21,8 +22,9 @@ initCss =
 
  """
 
-initCss2 = 
- """#bourg1{
+
+initCss2 =
+    """#bourg1{
   float: left;
   margin-right: 1em;
 }
@@ -37,7 +39,7 @@ initCss2 =
  margin-bottom: 1em;
  max-width: 29%;
  display: inline-block;
-} 
+}
 
 #bourg4{
   max-width: 32.76%;
@@ -56,7 +58,7 @@ h4 {
  margin: auto;
  padding-top: 3em;
  padding-bottom: 3em;
- width: 90%; 
+ width: 90%;
 }
 
 .subContainerData a {
@@ -90,8 +92,9 @@ h4 {
 
  """
 
-testinput = 
-  """ div [ class "main"
+
+testinput =
+    """ div [ class "main"
     ]
     [ header []
              [ h1 []
@@ -146,12 +149,12 @@ testinput =
                    ]
            ]
     , br [] []
-    , markdown 
+    , markdown
 "| First Header  | Second Header |
  | ------------- | ------------- |
  | Content Cell  | Content Cell  |
  | Content Cell  | Content Cell  |
-        
+
  - [x] @mentions, #refs, [links](), **formatting**, and <del>tags</del> supported
  - [x] list syntax required (any unordered or ordered list supported)
  - [x] this is a complete item
@@ -163,13 +166,16 @@ testinput =
     ]
 
   """
-testinput2 = 
-   """ textarea [] [text "hello"]
+
+
+testinput2 =
+    """ textarea [] [text "hello"]
 
   """
 
-testinput3 = 
-   """ markdown 
+
+testinput3 =
+    """ markdown
    "# This is Markdown
 
 [Markdown](http://daringfireball.net/projects/markdown/) lets you
@@ -187,8 +193,9 @@ to easily generate blocks of `Element` or `Html`.
 [elm-markdown]: http://package.elm-lang.org/packages/evancz/elm-markdown/latest
 "   """
 
-testinput4 = 
-  """ markdown 
+
+testinput4 =
+    """ markdown
   "test
 
    | First Header  | Second Header |
@@ -200,16 +207,17 @@ testinput4 =
   - [x] this is a complete item
   - [ ] this is an incomplete item
   "
-  
+
   """
 
+
 testinput5 =
-  """div [class "subContainerData"] [
+    """div [class "subContainerData"] [
   h4 [] [text "Le bourg de murol"]
-  , img [src "/images/2 Murol, le bourg.jpg", id "bourg1"] [] 
-                , p  [] [text "Le bourg de Murol est implanté dans un 
-                               écrin de verdure à 850 mètres d'altitude, dans 
-                               la vallée de la Couze Chambon, sur le 
+  , img [src "/images/2 Murol, le bourg.jpg", id "bourg1"] []
+                , p  [] [text "Le bourg de Murol est implanté dans un
+                               écrin de verdure à 850 mètres d'altitude, dans
+                               la vallée de la Couze Chambon, sur le
                                versant Est du massif du Sancy."]
                 , p [] [ text "Enchâssé entre le volcan boisé du "
                        , a [href "/DécouvrirMurol.html?bloc=Le volcan du Tartaret"]
@@ -217,13 +225,13 @@ testinput5 =
                        , text " le promontoire du "
                        , a [href "/DécouvrirMurol.html?bloc=01"]
                            [text "château de Murol"]
-                       , text " et le puy 
-                             de Bessolles, le village vous ravira par ses 
+                       , text " et le puy
+                             de Bessolles, le village vous ravira par ses
                              sites remarquables et pittoresques. "
                        ]
-                
+
                 , p []
-                       [ text "Au pied du château, découvrez le parc 
+                       [ text "Au pied du château, découvrez le parc
                               arboré du Prélong où se trouvent le "
                        , a [ target "_blank", href "http://www.musee-murol.fr/fr"]
                            [ text "musée des Peintres de l’Ecole de Murols"]
@@ -238,28 +246,29 @@ testinput5 =
                        ]
                 , p [] [ text "Le bourg de Murol offre de nombreux "
                        , a [href "/Commerces.html"] [text "commerces et services"]
-                       , text ". Le marché hebdomadaire a lieu chaque 
-                              mercredi matin. " 
+                       , text ". Le marché hebdomadaire a lieu chaque
+                              mercredi matin. "
                        ]
                 , p [class "toClear"] [ text "Murol est animé tout au long de l’année par de "
                        , a [href "/Animation.html"]
                            [text "grandes manifestations"]
-                       , text " à destination d’un public 
-                               familial. Chaque dimanche de la saison estivale, participez à une visite insolite du bourg 
+                       , text " à destination d’un public
+                               familial. Chaque dimanche de la saison estivale, participez à une visite insolite du bourg
                                en suivant Monsieur Alphonse…"
                        ]
                 , img [src "/images/prelong.jpg", id "bourg2"] []
                 , img [src "/images/museePeintre.jpeg", id "bourg3"] []
-                , img [src "/images/bourg2.jpg", id "bourg4"] [] 
+                , img [src "/images/bourg2.jpg", id "bourg4"] []
 
   ]
   """
 
-testinput6 = 
-  """div [class "subContainerData"] [
+
+testinput6 =
+    """div [class "subContainerData"] [
   h4 [] [text "Le bourg de murol"]
-  , img [src "/images/2 Murol, le bourg.jpg", id "bourg1"] [] 
-                markdown 
+  , img [src "/images/2 Murol, le bourg.jpg", id "bourg1"] []
+                markdown
                 "Le bourg de Murol est implanté dans un écrin de verdure à 850 mètres d'altitude, dans la vallée de la Couze Chambon, sur le versant Est du massif du Sancy.
 
 Enchâssé entre le volcan boisé du [Tartaret](/DécouvrirMurol.html?bloc=Le volcan du Tartaret) le promontoire du [château de Murol](/DécouvrirMurol.html?bloc=01) et le puy de Bessolles, le village vous ravira par ses sites remarquables et pittoresques.
@@ -268,7 +277,7 @@ Au pied du château, découvrez le parc arboré du Prélong où se trouvent le [
 
 Le bourg de Murol offre de nombreux commerces et services. Le marché hebdomadaire a lieu chaque mercredi matin.
 
-Murol est animé tout au long de l’année par de grandes manifestations à destination d’un public familial. Chaque dimanche de la saison estivale, participez à une visite insolite du bourg en suivant Monsieur Alphonse… 
+Murol est animé tout au long de l’année par de grandes manifestations à destination d’un public familial. Chaque dimanche de la saison estivale, participez à une visite insolite du bourg en suivant Monsieur Alphonse…
 
 "
 , br [class "toClear"] []
@@ -276,7 +285,7 @@ Murol est animé tout au long de l’année par de grandes manifestations à des
 
 , img [src "/images/prelong.jpg", id "bourg2"] []
 , img [src "/images/museePeintre.jpeg", id "bourg3"] []
-, img [src "/images/bourg2.jpg", id "bourg4"] [] 
+, img [src "/images/bourg2.jpg", id "bourg4"] []
 
 , markdown
 

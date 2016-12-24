@@ -1,0 +1,975 @@
+var _user$project$TagAttr$splitAttr = function (attr) {
+	var f = F2(
+		function (buff, xs) {
+			f:
+			while (true) {
+				var _p0 = xs;
+				if (_p0.ctor === '[]') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$String$fromList(
+							_elm_lang$core$List$reverse(buff)),
+						_1: ''
+					};
+				} else {
+					var _p2 = _p0._1;
+					var _p1 = _p0._0;
+					if (_elm_lang$core$Native_Utils.eq(
+						_p1,
+						_elm_lang$core$Native_Utils.chr(' '))) {
+						return {
+							ctor: '_Tuple2',
+							_0: _elm_lang$core$String$fromList(
+								_elm_lang$core$List$reverse(buff)),
+							_1: _elm_lang$core$String$fromList(_p2)
+						};
+					} else {
+						var _v1 = {ctor: '::', _0: _p1, _1: buff},
+							_v2 = _p2;
+						buff = _v1;
+						xs = _v2;
+						continue f;
+					}
+				}
+			}
+		});
+	var s = _elm_lang$core$String$toList(
+		_elm_lang$core$Basics$toString(attr));
+	return A2(
+		f,
+		{ctor: '[]'},
+		s);
+};
+var _user$project$TagAttr$toInts = function (s) {
+	var _p3 = _elm_lang$core$String$toInt(s);
+	if (_p3.ctor === 'Err') {
+		return -1;
+	} else {
+		return _p3._0;
+	}
+};
+var _user$project$TagAttr$toBool = function (s) {
+	return (_elm_lang$core$Native_Utils.eq(s, 'True') || _elm_lang$core$Native_Utils.eq(s, 'true')) ? true : false;
+};
+var _user$project$TagAttr$toAttr = function (a) {
+	var _p4 = a;
+	switch (_p4.ctor) {
+		case 'Class':
+			return _elm_lang$html$Html_Attributes$class(_p4._0);
+		case 'Id':
+			return _elm_lang$html$Html_Attributes$id(_p4._0);
+		case 'Href':
+			return _elm_lang$html$Html_Attributes$href(_p4._0);
+		case 'Style':
+			return _elm_lang$html$Html_Attributes$style(_p4._0);
+		case 'Title':
+			return _elm_lang$html$Html_Attributes$title(_p4._0);
+		case 'Hidden':
+			return _elm_lang$html$Html_Attributes$hidden(
+				_user$project$TagAttr$toBool(_p4._0));
+		case 'Type':
+			return _elm_lang$html$Html_Attributes$type_(_p4._0);
+		case 'Value':
+			return _elm_lang$html$Html_Attributes$value(_p4._0);
+		case 'DefaultValue':
+			return _elm_lang$html$Html_Attributes$defaultValue(_p4._0);
+		case 'Checked':
+			return _elm_lang$html$Html_Attributes$checked(
+				_user$project$TagAttr$toBool(_p4._0));
+		case 'Placeholder':
+			return _elm_lang$html$Html_Attributes$placeholder(_p4._0);
+		case 'Selected':
+			return _elm_lang$html$Html_Attributes$selected(
+				_user$project$TagAttr$toBool(_p4._0));
+		case 'Accept':
+			return _elm_lang$html$Html_Attributes$accept(_p4._0);
+		case 'AcceptCharset':
+			return _elm_lang$html$Html_Attributes$acceptCharset(_p4._0);
+		case 'Action':
+			return _elm_lang$html$Html_Attributes$action(_p4._0);
+		case 'Autocomplete':
+			return _elm_lang$html$Html_Attributes$autocomplete(
+				_user$project$TagAttr$toBool(_p4._0));
+		case 'Autofocus':
+			return _elm_lang$html$Html_Attributes$autofocus(
+				_user$project$TagAttr$toBool(_p4._0));
+		case 'Disabled':
+			return _elm_lang$html$Html_Attributes$disabled(
+				_user$project$TagAttr$toBool(_p4._0));
+		case 'Enctype':
+			return _elm_lang$html$Html_Attributes$enctype(_p4._0);
+		case 'Formaction':
+			return _elm_lang$html$Html_Attributes$formaction(_p4._0);
+		case 'List_':
+			return _elm_lang$html$Html_Attributes$list(_p4._0);
+		case 'Maxlength':
+			return _elm_lang$html$Html_Attributes$maxlength(
+				_user$project$TagAttr$toInts(_p4._0));
+		case 'Minlength':
+			return _elm_lang$html$Html_Attributes$minlength(
+				_user$project$TagAttr$toInts(_p4._0));
+		case 'Method':
+			return _elm_lang$html$Html_Attributes$method(_p4._0);
+		case 'Multiple':
+			return _elm_lang$html$Html_Attributes$multiple(
+				_user$project$TagAttr$toBool(_p4._0));
+		case 'Name':
+			return _elm_lang$html$Html_Attributes$name(_p4._0);
+		case 'Novalidate':
+			return _elm_lang$html$Html_Attributes$novalidate(
+				_user$project$TagAttr$toBool(_p4._0));
+		case 'Pattern':
+			return _elm_lang$html$Html_Attributes$pattern(_p4._0);
+		case 'Readonly':
+			return _elm_lang$html$Html_Attributes$readonly(
+				_user$project$TagAttr$toBool(_p4._0));
+		case 'Required':
+			return _elm_lang$html$Html_Attributes$required(
+				_user$project$TagAttr$toBool(_p4._0));
+		case 'Size':
+			return _elm_lang$html$Html_Attributes$size(
+				_user$project$TagAttr$toInts(_p4._0));
+		case 'For':
+			return _elm_lang$html$Html_Attributes$for(_p4._0);
+		case 'Form_':
+			return _elm_lang$html$Html_Attributes$form(_p4._0);
+		case 'Max':
+			return _elm_lang$html$Html_Attributes$max(_p4._0);
+		case 'Min':
+			return _elm_lang$html$Html_Attributes$min(_p4._0);
+		case 'Step':
+			return _elm_lang$html$Html_Attributes$step(_p4._0);
+		case 'Cols':
+			return _elm_lang$html$Html_Attributes$cols(
+				_user$project$TagAttr$toInts(_p4._0));
+		case 'Rows':
+			return _elm_lang$html$Html_Attributes$rows(
+				_user$project$TagAttr$toInts(_p4._0));
+		case 'Wrap':
+			return _elm_lang$html$Html_Attributes$wrap(_p4._0);
+		case 'Target':
+			return _elm_lang$html$Html_Attributes$target(_p4._0);
+		case 'Download':
+			return _elm_lang$html$Html_Attributes$download(
+				_user$project$TagAttr$toBool(_p4._0));
+		case 'DownloadAs':
+			return _elm_lang$html$Html_Attributes$downloadAs(_p4._0);
+		case 'Hreflang':
+			return _elm_lang$html$Html_Attributes$hreflang(_p4._0);
+		case 'Media':
+			return _elm_lang$html$Html_Attributes$media(_p4._0);
+		default:
+			return _elm_lang$html$Html_Attributes$src(_p4._0);
+	}
+};
+var _user$project$TagAttr$capitalize = function (s) {
+	var _p5 = _elm_lang$core$String$uncons(s);
+	if (_p5.ctor === 'Nothing') {
+		return '';
+	} else {
+		return A2(
+			_elm_lang$core$String$cons,
+			_elm_lang$core$Char$toUpper(_p5._0._0),
+			_p5._0._1);
+	}
+};
+var _user$project$TagAttr$toTag = function (tn) {
+	var _p6 = tn;
+	switch (_p6.ctor) {
+		case 'Div':
+			return _elm_lang$html$Html$div;
+		case 'P':
+			return _elm_lang$html$Html$p;
+		case 'Input':
+			return _elm_lang$html$Html$input;
+		case 'Img':
+			return _elm_lang$html$Html$img;
+		case 'H1':
+			return _elm_lang$html$Html$h1;
+		case 'H2':
+			return _elm_lang$html$Html$h2;
+		case 'H3':
+			return _elm_lang$html$Html$h3;
+		case 'H4':
+			return _elm_lang$html$Html$h4;
+		case 'H5':
+			return _elm_lang$html$Html$h5;
+		case 'H6':
+			return _elm_lang$html$Html$h6;
+		case 'A':
+			return _elm_lang$html$Html$a;
+		case 'Text':
+			return F2(
+				function (_p8, _p7) {
+					return _elm_lang$html$Html$text(_p6._0);
+				});
+		case 'TextNode':
+			return F2(
+				function (_p10, _p9) {
+					return _elm_lang$html$Html$text('should never happen');
+				});
+		case 'MarkdownNode':
+			return F2(
+				function (_p12, _p11) {
+					return _elm_lang$html$Html$text('should never happen');
+				});
+		case 'Hr':
+			return _elm_lang$html$Html$hr;
+		case 'Pre':
+			return _elm_lang$html$Html$pre;
+		case 'Blockquote':
+			return _elm_lang$html$Html$blockquote;
+		case 'Span':
+			return _elm_lang$html$Html$span;
+		case 'Code':
+			return _elm_lang$html$Html$code;
+		case 'Em':
+			return _elm_lang$html$Html$em;
+		case 'Strong':
+			return _elm_lang$html$Html$strong;
+		case 'I':
+			return _elm_lang$html$Html$i;
+		case 'B':
+			return _elm_lang$html$Html$b;
+		case 'U':
+			return _elm_lang$html$Html$u;
+		case 'Sub':
+			return _elm_lang$html$Html$sub;
+		case 'Sup':
+			return _elm_lang$html$Html$sup;
+		case 'Br':
+			return _elm_lang$html$Html$br;
+		case 'Ol':
+			return _elm_lang$html$Html$ol;
+		case 'Ul':
+			return _elm_lang$html$Html$ul;
+		case 'Li':
+			return _elm_lang$html$Html$li;
+		case 'Dl':
+			return _elm_lang$html$Html$dl;
+		case 'Dt':
+			return _elm_lang$html$Html$dt;
+		case 'Dd':
+			return _elm_lang$html$Html$dd;
+		case 'Iframe':
+			return _elm_lang$html$Html$iframe;
+		case 'Canvas':
+			return _elm_lang$html$Html$canvas;
+		case 'Svg':
+			return _elm_lang$svg$Svg$svg;
+		case 'Math':
+			return _elm_lang$html$Html$math;
+		case 'Form':
+			return _elm_lang$html$Html$form;
+		case 'Textarea':
+			return _elm_lang$html$Html$textarea;
+		case 'Button':
+			return _elm_lang$html$Html$button;
+		case 'Select':
+			return _elm_lang$html$Html$select;
+		case 'Option':
+			return _elm_lang$html$Html$option;
+		case 'Section':
+			return _elm_lang$html$Html$section;
+		case 'Nav':
+			return _elm_lang$html$Html$nav;
+		case 'Article':
+			return _elm_lang$html$Html$article;
+		case 'Aside':
+			return _elm_lang$html$Html$aside;
+		case 'Header':
+			return _elm_lang$html$Html$header;
+		case 'Footer':
+			return _elm_lang$html$Html$footer;
+		case 'Address':
+			return _elm_lang$html$Html$address;
+		case 'Main':
+			return _elm_lang$html$Html$main_;
+		case 'Body':
+			return _elm_lang$html$Html$body;
+		case 'Figure':
+			return _elm_lang$html$Html$figure;
+		case 'Figcaption':
+			return _elm_lang$html$Html$figcaption;
+		case 'Table':
+			return _elm_lang$html$Html$table;
+		case 'Caption':
+			return _elm_lang$html$Html$caption;
+		case 'Colgroup':
+			return _elm_lang$html$Html$colgroup;
+		case 'Col':
+			return _elm_lang$html$Html$col;
+		case 'Tbody':
+			return _elm_lang$html$Html$tbody;
+		case 'Thead':
+			return _elm_lang$html$Html$thead;
+		case 'Tfoot':
+			return _elm_lang$html$Html$tfoot;
+		case 'Tr':
+			return _elm_lang$html$Html$tr;
+		case 'Td':
+			return _elm_lang$html$Html$td;
+		case 'Th':
+			return _elm_lang$html$Html$th;
+		case 'Markdown':
+			return F2(
+				function (_p14, _p13) {
+					return A3(
+						_evancz$elm_markdown$Markdown$toHtmlWith,
+						{
+							githubFlavored: _elm_lang$core$Maybe$Just(
+								{tables: true, breaks: false}),
+							sanitize: true,
+							defaultHighlighting: _elm_lang$core$Maybe$Nothing,
+							smartypants: false
+						},
+						{ctor: '[]'},
+						_p6._0);
+				});
+		default:
+			return F2(
+				function (_p16, _p15) {
+					return A3(
+						_elm_lang$html$Html$node,
+						'style',
+						{
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html_Attributes$property,
+								'textContent',
+								_elm_lang$core$Json_Encode$string(_p6._0)),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html_Attributes$property,
+									'type',
+									_elm_lang$core$Json_Encode$string('text/css')),
+								_1: {ctor: '[]'}
+							}
+						},
+						{ctor: '[]'});
+				});
+	}
+};
+var _user$project$TagAttr$CssTag = function (a) {
+	return {ctor: 'CssTag', _0: a};
+};
+var _user$project$TagAttr$Markdown = function (a) {
+	return {ctor: 'Markdown', _0: a};
+};
+var _user$project$TagAttr$Th = {ctor: 'Th'};
+var _user$project$TagAttr$Td = {ctor: 'Td'};
+var _user$project$TagAttr$Tr = {ctor: 'Tr'};
+var _user$project$TagAttr$Tfoot = {ctor: 'Tfoot'};
+var _user$project$TagAttr$Thead = {ctor: 'Thead'};
+var _user$project$TagAttr$Tbody = {ctor: 'Tbody'};
+var _user$project$TagAttr$Col = {ctor: 'Col'};
+var _user$project$TagAttr$Colgroup = {ctor: 'Colgroup'};
+var _user$project$TagAttr$Caption = {ctor: 'Caption'};
+var _user$project$TagAttr$Table = {ctor: 'Table'};
+var _user$project$TagAttr$Figcaption = {ctor: 'Figcaption'};
+var _user$project$TagAttr$Figure = {ctor: 'Figure'};
+var _user$project$TagAttr$Body = {ctor: 'Body'};
+var _user$project$TagAttr$Main = {ctor: 'Main'};
+var _user$project$TagAttr$Address = {ctor: 'Address'};
+var _user$project$TagAttr$Footer = {ctor: 'Footer'};
+var _user$project$TagAttr$Header = {ctor: 'Header'};
+var _user$project$TagAttr$Aside = {ctor: 'Aside'};
+var _user$project$TagAttr$Article = {ctor: 'Article'};
+var _user$project$TagAttr$Nav = {ctor: 'Nav'};
+var _user$project$TagAttr$Section = {ctor: 'Section'};
+var _user$project$TagAttr$Option = {ctor: 'Option'};
+var _user$project$TagAttr$Select = {ctor: 'Select'};
+var _user$project$TagAttr$Button = {ctor: 'Button'};
+var _user$project$TagAttr$Textarea = {ctor: 'Textarea'};
+var _user$project$TagAttr$Form = {ctor: 'Form'};
+var _user$project$TagAttr$Math = {ctor: 'Math'};
+var _user$project$TagAttr$Svg = {ctor: 'Svg'};
+var _user$project$TagAttr$Canvas = {ctor: 'Canvas'};
+var _user$project$TagAttr$Iframe = {ctor: 'Iframe'};
+var _user$project$TagAttr$Dd = {ctor: 'Dd'};
+var _user$project$TagAttr$Dt = {ctor: 'Dt'};
+var _user$project$TagAttr$Dl = {ctor: 'Dl'};
+var _user$project$TagAttr$Li = {ctor: 'Li'};
+var _user$project$TagAttr$Ul = {ctor: 'Ul'};
+var _user$project$TagAttr$Ol = {ctor: 'Ol'};
+var _user$project$TagAttr$Br = {ctor: 'Br'};
+var _user$project$TagAttr$Sup = {ctor: 'Sup'};
+var _user$project$TagAttr$Sub = {ctor: 'Sub'};
+var _user$project$TagAttr$U = {ctor: 'U'};
+var _user$project$TagAttr$B = {ctor: 'B'};
+var _user$project$TagAttr$I = {ctor: 'I'};
+var _user$project$TagAttr$Strong = {ctor: 'Strong'};
+var _user$project$TagAttr$Em = {ctor: 'Em'};
+var _user$project$TagAttr$Code = {ctor: 'Code'};
+var _user$project$TagAttr$Span = {ctor: 'Span'};
+var _user$project$TagAttr$Blockquote = {ctor: 'Blockquote'};
+var _user$project$TagAttr$Pre = {ctor: 'Pre'};
+var _user$project$TagAttr$Hr = {ctor: 'Hr'};
+var _user$project$TagAttr$MarkdownNode = {ctor: 'MarkdownNode'};
+var _user$project$TagAttr$TextNode = {ctor: 'TextNode'};
+var _user$project$TagAttr$A = {ctor: 'A'};
+var _user$project$TagAttr$Div = {ctor: 'Div'};
+var _user$project$TagAttr$Text = function (a) {
+	return {ctor: 'Text', _0: a};
+};
+var _user$project$TagAttr$H6 = {ctor: 'H6'};
+var _user$project$TagAttr$H5 = {ctor: 'H5'};
+var _user$project$TagAttr$H4 = {ctor: 'H4'};
+var _user$project$TagAttr$H3 = {ctor: 'H3'};
+var _user$project$TagAttr$H2 = {ctor: 'H2'};
+var _user$project$TagAttr$H1 = {ctor: 'H1'};
+var _user$project$TagAttr$Img = {ctor: 'Img'};
+var _user$project$TagAttr$Input = {ctor: 'Input'};
+var _user$project$TagAttr$P = {ctor: 'P'};
+var _user$project$TagAttr$tagnames = _elm_lang$core$Dict$fromList(
+	{
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'p', _1: _user$project$TagAttr$P},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'input', _1: _user$project$TagAttr$Input},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'img', _1: _user$project$TagAttr$Img},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'h1', _1: _user$project$TagAttr$H1},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'h2', _1: _user$project$TagAttr$H2},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'h3', _1: _user$project$TagAttr$H3},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'h4', _1: _user$project$TagAttr$H4},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'h5', _1: _user$project$TagAttr$H5},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'h6', _1: _user$project$TagAttr$H6},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'div', _1: _user$project$TagAttr$Div},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'a', _1: _user$project$TagAttr$A},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 'pre', _1: _user$project$TagAttr$Pre},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'blockquote', _1: _user$project$TagAttr$Blockquote},
+														_1: {
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: 'span', _1: _user$project$TagAttr$Span},
+															_1: {
+																ctor: '::',
+																_0: {ctor: '_Tuple2', _0: 'code', _1: _user$project$TagAttr$Code},
+																_1: {
+																	ctor: '::',
+																	_0: {ctor: '_Tuple2', _0: 'em', _1: _user$project$TagAttr$Em},
+																	_1: {
+																		ctor: '::',
+																		_0: {ctor: '_Tuple2', _0: 'strong', _1: _user$project$TagAttr$Strong},
+																		_1: {
+																			ctor: '::',
+																			_0: {ctor: '_Tuple2', _0: 'i', _1: _user$project$TagAttr$I},
+																			_1: {
+																				ctor: '::',
+																				_0: {ctor: '_Tuple2', _0: 'b', _1: _user$project$TagAttr$B},
+																				_1: {
+																					ctor: '::',
+																					_0: {ctor: '_Tuple2', _0: 'u', _1: _user$project$TagAttr$U},
+																					_1: {
+																						ctor: '::',
+																						_0: {ctor: '_Tuple2', _0: 'sub', _1: _user$project$TagAttr$Sub},
+																						_1: {
+																							ctor: '::',
+																							_0: {ctor: '_Tuple2', _0: 'sup', _1: _user$project$TagAttr$Sup},
+																							_1: {
+																								ctor: '::',
+																								_0: {ctor: '_Tuple2', _0: 'br', _1: _user$project$TagAttr$Br},
+																								_1: {
+																									ctor: '::',
+																									_0: {ctor: '_Tuple2', _0: 'ol', _1: _user$project$TagAttr$Ol},
+																									_1: {
+																										ctor: '::',
+																										_0: {ctor: '_Tuple2', _0: 'ul', _1: _user$project$TagAttr$Ul},
+																										_1: {
+																											ctor: '::',
+																											_0: {ctor: '_Tuple2', _0: 'li', _1: _user$project$TagAttr$Li},
+																											_1: {
+																												ctor: '::',
+																												_0: {ctor: '_Tuple2', _0: 'dl', _1: _user$project$TagAttr$Dl},
+																												_1: {
+																													ctor: '::',
+																													_0: {ctor: '_Tuple2', _0: 'dt', _1: _user$project$TagAttr$Dt},
+																													_1: {
+																														ctor: '::',
+																														_0: {ctor: '_Tuple2', _0: 'dd', _1: _user$project$TagAttr$Dd},
+																														_1: {
+																															ctor: '::',
+																															_0: {ctor: '_Tuple2', _0: 'iframe', _1: _user$project$TagAttr$Iframe},
+																															_1: {
+																																ctor: '::',
+																																_0: {ctor: '_Tuple2', _0: 'canvas', _1: _user$project$TagAttr$Canvas},
+																																_1: {
+																																	ctor: '::',
+																																	_0: {ctor: '_Tuple2', _0: 'svg', _1: _user$project$TagAttr$Svg},
+																																	_1: {
+																																		ctor: '::',
+																																		_0: {ctor: '_Tuple2', _0: 'math', _1: _user$project$TagAttr$Math},
+																																		_1: {
+																																			ctor: '::',
+																																			_0: {ctor: '_Tuple2', _0: 'form', _1: _user$project$TagAttr$Form},
+																																			_1: {
+																																				ctor: '::',
+																																				_0: {ctor: '_Tuple2', _0: 'textarea', _1: _user$project$TagAttr$Textarea},
+																																				_1: {
+																																					ctor: '::',
+																																					_0: {ctor: '_Tuple2', _0: 'button', _1: _user$project$TagAttr$Button},
+																																					_1: {
+																																						ctor: '::',
+																																						_0: {ctor: '_Tuple2', _0: 'select', _1: _user$project$TagAttr$Select},
+																																						_1: {
+																																							ctor: '::',
+																																							_0: {ctor: '_Tuple2', _0: 'option', _1: _user$project$TagAttr$Option},
+																																							_1: {
+																																								ctor: '::',
+																																								_0: {ctor: '_Tuple2', _0: 'section', _1: _user$project$TagAttr$Section},
+																																								_1: {
+																																									ctor: '::',
+																																									_0: {ctor: '_Tuple2', _0: 'nav', _1: _user$project$TagAttr$Nav},
+																																									_1: {
+																																										ctor: '::',
+																																										_0: {ctor: '_Tuple2', _0: 'article', _1: _user$project$TagAttr$Article},
+																																										_1: {
+																																											ctor: '::',
+																																											_0: {ctor: '_Tuple2', _0: 'aside', _1: _user$project$TagAttr$Aside},
+																																											_1: {
+																																												ctor: '::',
+																																												_0: {ctor: '_Tuple2', _0: 'header', _1: _user$project$TagAttr$Header},
+																																												_1: {
+																																													ctor: '::',
+																																													_0: {ctor: '_Tuple2', _0: 'footer', _1: _user$project$TagAttr$Footer},
+																																													_1: {
+																																														ctor: '::',
+																																														_0: {ctor: '_Tuple2', _0: 'address', _1: _user$project$TagAttr$Address},
+																																														_1: {
+																																															ctor: '::',
+																																															_0: {ctor: '_Tuple2', _0: 'main', _1: _user$project$TagAttr$Main},
+																																															_1: {
+																																																ctor: '::',
+																																																_0: {ctor: '_Tuple2', _0: 'body', _1: _user$project$TagAttr$Body},
+																																																_1: {
+																																																	ctor: '::',
+																																																	_0: {ctor: '_Tuple2', _0: 'Figure', _1: _user$project$TagAttr$Figure},
+																																																	_1: {
+																																																		ctor: '::',
+																																																		_0: {ctor: '_Tuple2', _0: 'figcaption', _1: _user$project$TagAttr$Figcaption},
+																																																		_1: {
+																																																			ctor: '::',
+																																																			_0: {ctor: '_Tuple2', _0: 'table', _1: _user$project$TagAttr$Table},
+																																																			_1: {
+																																																				ctor: '::',
+																																																				_0: {ctor: '_Tuple2', _0: 'caption', _1: _user$project$TagAttr$Caption},
+																																																				_1: {
+																																																					ctor: '::',
+																																																					_0: {ctor: '_Tuple2', _0: 'colgroup', _1: _user$project$TagAttr$Colgroup},
+																																																					_1: {
+																																																						ctor: '::',
+																																																						_0: {ctor: '_Tuple2', _0: 'col', _1: _user$project$TagAttr$Col},
+																																																						_1: {
+																																																							ctor: '::',
+																																																							_0: {ctor: '_Tuple2', _0: 'tbody', _1: _user$project$TagAttr$Tbody},
+																																																							_1: {
+																																																								ctor: '::',
+																																																								_0: {ctor: '_Tuple2', _0: 'thead', _1: _user$project$TagAttr$Thead},
+																																																								_1: {
+																																																									ctor: '::',
+																																																									_0: {ctor: '_Tuple2', _0: 'tfoot', _1: _user$project$TagAttr$Tfoot},
+																																																									_1: {
+																																																										ctor: '::',
+																																																										_0: {ctor: '_Tuple2', _0: 'tr', _1: _user$project$TagAttr$Tr},
+																																																										_1: {
+																																																											ctor: '::',
+																																																											_0: {ctor: '_Tuple2', _0: 'td', _1: _user$project$TagAttr$Td},
+																																																											_1: {
+																																																												ctor: '::',
+																																																												_0: {ctor: '_Tuple2', _0: 'th', _1: _user$project$TagAttr$Th},
+																																																												_1: {ctor: '[]'}
+																																																											}
+																																																										}
+																																																									}
+																																																								}
+																																																							}
+																																																						}
+																																																					}
+																																																				}
+																																																			}
+																																																		}
+																																																	}
+																																																}
+																																															}
+																																														}
+																																													}
+																																												}
+																																											}
+																																										}
+																																									}
+																																								}
+																																							}
+																																						}
+																																					}
+																																				}
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	});
+var _user$project$TagAttr$Src = function (a) {
+	return {ctor: 'Src', _0: a};
+};
+var _user$project$TagAttr$Media = function (a) {
+	return {ctor: 'Media', _0: a};
+};
+var _user$project$TagAttr$Hreflang = function (a) {
+	return {ctor: 'Hreflang', _0: a};
+};
+var _user$project$TagAttr$DownloadAs = function (a) {
+	return {ctor: 'DownloadAs', _0: a};
+};
+var _user$project$TagAttr$Download = function (a) {
+	return {ctor: 'Download', _0: a};
+};
+var _user$project$TagAttr$Target = function (a) {
+	return {ctor: 'Target', _0: a};
+};
+var _user$project$TagAttr$Wrap = function (a) {
+	return {ctor: 'Wrap', _0: a};
+};
+var _user$project$TagAttr$Rows = function (a) {
+	return {ctor: 'Rows', _0: a};
+};
+var _user$project$TagAttr$Cols = function (a) {
+	return {ctor: 'Cols', _0: a};
+};
+var _user$project$TagAttr$Step = function (a) {
+	return {ctor: 'Step', _0: a};
+};
+var _user$project$TagAttr$Min = function (a) {
+	return {ctor: 'Min', _0: a};
+};
+var _user$project$TagAttr$Max = function (a) {
+	return {ctor: 'Max', _0: a};
+};
+var _user$project$TagAttr$Form_ = function (a) {
+	return {ctor: 'Form_', _0: a};
+};
+var _user$project$TagAttr$For = function (a) {
+	return {ctor: 'For', _0: a};
+};
+var _user$project$TagAttr$Size = function (a) {
+	return {ctor: 'Size', _0: a};
+};
+var _user$project$TagAttr$Required = function (a) {
+	return {ctor: 'Required', _0: a};
+};
+var _user$project$TagAttr$Readonly = function (a) {
+	return {ctor: 'Readonly', _0: a};
+};
+var _user$project$TagAttr$Pattern = function (a) {
+	return {ctor: 'Pattern', _0: a};
+};
+var _user$project$TagAttr$Novalidate = function (a) {
+	return {ctor: 'Novalidate', _0: a};
+};
+var _user$project$TagAttr$Name = function (a) {
+	return {ctor: 'Name', _0: a};
+};
+var _user$project$TagAttr$Multiple = function (a) {
+	return {ctor: 'Multiple', _0: a};
+};
+var _user$project$TagAttr$Method = function (a) {
+	return {ctor: 'Method', _0: a};
+};
+var _user$project$TagAttr$Minlength = function (a) {
+	return {ctor: 'Minlength', _0: a};
+};
+var _user$project$TagAttr$Maxlength = function (a) {
+	return {ctor: 'Maxlength', _0: a};
+};
+var _user$project$TagAttr$List_ = function (a) {
+	return {ctor: 'List_', _0: a};
+};
+var _user$project$TagAttr$Formaction = function (a) {
+	return {ctor: 'Formaction', _0: a};
+};
+var _user$project$TagAttr$Enctype = function (a) {
+	return {ctor: 'Enctype', _0: a};
+};
+var _user$project$TagAttr$Disabled = function (a) {
+	return {ctor: 'Disabled', _0: a};
+};
+var _user$project$TagAttr$Autofocus = function (a) {
+	return {ctor: 'Autofocus', _0: a};
+};
+var _user$project$TagAttr$Autocomplete = function (a) {
+	return {ctor: 'Autocomplete', _0: a};
+};
+var _user$project$TagAttr$Action = function (a) {
+	return {ctor: 'Action', _0: a};
+};
+var _user$project$TagAttr$AcceptCharset = function (a) {
+	return {ctor: 'AcceptCharset', _0: a};
+};
+var _user$project$TagAttr$Accept = function (a) {
+	return {ctor: 'Accept', _0: a};
+};
+var _user$project$TagAttr$Selected = function (a) {
+	return {ctor: 'Selected', _0: a};
+};
+var _user$project$TagAttr$Placeholder = function (a) {
+	return {ctor: 'Placeholder', _0: a};
+};
+var _user$project$TagAttr$Checked = function (a) {
+	return {ctor: 'Checked', _0: a};
+};
+var _user$project$TagAttr$DefaultValue = function (a) {
+	return {ctor: 'DefaultValue', _0: a};
+};
+var _user$project$TagAttr$Value = function (a) {
+	return {ctor: 'Value', _0: a};
+};
+var _user$project$TagAttr$Type = function (a) {
+	return {ctor: 'Type', _0: a};
+};
+var _user$project$TagAttr$Hidden = function (a) {
+	return {ctor: 'Hidden', _0: a};
+};
+var _user$project$TagAttr$Title = function (a) {
+	return {ctor: 'Title', _0: a};
+};
+var _user$project$TagAttr$Href = function (a) {
+	return {ctor: 'Href', _0: a};
+};
+var _user$project$TagAttr$Style = function (a) {
+	return {ctor: 'Style', _0: a};
+};
+var _user$project$TagAttr$Id = function (a) {
+	return {ctor: 'Id', _0: a};
+};
+var _user$project$TagAttr$Class = function (a) {
+	return {ctor: 'Class', _0: a};
+};
+var _user$project$TagAttr$attrnames = _elm_lang$core$Dict$fromList(
+	{
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: 'class', _1: _user$project$TagAttr$Class},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: 'id', _1: _user$project$TagAttr$Id},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: 'href', _1: _user$project$TagAttr$Href},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'src', _1: _user$project$TagAttr$Src},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'title', _1: _user$project$TagAttr$Title},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'hidden', _1: _user$project$TagAttr$Hidden},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'type', _1: _user$project$TagAttr$Type},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'value', _1: _user$project$TagAttr$Value},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'defaultValue', _1: _user$project$TagAttr$DefaultValue},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'checked', _1: _user$project$TagAttr$Checked},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'placeholder', _1: _user$project$TagAttr$Placeholder},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 'selected', _1: _user$project$TagAttr$Selected},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'accept', _1: _user$project$TagAttr$Accept},
+														_1: {
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: 'acceptCharset', _1: _user$project$TagAttr$AcceptCharset},
+															_1: {
+																ctor: '::',
+																_0: {ctor: '_Tuple2', _0: 'action', _1: _user$project$TagAttr$Action},
+																_1: {
+																	ctor: '::',
+																	_0: {ctor: '_Tuple2', _0: 'autocomplete', _1: _user$project$TagAttr$Autocomplete},
+																	_1: {
+																		ctor: '::',
+																		_0: {ctor: '_Tuple2', _0: 'autofocus', _1: _user$project$TagAttr$Autofocus},
+																		_1: {
+																			ctor: '::',
+																			_0: {ctor: '_Tuple2', _0: 'disabled', _1: _user$project$TagAttr$Disabled},
+																			_1: {
+																				ctor: '::',
+																				_0: {ctor: '_Tuple2', _0: 'enctype', _1: _user$project$TagAttr$Enctype},
+																				_1: {
+																					ctor: '::',
+																					_0: {ctor: '_Tuple2', _0: 'formaction', _1: _user$project$TagAttr$Formaction},
+																					_1: {
+																						ctor: '::',
+																						_0: {ctor: '_Tuple2', _0: 'list\'', _1: _user$project$TagAttr$List_},
+																						_1: {
+																							ctor: '::',
+																							_0: {ctor: '_Tuple2', _0: 'maxlength', _1: _user$project$TagAttr$Maxlength},
+																							_1: {
+																								ctor: '::',
+																								_0: {ctor: '_Tuple2', _0: 'minlength', _1: _user$project$TagAttr$Minlength},
+																								_1: {
+																									ctor: '::',
+																									_0: {ctor: '_Tuple2', _0: 'method', _1: _user$project$TagAttr$Method},
+																									_1: {
+																										ctor: '::',
+																										_0: {ctor: '_Tuple2', _0: 'multiple', _1: _user$project$TagAttr$Multiple},
+																										_1: {
+																											ctor: '::',
+																											_0: {ctor: '_Tuple2', _0: 'name', _1: _user$project$TagAttr$Name},
+																											_1: {
+																												ctor: '::',
+																												_0: {ctor: '_Tuple2', _0: 'novalidate', _1: _user$project$TagAttr$Novalidate},
+																												_1: {
+																													ctor: '::',
+																													_0: {ctor: '_Tuple2', _0: 'pattern', _1: _user$project$TagAttr$Pattern},
+																													_1: {
+																														ctor: '::',
+																														_0: {ctor: '_Tuple2', _0: 'readonly', _1: _user$project$TagAttr$Readonly},
+																														_1: {
+																															ctor: '::',
+																															_0: {ctor: '_Tuple2', _0: 'required', _1: _user$project$TagAttr$Required},
+																															_1: {
+																																ctor: '::',
+																																_0: {ctor: '_Tuple2', _0: 'size', _1: _user$project$TagAttr$Size},
+																																_1: {
+																																	ctor: '::',
+																																	_0: {ctor: '_Tuple2', _0: 'for', _1: _user$project$TagAttr$For},
+																																	_1: {
+																																		ctor: '::',
+																																		_0: {ctor: '_Tuple2', _0: 'form\'', _1: _user$project$TagAttr$Form_},
+																																		_1: {
+																																			ctor: '::',
+																																			_0: {ctor: '_Tuple2', _0: 'max', _1: _user$project$TagAttr$Max},
+																																			_1: {
+																																				ctor: '::',
+																																				_0: {ctor: '_Tuple2', _0: 'min', _1: _user$project$TagAttr$Min},
+																																				_1: {
+																																					ctor: '::',
+																																					_0: {ctor: '_Tuple2', _0: 'step', _1: _user$project$TagAttr$Step},
+																																					_1: {
+																																						ctor: '::',
+																																						_0: {ctor: '_Tuple2', _0: 'cols', _1: _user$project$TagAttr$Cols},
+																																						_1: {
+																																							ctor: '::',
+																																							_0: {ctor: '_Tuple2', _0: 'rows', _1: _user$project$TagAttr$Rows},
+																																							_1: {
+																																								ctor: '::',
+																																								_0: {ctor: '_Tuple2', _0: 'wrap', _1: _user$project$TagAttr$Wrap},
+																																								_1: {
+																																									ctor: '::',
+																																									_0: {ctor: '_Tuple2', _0: 'target', _1: _user$project$TagAttr$Target},
+																																									_1: {
+																																										ctor: '::',
+																																										_0: {ctor: '_Tuple2', _0: 'download', _1: _user$project$TagAttr$Download},
+																																										_1: {
+																																											ctor: '::',
+																																											_0: {ctor: '_Tuple2', _0: 'downloadAs', _1: _user$project$TagAttr$DownloadAs},
+																																											_1: {
+																																												ctor: '::',
+																																												_0: {ctor: '_Tuple2', _0: 'hreflang', _1: _user$project$TagAttr$Hreflang},
+																																												_1: {
+																																													ctor: '::',
+																																													_0: {ctor: '_Tuple2', _0: 'media', _1: _user$project$TagAttr$Media},
+																																													_1: {ctor: '[]'}
+																																												}
+																																											}
+																																										}
+																																									}
+																																								}
+																																							}
+																																						}
+																																					}
+																																				}
+																																			}
+																																		}
+																																	}
+																																}
+																															}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	});
